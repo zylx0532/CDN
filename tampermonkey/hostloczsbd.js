@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         hostloc zsbd
-// @namespace    http://tampermonkey.net/
-// @version      0.1
+// @namespace    https://greasyfork.org/zh-CN/scripts/396933-hostloc-zsbd
+// @version      0.2
 // @description  HostLoc 字数补丁，防折叠!
-// @author       You
+// @author       webmaster@zhiqiang.name
 // @match        https://www.hostloc.com/thread-*
 // @match        https://www.hostloc.com/forum.php?mod=viewthread*
 // @match        https://hostloc.com/forum.php?mod=viewthread*
