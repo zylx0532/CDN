@@ -335,7 +335,7 @@ nw.c([
 ] , function(){
 
     nw.addScriptLink({
-        'src' : 'https://www.zylx.net/sdk/pup.js',
+        'src' : 'https://cdn.jsdelivr.net/gh/zylx0532/CDN/Chevereto/pup.js',
         'id' : 'chevereto-pup-src',
         'data-url':'https://www.zylx.net/upload',
         'data-auto-insert':'bbcode-embed'
