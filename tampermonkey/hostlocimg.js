@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         hostloc_image_up
 // @namespace    https://greasyfork.org/zh-CN/scripts/383222-hostloc-image-up
-// @version      0.6.2
+// @version      0.6.4
 // @license      MIT
 // @description  用于改善HostLoc等DZ论坛上传图片需要放大镜的问题
 // @author       webmaster@zhiqiang.name
