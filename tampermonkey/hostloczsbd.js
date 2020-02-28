@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         hostloc zsbd
-// @namespace    https://greasyfork.org/zh-CN/scripts/396933-hostloc-zsbd
-// @version      0.2
+// @namespace    https://greasyfork.org/scripts/396933-hostloc-zsbd
+// @version      0.3
 // @description  HostLoc 字数补丁，防折叠!
 // @author       webmaster@zhiqiang.name
 // @match        https://www.hostloc.com/thread-*
@@ -28,7 +28,7 @@
         "故事开始便不承认普通",
         "mjj专用紫薯布丁",
         "那挺骚的，紫薯布丁",
-        "那挺好的，紫薯布丁",
+        "这个世上有很多事是解释不通的，比如突然的失落，莫名其妙的孤独，没有由来的落寞，以及突然离开的你。",
         "我哪知道啊，紫薯布丁",
         "我怎么知道啊，你问楼下吧",
         "你才知道啊，紫薯布丁",
@@ -44,7 +44,7 @@
     function addIdioms() {
         var text=document.getElementById("fastpostmessage");
         if (text.value.length<16) {
-            text.value += "\n  --< "+idioms[Math.floor(Math.random()*idioms.length)] + " >--";
+            text.value += "\n/**\n * "+idioms[Math.floor(Math.random()*idioms.length)] + "\n *\n *@see https://greasyfork.org/zh-CN/scripts/396933-hostloc-zsbd\n */";
         }
     }
     document.getElementById("fastpostmessage").onkeydown=function(event) {
