@@ -1,2 +1,2 @@
-/** PTNovelSearch-v4.1.2 LPPL License By http://www.ptcms.com/ */
+/** PTNovelSearch-v4.1.2 LPPL License By https://www.zhiqiang.name/ */
  ;layui.define(["form","upload"],function(i){var a=layui.$,n=layui.layer,l=layui.laytpl,u=layui.admin,e=layui.form,t=a("body");e.render(),u.req({url:api,success:function(i){layui.each(i.data.fields,function(i,a){l(tplField.innerHTML).render(a,function(i){t.find(".layui-form .layui-fields").append(i)})}),e.val("LAY-info-form",i.data.values)}}),e.on("submit(submit)",function(i){return layui.$(this).hasClass("layui-btn-disabled")||u.req({url:api,data:i.field,method:"POST",success:function(i){n.open({icon:1,title:"操作成功",content:"修改成功"})}}),!1}),i("curd/set",{})});

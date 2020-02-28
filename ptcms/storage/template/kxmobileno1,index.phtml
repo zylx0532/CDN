@@ -5,10 +5,10 @@
 	<title><?php include \Kuxin\View::parseTpl($tkd['title']);?></title>
     <meta name="keywords" content="<?php include \Kuxin\View::parseTpl($tkd['keywords']);?>">
     <meta name="description" content="<?php include \Kuxin\View::parseTpl($tkd['description']);?>">
-	<link rel="stylesheet" href="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxmobileno1/css/global.css"/>
-	<script src="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxmobileno1/js/flexible.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/css/global.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/flexible.min.js"></script>
     <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
-    <meta name="author" content="www.ptcms.com">
+    <meta name="author" content="www.zhiqiang.name">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit">
     <meta name="viewport" content="width=device-width" />
@@ -50,7 +50,7 @@
 	<!-- 搜索框 -->
 	<div class="w100 bg-white pb10 plr15">
 		<a href="<?php echo \Kuxin\Helper\Url::build("novel.search.index",[],"");?>" class="flex-wrp flex-center pt-search">
-			<img src="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxmobileno1/images/search.png" class="mr10 pt-search-icon" ><input type="text" class="color4" placeholder="请输入您要搜索的书名">
+			<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/search.png" class="mr10 pt-search-icon" ><input type="text" class="color4" placeholder="请输入您要搜索的书名">
 		</a>
 	</div>
 
@@ -191,7 +191,7 @@
     <div class="size12  w100 text-center"><?php echo \Kuxin\Response::runinfo();?></div>
 </div>
 <!-- js -->
-<script src="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxmobileno1/js/jquery-3.3.1.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/jquery-3.3.1.js"></script>
 <script>
     $('.pt-return,.pt-recall').click(function(){
         window.history.back();
@@ -229,6 +229,6 @@
         <div class="lh100">我的</div>
     </a>
 </div>
-	<script src="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxmobileno1/js/index.js"></script>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/index.js"></script>
 </body>
 </html>

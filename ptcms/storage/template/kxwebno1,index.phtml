@@ -5,10 +5,10 @@
     <title><?php include \Kuxin\View::parseTpl($tkd['title']);?></title>
     <meta name="keywords" content="<?php include \Kuxin\View::parseTpl($tkd['keywords']);?>">
     <meta name="description" content="<?php include \Kuxin\View::parseTpl($tkd['description']);?>">
-    <link rel="stylesheet" href="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxwebno1/css/global.css"/>
-    <link rel="stylesheet" href="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxwebno1/css/style.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/style.css"/>
     <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
-    <meta name="author" content="www.ptcms.com">
+    <meta name="author" content="www.zhiqiang.name">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
     <meta name="renderer" content="webkit">
     <meta name="viewport" content="width=device-width" />
@@ -26,35 +26,35 @@
             欢迎访问<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "sitename");?>小说网
         </li>
         <li class="fr m">
-            <img src="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxwebno1/images/shortcut_icon.png" class="pt-shortcut-icon">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/shortcut_icon.png" class="pt-shortcut-icon">
             <span class="cursor color4 lh100" onclick="toDesktop('<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "siteurl");?>','<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "sitename");?>')">桌面快捷</span>
         </li>
         <li class="fr mr20">
-            <img src="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxwebno1/images/star_icon.png" class="pt-index-icon">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star_icon.png" class="pt-index-icon">
             <span class="cursor color4 lh100" onclick="addFavorite(document.title,window.location);">加入收藏</span>
         </li>
         <li class="fr mr20">
-            <img src="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxwebno1/images/index_icon.png" class="pt-index-icon">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/index_icon.png" class="pt-index-icon">
             <span class="cursor color4 lh100" onclick="setHome(this);">设为首页</span>
         </li>
     </ul>
 </div>
 <div class="w100 pt-head-bg">
     <div class="pt-head">
-        <img src="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/static/image/logo.png" class="pt-logo" title="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "sitename");?>">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/static/image/logo.png" class="pt-logo" title="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "sitename");?>">
         <div class="pt-search-box">
             <form action="<?php echo \Kuxin\Helper\Url::build("novel.search.result",[],"");?>">
                 <div class="pt-serachbg">
                     <input type="text" name="searchkey" placeholder="请输入您要搜索的书名" class="pt-serarch-input" value="<?php echo $_GET['searchkey'];?>">
                 </div>
                 <button type="submit" class="pt-search-btn">
-                    <img src="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxwebno1/images/search.png" class="pt-search-icon">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/search.png" class="pt-search-icon">
                 </button>
             </form>
         </div>
         <ul class="inline-block size14 color4 fr pt-head-list">
             <li>
-                <img src="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxwebno1/images/person_icon.png" class="pt-person-icon">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/person_icon.png" class="pt-person-icon">
                 <?php if(($islogin)):?>
                 <span class="color2 lh100">
                     <a href="<?php echo \Kuxin\Helper\Url::build("user.index.index",[],"");?>" class="color2"><?php echo $userinfo['nickname']?:$userinfo['name'];?></a>
@@ -66,11 +66,11 @@
                 <?php endif;?>
             </li>
             <li>
-                <img src="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxwebno1/images/book_icon.png" class="pt-book-icon">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/book_icon.png" class="pt-book-icon">
                 <a rel="nofollow" href="<?php echo \Kuxin\Helper\Url::build("user.mark.index",[],"");?>" class="color4 lh100">我的书架</a>
             </li>
             <li class="inline-block">
-                <img src="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxwebno1/images/history_icon.png" class="pt-history-icon">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/history_icon.png" class="pt-history-icon">
                 <a rel="nofollow" href="<?php echo \Kuxin\Helper\Url::build("user.history.index",[],"");?>" class="color4 lh100">阅读历史</a>
             </li>
         </ul>
@@ -351,11 +351,11 @@
     <div class="color4 footer-info" style="margin-top:28px;">Copyright © 2009 - 2019 <a href="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "siteurl");?>" target="_blank"><?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "sitename");?></a>. All Rights Reserved . 版权所有<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "sitename");?></div>
     <div class="color4 footer-info">本站内容系<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "sitename");?>根据您的指令搜索各大小说站得到的链接列表，不代表<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "sitename");?>赞成被搜索网站的内容或立场</div>
     <div class="color4 footer-info">如果版权人认为在本站放置您的作品有损您的利益，请发邮件至“<?php if(\Kuxin\Helper\Arr::getValue($_kxcms_config, "email")):?><?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "email");?><?php else:?><?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "qq");?>@qq.com<?php endif;?>”，本站确认后将会立即删除。</div>
-    <div class="color4 footer-info">Power by <a href="http://www.ptcms.com" target="_blank">PT聚合小说搜索聚合程序 <?php echo PRO_VERSION;?> Build<?php echo PRO_TIME;?></a>，模版设计：<a href="http://www.pakey.net" target="_blank">Pakey</a>，<a href="http://www.miitbeian.gov.cn/" target="_blank" rel="nofollow"><?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "beian");?></a></div>
+    <div class="color4 footer-info">Power by <a href="https://www.zhiqiang.name" target="_blank">PT聚合小说搜索聚合程序 <?php echo PRO_VERSION;?> Build<?php echo PRO_TIME;?></a>，模版设计：<a href="http://www.pakey.net" target="_blank">Pakey</a>，<a href="http://www.miitbeian.gov.cn/" target="_blank" rel="nofollow"><?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "beian");?></a></div>
     <div class="color4 footer-info"><?php echo \Kuxin\Response::runinfo();?></div>
 </div>
-<script src="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxwebno1/js/jquery-3.3.1.js"></script>
-<script src="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxwebno1/js/layer/layer.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/jquery-3.3.1.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/layer/layer.js"></script>
 <div class="none">
     <?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "tongji.pc");?>
     <?php if(\Kuxin\Helper\Arr::getValue($_kxcms_config, "app.use_cdn")):?>
@@ -365,6 +365,6 @@
 </div>
 
 <!-- js-->
-<script src="<?php echo \Kuxin\Helper\Arr::getValue($_kxcms_config, "resurl");?>/template/kxwebno1/js/index.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/index.js"></script>
 </body>
 </html>
