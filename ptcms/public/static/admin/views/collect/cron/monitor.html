@@ -1,0 +1,125 @@
+<title>运行监控</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>任务管理</cite></a>
+        <a><cite>运行监控</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+                <div style="float:right;line-height:48px;" class="runtime">
+
+                </div>
+            </div>
+
+
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var t, config = {
+        api: {
+            power: '/manage/collect/cron/power.json',
+            list: '/manage/collect/cron/monitor.json',
+        },
+        done: function (layui) {
+            layui.admin.req({
+                url: config.api.power,
+                method: 'GET',
+                success: function (res) {
+                    if (res.data.status == "1") {
+                        layui.$('.btn-power').text('停止总进程');
+                        layui.$('.btn-power').addClass('layui-btn-danger');
+                    } else {
+                        layui.$('.btn-power').text('启动总进程');
+                        layui.$('.btn-power').removeClass('layui-btn-danger');
+                    }
+                }
+            });
+        },
+        topButton: {
+            power: {
+                style: 'btn-power ',
+                text: 'power',
+                action: function () {
+                    layui.admin.req({
+                        url: config.api.power,
+                        method: 'POST',
+                        success: function (res) {
+                            if (res.data.status) {
+                                layui.$('.btn-power').text('停止总进程');
+                                layui.$('.btn-power').addClass('layui-btn-danger');
+                            } else {
+                                layui.$('.btn-power').text('启动总进程');
+                                layui.$('.btn-power').removeClass('layui-btn-danger');
+                            }
+                        }
+                    })
+                }
+            },
+            flush: {
+                style: 'btn-flush layui-btn-normal',
+                text: '开启自动刷新',
+                action: function () {
+                    if (layui.$('.btn-flush').text() == '开启自动刷新') {
+                        t = setInterval(function () {
+                            tableIns.reload();
+                        }, 1000);
+                        layui.$('.btn-flush').text('关闭自动刷新');
+                        layui.$('.btn-flush').addClass('layui-btn-danger');
+                    } else {
+                        clearInterval(t);
+                        layui.$('.btn-flush').text('开启自动刷新')
+                        layui.$('.btn-flush').removeClass('layui-btn-danger');
+                    }
+                }
+            }
+        },
+        actionButton: {},
+        table: {
+            page: false,
+            limit: 100,
+            cols: [[
+                {field: 'name', title: '任务名称', align: 'center'},
+                {field: 'novel', title: '采集小说'},
+                {field: 'info', title: '运行信息', width: 330},
+                {field: 'last', title: '持续'},
+                {field: 'starttime', title: '启动时间', width: 165},
+                {field: 'lastruntime', title: '上次完成时间', width: 160}
+            ]],
+            done: function (res, curr, count) {
+                if (res.runtime) {
+                    layui.$('.runtime').html('主进程正常运行，上次执行时间' + res.runtime);
+                } else {
+                    layui.$('.runtime').html('获取主进程运行状态失败');
+                }
+            }
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+    layui.admin.on('hash()', function (router) {
+        clearInterval(t);
+    });
+</script>

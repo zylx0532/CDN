@@ -1,0 +1,96 @@
+<title>驻站作者列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>书籍管理</cite></a>
+        <a><cite>专区原创</cite></a>
+        <a><cite>作者管理</cite></a>
+        <a><cite>驻站作者列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            batch: '/manage/author/batch.json',
+            list: '/manage/author/resident.json',
+            del: '/manage/author/del.json',
+            change: '/manage/author/change.json',
+            audit: '/manage/author/audit.json',
+        },
+        topButton: {
+            del: {},
+        },
+        actionButton: {
+            info: {
+                text: '详情', style: 'layui-btn-normal', icon: 'layui-icon layui-icon-form', action: function (obj) {
+                    layui.layer.open({
+                        type: 1,
+                        skin: 'layui-layer-rim',
+                        area: '500px',
+                        btn: '关闭',
+                        title: '详情',
+                        content: '<table class="layui-table"></table>',
+                        success: function (layero, index) {
+                            var table = layero.find('.layui-layer-content table');
+                            table.append('<tr><th>用户ID</th><td>' + obj.data.user.id + '</td></tr>');
+                            table.append('<tr><th>用户名</th><td>' + obj.data.user.name + '</td></tr>');
+                            table.append('<tr><th>作者ID</th><td>' + obj.data.id + '</td></tr>');
+                            table.append('<tr><th>作者笔名</th><td>' + obj.data.name + '</td></tr>');
+                            table.append('<tr><th>作者简介</th><td>' + obj.data.intro + '</td></tr>');
+                            table.append('<tr><th>作者真名</th><td>' + obj.data.truename + '</td></tr>');
+                            table.append('<tr><th>性别</th><td>' + (obj.data.sex === '1' ? '男' : '女') + '</td></tr>');
+                            table.append('<tr><th>身份证号</th><td>' + obj.data.idcard + '</td></tr>');
+                            table.append('<tr><th>电话</th><td>' + obj.data.mobile + '</td></tr>');
+                            table.append('<tr><th>邮箱</th><td>' + obj.data.email + '</td></tr>');
+                            table.append('<tr><th>QQ</th><td>' + obj.data.qq + '</td></tr>');
+                            table.append('<tr><th>所在地</th><td>' + obj.data.province + obj.data.city + obj.data.district + '</td></tr>');
+                            table.append('<tr><th>详细地址</th><td>' + obj.data.address + '</td></tr>');
+                            layero.resize();
+                        }
+                    });
+                }
+            },
+            del: {},
+        },
+        table: {
+            page: true,
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'ID', align: 'center', width: 60},
+                {field: 'name', title: '作者名称', width: 200, align: 'center'},
+                {field: 'pinyin', title: '作者拼音', width: 200, align: 'center'},
+                {field: 'intro', title: '简介', align: 'center'},
+                {field: 'num', title: '作品数量', width: 100, align: 'center'},
+                {field: 'status', title: '状态', templet: '#table-switch', width: 100, data: {text: '正常|禁用'}},
+                {title: '操作', width: 140, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

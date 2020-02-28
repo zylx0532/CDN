@@ -1,0 +1,62 @@
+<title>发布广告</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营设置</cite></a>
+        <a><cite>广告设置</cite></a>
+        <a><cite>发布广告</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">发布广告</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认发布</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var config;
+    layui.admin.req({
+        url: '/manage/content/ad/position/info.json',
+        method: 'POST',
+        data: {id: layui.router().search.position},
+        success: function (res) {
+            config = {
+                url: {
+                    index: '/content/ad/position=' + layui.router().search.position + '/'
+                },
+                api: {
+                    submit: '/manage/content/ad/ad/add.json'
+                },
+                fields: [
+                    {name: '位置', type: 'label', value: res.data.title},
+                    {name: '位置', key: 'position_id', type: 'hide', value: res.data.id},
+                    {name: '标题', key: 'title', type: 'text'},
+                    {name: '描述', key: 'intro', type: 'text'},
+                    {name: '代码', key: 'code', type: 'textarea'},
+                    {name: '权重', key: 'weight', type: 'slider', extra: {min: 0, max: 100}},
+                    {name: '类型', key: 'type', type: 'radio', extra: '1:html代码 2:js代码',value:"2"},
+                    {name: '状态', key: 'status', type: 'switch', extra: '正常|隐藏'}
+                ],
+            };
+            layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+        }
+    });
+</script>

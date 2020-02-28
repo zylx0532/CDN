@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+	<title>我的评分 - 用户中心 - {$kx.config.sitename}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/css/global.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/flexible.min.js"></script>
+</head>
+<body class="bg-f27">
+	<div class="relative w100  bg-white flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+		<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/return.png" class="pt-return">
+		<div class="size18 bold color37">我的评分</div>
+        <div>
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/ellipsis.png" class="mr5 pt-ellipsis">
+        </div>
+        <div class="pt5 pb5 pt-tip">
+            <a href="{link=index.index}" class="block color1 text-center pt-tip-item" title="{$kx.config.sitename}">前往首页</a>
+            <a href="{link=novel.search.index}" class="block color1 text-center pt-tip-item">搜索小说</a>
+            <a href="{link=user.index.index}" class="block color1 text-center pt-tip-item" rel="nofollow">个人中心</a>
+        </div>
+	</div>
+
+	<!-- 星标置顶 -->
+	<div class="w100 bg-white lh100 mt10 pt-stick" style="margin-bottom: .56rem;">
+        {block method="pagination" name="paginate" page=$page limit=$pagesize count=$userinfo.data.star_num maxpage=50 section=3}
+        {block method="user.starList" name=starList userid=$userinfo.id}
+        <div class="pt-stick-cont">
+            {loop=starList}
+            <a href="{link=novel.novel.index novelid=$loop.novel.novel.id pinyin=$loop.novel.novel.pinyin}">
+                <div class="flex-wrp pt-stick-item"  data-novel-id="{$loop.novel.id}">
+                    <img src="{$loop.novel.novel.cover}" class="mr15">
+                    <div class="flex-item flex-wrp flex-cell flex-between pt5">
+                        <div class="flex-wrp flex-between">
+                            <div class="size14 color7">{$loop.novel.novel.name}</div>
+                        </div>
+                        <div class="size12 color4">[ {$loop.novel.author.name} ]</div>
+                        <div class="size12 compulsory-row-one lh130 color4">
+                            评分：{$loop.num}<span class="plr15">|</span>
+                            {$kx.config.user.exp_caption}奖励：{$loop.exp}<span class="plr15">|</span>
+                            {$kx.config.user.point_caption}奖励：{$loop.point}
+                        </div>
+                        <div class="flex-wrp">
+                            <div class="flex-wrp flex-align-center color5 size12">时间：{$loop.datetime|date="Y-m-d H:i:s"}</div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+            {/loop}
+		</div>
+        {if $paginate.total > 1}
+        <div class="flex-wrp flex-between bg-white ptb15 plr15 mt10">
+            {if $paginate.first != $paginate.current}
+            <div class="flex-wrp flex-around flex-center pt-page4">
+                <a href="{link=user.star.index page=$paginate.first}">
+                    <span class="size14 color2">首页</span>
+                </a>
+            </div>
+            {/if}
+            {if $paginate.prev}
+            <div class="flex-wrp flex-around flex-center pt-page4">
+                <a href="{link=user.star.index page=$paginate.prev}">
+                    <span class="size14 color2">上一页</span>
+                </a>
+            </div>
+            {/if}
+            {if $paginate.next}
+            <div class="flex-wrp flex-around flex-center pt-page4">
+                <a href="{link=user.star.index page=$paginate.next}">
+                    <span class="size14 color2">下一页</span>
+                </a>
+            </div>
+            {/if}
+            {if $paginate.last != $paginate.current}
+            <div class="flex-wrp flex-around flex-center pt-page4">
+                <a href="{link=user.star.index page=$paginate.last}">
+                    <span class="size14 color2">尾页</span>
+                </a>
+            </div>
+            {/if}
+        </div>
+        {/if}
+    </div>
+
+    <!-- 底部版权 -->
+    {include file="/system/footer"}
+    <!-- 底部按钮 -->
+    {include file="/system/footerbutton"}
+</body>
+</html>

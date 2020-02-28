@@ -1,0 +1,114 @@
+<title>规则列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>规则管理</cite></a>
+        <a><cite>规则列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+            api: {
+                batch: '/manage/collect/rule/batch.json',
+                list: '/manage/collect/rule/list.json',
+                change: '/manage/collect/rule/change.json',
+                del: '/manage/collect/rule/del.json',
+                export: '/manage/collect/rule/export.html',
+            },
+            search: {},
+            topButton: {
+                add: {},
+                del: {},
+                import:{
+                    text: '导入',
+                    style: 'layui-btn layui-btn-normal',
+                    action: function (obj) {
+                        location.hash = layui.router().href + 'import';
+                    }
+                },
+                export: {
+                    text: '导出', style: 'layui-btn layui-btn-normal', action: function (obj) {
+                        var checkData = layui.table.checkStatus('LAY-curd-table').data;
+                        if (checkData.length === 0) {
+                            return layui.layer.msg('请选择数据');
+                        }
+                        layui.each(checkData, function (k, v) {
+                            layui.layer.open({
+                                type: 2,
+                                title: false,
+                                shadeClose: false,
+                                shade: false,
+                                area: ['0px', '0px'],
+                                closeBtn: 0,
+                                zIndex: -1,
+                                content: config.api.export + '?&id=' + v.id + '&access_token=' + encodeURIComponent(layui.data('layuiAdmin').access_token)
+                            });
+                        });
+                    }
+                },
+            },
+            actionButton: {
+                edit: {},
+                collect: {
+                    text: '采集', icon: 'layui-icon layui-icon-triangle-r', action: function (obj) {
+                        location.hash = '/collect/collect/list/ruleid=' + obj.data.id;
+                    }
+                },
+                test: {
+                    text: '测试', icon: 'layui-icon layui-icon-console', action: function (obj) {
+                        location.hash = '/collect/rule/run/type=test/id=' + obj.data.id;
+                    }
+                },
+                cron: {
+                    text: '任务', icon: 'layui-icon layui-icon-engine', action: function (obj) {
+                        location.hash = '/collect/rule/run/type=cron/id=' + obj.data.id;
+                    }
+                },
+                del: {},
+            },
+            table: {
+                page: true,
+                limit: 30,
+                cols: [[
+                    {type: 'checkbox', fixed: 'left'},
+                    {field: 'id', title: 'ID', align: 'center', width: 60},
+                    {field: 'name', title: '规则名称', align: 'center'},
+                    {field: 'site.name', title: '所属站点'},
+                    {field: 'create_user.name', title: '创建人'},
+                    {field: 'create_time', title: '创建时间'},
+                    {field: 'update_user.name', title: '修改人'},
+                    {field: 'update_time', title: '修改时间'},
+                    {title: '操作', width: 320, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+                ]]
+            }
+        }
+    ;
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/style.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/jquery-3.3.1.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+</head>
+<body>
+<!-- 导航栏 -->
+{include file="/system/header"}
+<!-- 内容 -->
+<div class="pt-content">
+    <!-- 面包屑 -->
+    <div class="pt-crumb">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/crumb_icon.png" class="pt-crumb-icon"">
+        <span class="color5"><a title="{$kx.config.sitename}" href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > <a title="{$category.name}" href="{link=novel.category.list categoryid=$category.id key=$category.key}" class="color5">{$category.name}</a> > <a title="{$novel.name}" href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}" class="color5">{$novel.name}</a></span>
+    </div>
+    <!-- 书籍详情 -->
+    <div class="pt-bookdetail">
+        <a title="{$novel.name}" href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}"><img src="{$novel.cover}" class="fl pt-bookdetail-img" title="{$novel.name}" alt="{$novel.name}"></a>
+        <div class="fl pt-bookdetail-info">
+            <div style="line-height: 40px;">
+                <h1 class="size24 mr20 novelname"><a href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}" class="color2" title="{$novel.name}">{$novel.name}</a></h1>
+                <span class="mr30">作者：<a title="{$author.name}" href="{link=author.space.index authorid=$author.id pinyin=$author.pinyin name=$author.name}"><span class="color5">{$author.name}</span></a></span>
+                <span class="">类别：<a title="{$category.name}" href="{link=novel.category.list categoryid=$category.id key=$category.key}" class="color5"><span class="color5">{$category.name}</span></a></span>
+                <span class="fr color7">综合评分 <span class="size26 color2 num-avg-star" data-star-score="{$data.star_score}" data-star-num="{$data.star_num}">{$data.star}</span></span>
+            </div>
+            <div style="max-height: 72px;overflow: hidden;position:relative" class="tags">
+                <div>
+                    {loop=$tag}
+                    <a title="{$loop.name}" class="pt-bookdetail-label mt10" data-href="{link=tag.detail tagid=$loop.id pinyin=$loop.pinyin}">{$loop.name}</a>
+                    {/loop}
+                </div>
+            </div>
+            <div class="compulsory-row-three pt-bookdetail-intro">
+                {$novel.intro|showIntro}
+            </div>
+            <div>
+                {if $last.id}
+                <a title="{$last.name}" href="{link=novel.chapter.read pinyin=$novel.pinyin novelid=$novel.id chapterid=$last.id}"><span class="color2 mr20">{$last.name}</span></a>
+                {else}
+                <span class="color2 mr20">{$last.name}</span>
+                {/if}
+                <span class="size12 color0">{$last.time|date="Y-m-d H:i:s"}</span>
+            </div>
+            <div class="pt-bookdetail-btn">
+                <a href="{link=novel.chapter.read novelid=$novel.id pinyin=$novel.pinyin chapterid=1}" class="pt-bookdetail-select">立即阅读</a>
+                <a href="javascript:void(0);" id="btn-mark">{$ismark|default='加入收藏','取消收藏'}</a>
+                <a href="javascript:void(0);" id="btn-vote">我要推荐</a>
+                <a title="{$novel.name}" href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}">书籍详情</a>
+            </div>
+        </div>
+    </div>
+    <!-- 右侧次数 -->
+    <div class="pt-bookdetail-num">
+        <div class="mb20 lh100">
+            <span class="color5 mr10">点击:</span>
+            <span class="color7">{$data.allvisit} 次</span>
+        </div>
+        <div class="mb20 lh100">
+            <span class="color5 mr10">收藏:</span>
+            <span class="color7"><span class="num-mark">{$data.mark}</span> 人</span>
+        </div>
+        <div class="mb20 lh100">
+            <span class="color5 mr10">推荐:</span>
+            <span class="color7"><span class="num-vote">{$data.vote}</span> 人</span>
+        </div>
+        <div class="mb20 lh100">
+            <span class="color5 mr10">字数:</span>
+            <span class="color7">{$data.words}万</span>
+        </div>
+        <div class="mb20 lh100">
+            <span class="color5 mr10">我要评分:</span>
+            <span class="pt-photo">
+                <span title="不知所云">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star1.png" class="high">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star.png" class="nohigh">
+                </span>
+                <span title="随便看看">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star1.png" class="high">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star.png" class="nohigh">
+                </span>
+                <span title="值得一读">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star1.png" class="high">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star.png" class="nohigh">
+                </span>
+                <span title="不容错过">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star1.png" class="high">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star.png" class="nohigh">
+                </span>
+                <span title="经典必读">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star1.png" class="high">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star.png" class="nohigh">
+                </span>
+            </span>
+        </div>
+        <div class="mb20 lh100">
+            <span class="color5 mr10">参评人数:</span>
+            <span class="color7"><span class="num-star-people">{$data.star_num}</span> 人</span>
+        </div>
+    </div>
+    <!-- 章节 -->
+    <div class="clearfix" style="width:100%">
+        <div class="fl" style="width:950px">
+            <div class="pt-chapter">
+                <div class="size18 color5 pt-chapter-title">
+                    <a href="javascript:;" class="pt-chapter-select">下载地址</a>
+                </div>
+                <div class="pt-chapter-content">
+                    {block method="novel.down" name=list novelid=$novel.id }
+                    {if $list}
+                    {loop}
+                    <div class="size16 pt-chapter-cont-title mb10 color2"> {$key|strtoupper} 格式下载 </div>
+                    {section loop=$loop item=$item}
+                    <ul class="downitem">
+                        <li class="site">{$item.site}</li>
+                        <li class="size">{$item.size|file_size_format}</li>
+                        <li class="date">{$item.date|date="Y-m-d"}</li>
+                        <li class="num">{$item.num}次</li>
+                        <li class="link"><a rel="nofollow" href="{link=novel.novel.downlink id=$item.id}" class="color10">{$key|strtoupper}打包下载</a></li>
+                    </ul>
+                    {/section}
+                    <div class="clear"></div>
+                    {/loop}
+                    {else}
+                    <div class="size16 pt-chapter-cont-title mb10 "> 本书暂无下载资源，站长正在寻找资源添加中...... </div>
+                    {/if}
+                </div>
+            </div>
+            <div class="pt-chapter">
+                <div class="size18 color5 pt-chapter-title">
+                    <a title="{$novel.name}评论区" href="{link=novel.comment.list novelid=$novel.id pinyin=$novel.pinyin}" class="pt-chapter-select">小说评论区</a>
+                </div>
+                <div>
+                    {block method="comment.list" name=commentlist type='novel' userid=$userinfo.id typeid=$novel.id}
+                    <div class="clear">
+                        <div class="size16 pt-chapter-cont-title"> <a href="{link=novel.comment.list novelid=$novel.id pinyin=$novel.pinyin}" class="color2 ">全部评论({=count($commentlist)}条)</a></div>
+                        <ul class="commentlist clearfix">
+                            {loop=commentlist}
+                            <li data-comment-id="{$loop.id}">
+                                <div class="fl">
+                                    <div class="avatar"><img src="{$loop.user.avatar}" alt="{$loop.user.name}></div>
+                                </div>
+                                <div class="fr">
+                                    <div class="comment-title">
+                                        <div class="comment-name"><b>{$loop.user.name}</b> 发表了帖子</div>
+                                        <div class="comment-time">{$loop.datetime|date="Y-m-d H:i:s"}</div>
+                                    </div>
+                                    <div class="comment-content">
+                                        {$loop.content}
+                                    </div>
+                                    <div class="comment-btn {$loop.rating|boolval|default='','disable'}">
+                                        <div class="comment-btn-up mr30 {=$loop.rating=='good'?'active':''}">
+                                            <span class="comment-btn-up-btn"></span>
+                                            <span class="number">{$loop.good_num}</span>
+                                        </div>
+                                        <div class="comment-btn-down {=$loop.rating=='bad'?'active':''}">
+                                            <span class="comment-btn-down-btn"></span>
+                                            <span class="number">{$loop.bad_num}</span>
+                                        </div>
+                                        <a href="{link=novel.comment.post novelid=$novel.id pinyin=$novel.pinyin commentid=$loop.id}">
+                                            <span class="comment-btn-reply color2">{$loop.post_num} 条回复</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            {/loop}
+                        </ul>
+                    </div>
+                    <form onsubmit="return false;" class="addcomment">
+                        <textarea></textarea>
+                        <button>发表</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="fr" style="width:240px;">
+            <!-- 猜你喜欢 -->
+            <div class="fr pt-new-recomment">
+                <div class="pt-new-recomment-title">猜你喜欢</div>
+                <ul class="pt-new-recomment-list">
+                    {block method="novel.list" name=list order=postdate sort=desc num=20}
+                    {section loop=$list item=$loop}
+                    <li>
+                        <span class="color3">[<a class="color3" title="{$loop.category.name}" href="{link=novel.category.list categoryid=$loop.category.id key=$loop.category.key}">{$loop.category.name}</a>]</span>
+                        <a class="color4 pt-text" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                    </li>
+                    {/section}
+                </ul>
+            </div>
+            <!-- 周榜、月榜 -->
+            <div class="pt-sexselect">
+                {block method="rank.info" name=rankinfo key=weekvisit}
+                <div class="pt-sexselect-title border-b"><span class="fl pt-sexselect-title-icon"></span>{$rankinfo.name}
+                </div>
+                <ul class="pt-sexselect-list">
+                    {block method="novel.list" name=list order=$rankinfo.key num=20}
+                    {section loop=$list item=$loop}
+                    <li>
+                        <span class="{=$i.index<3?'bg-red':'bg-ccc'} pt-sexselect-square">{$i.order}</span>
+                        <a class="color5" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                        <a title="{$loop.author.name}" class="color3 fr" href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">{$loop.author.name}</a>
+                    </li>
+                    {/section}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- 底部版权-->
+{include file="/system/footer"}
+<!-- js -->
+<script>
+var __ADD_STAR='{link=user.star.add}',__NOVEL_ID='{$novel.id}',__NOVEL_NAME='{$novel.name}',__ADD_MARK='{link=user.mark.add}',__DEL_MARK='{link=user.mark.del}',__ADD_VOTE='{link=user.vote.add}',__RATING_COMMENT='{link=novel.comment.rating}',__ADD_COMMENT='{link=novel.comment.add}';
+</script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/novel.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/css/global.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/flexible.min.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+    <style>
+		.pt-search-icon{
+			width:0.21rem;
+			height:0.21rem;
+		}
+
+	</style>
+</head>
+<body>
+	<!-- 头部 -->
+	<div class="w100  bg-white flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+		<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/return.png" class="pt-return">
+		<div class="size18 bold color37">评论详情</div>
+        <div>
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/ellipsis.png" class="mr5 pt-ellipsis">
+        </div>
+        <div class="pt5 pb5 pt-tip">
+            <a href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}" class="block color1 text-center pt-tip-item" title="{$novel.name}">回到书页</a>
+            <a href="{link=index.index}" class="block color1 text-center pt-tip-item" title="{$kx.config.sitename}">前往首页</a>
+            <a href="{link=novel.search.index}" class="block color1 text-center pt-tip-item">搜索小说</a>
+            <a href="{link=user.mark.index}" class="block color1 text-center pt-tip-item" rel="nofollow">我的书架</a>
+            <a href="{link=user.index.index}" class="block color1 text-center pt-tip-item" rel="nofollow">个人中心</a>
+        </div>
+	</div>
+
+	<div class="flex-wrp plr15 mt10 ptb15 bg-white pt-comment-hot">
+		<img src="{$comment.user.avatar}" class="mr20 pt-comment-icon" alt="{$comment.user.name}">
+		<div class="flex-item flex-wrp flex-cell flex-around">
+			<div class="flex-wrp lh100 flex-between">
+				<div class="size14 color4">{$comment.user.name}</div>
+				<div class="size12 color4">{$comment.datetime|date="Y-m-d H:i:s"}</div>
+			</div>
+			<div class="lh150 ptb10 size14 color32">{$comment.content|nl2br}</div>
+		</div>
+	</div>
+	<!-- 全部评论 -->
+	<div class="w100 mb10 bg-white lh100 mt10 pt-comment">
+		<div class="flex-wrp flex-between ">
+			<div class="size14 color7 bold pt-comment-title">全部回复</div>
+			<div class="size12 color4 mr15">当前共{$comment.post_num}条</div>
+		</div>
+        {block method="pagination" name="paginate" page=$page limit=$pagesize count=$comment.post_num maxpage=50 section=3}
+        {if $comment.post_num < 1}
+        <div class="plr15 pt-comment-cont" style="text-align: center;">暂无回复</div>
+        {else}
+        {block method="comment.replyList" name=replyList commentid=$comment.id num=$paginate.limit page=$paginate.current}
+        {section loop=$replyList item=$loop}
+        <div class="flex-wrp plr15 pt-comment-cont">
+            <img src="{$loop.user.avatar}" class="mr20 pt-comment-icon" alt="{$loop.user.name}">
+            <div class="flex-item flex-wrp flex-cell flex-around">
+                <div class="flex-wrp lh100 flex-between">
+                    <div class="size14 color4">{$loop.user.name}</div>
+                    <div class="size12 color4">{$loop.datetime|date="Y-m-d H:i:s"}</div>
+                </div>
+                <div class="lh150 ptb10 size14 color32">{$loop.content}</div>
+            </div>
+        </div>
+        {/section}
+        {/if}
+	</div>
+    {if $paginate.total > 1}
+    <div class="flex-wrp flex-between bg-white ptb15 plr15 mt10" style="position: fixed;bottom: 0.44rem;width: 100%;">
+        {if $paginate.first != $paginate.current}
+        <div class="flex-wrp flex-around flex-center pt-page4">
+            <a href="{link=novel.comment.post novelid=$novel.id pinyin=$novel.pinyin commentid=$comment.id page=$paginate.first}">
+                <span class="size14 color2">首页</span>
+            </a>
+        </div>
+        {/if}
+        {if $paginate.prev}
+        <div class="flex-wrp flex-around flex-center pt-page4">
+            <a href="{link=novel.comment.post novelid=$novel.id pinyin=$novel.pinyin commentid=$comment.id page=$paginate.prev}">
+                <span class="size14 color2">上一页</span>
+            </a>
+        </div>
+        {/if}
+        {if $paginate.next}
+        <div class="flex-wrp flex-around flex-center pt-page4">
+            <a href="{link=novel.comment.post novelid=$novel.id pinyin=$novel.pinyin commentid=$comment.id page=$paginate.next}">
+                <span class="size14 color2">下一页</span>
+            </a>
+        </div>
+        {/if}
+        {if $paginate.last != $paginate.current}
+        <div class="flex-wrp flex-around flex-center pt-page4">
+            <a href="{link=novel.comment.post novelid=$novel.id pinyin=$novel.pinyin commentid=$comment.id page=$paginate.last}">
+                <span class="size14 color2">尾页</span>
+            </a>
+        </div>
+        {/if}
+    {/if}
+	<!-- 留言评论 -->
+	<div class="size14 color2 pt-leave-comment">
+		回复留言
+	</div>
+    <div class="pt-comment-box" style="display: none;">
+        <div class="size18 bold color37 text-center">回复留言</div>
+        <!-- 内容 -->
+        <div class="pt-content" style="margin: 0.1rem;">
+            <textarea class="pt-text" style="height: 1rem;width: 100%;padding:0.1rem;border-radius: 0.05rem" placeholder="请在此输入回复内容" ></textarea>
+            <div class="size14 color92 pt-sum text-right"><span class="pt-num">0</span>/<span class="pt-limit">200</span></div>
+        </div>
+        <div class="bg-red size16 color1 pt-submit" style="height: 0.4rem;text-align: center;line-height:0.4rem;margin: 0 0.3rem 0.2rem;border-radius: 0.2rem">提交</div>
+    </div>
+        <!-- 底部版权 -->
+        {include file="/system/footer"}
+        <!-- 底部按钮 -->
+        {include file="/system/footerbutton"}
+        <script>var __REPLY_COMMENT='{link=comment.reply}',__TYPE='novel',__TYPE_ID='{$novel.id}',__COMMENT_ID='{$comment.id}'</script>
+        <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/layer/mobile/layer.js"></script>
+        <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/comment.js"></script>
+</body>
+</html>

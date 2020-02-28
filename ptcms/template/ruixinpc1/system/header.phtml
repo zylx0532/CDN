@@ -1,0 +1,70 @@
+<div class="pt-top-nav">
+    <ul class="content">
+        <li class="fl">
+            Welcome to {$kx.config.sitename}
+        </li>
+        <li class="fr m">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/shortcut_icon.png" class="pt-shortcut-icon">
+            <span class="cursor color4 lh100" onclick="toDesktop('{$kx.config.siteurl}','{$kx.config.sitename}')">toDesktop</span>
+        </li>
+        <li class="fr mr20">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star_icon.png" class="pt-index-icon">
+            <span class="cursor color4 lh100" onclick="addFavorite(document.title,window.location);">addFavorite</span>
+        </li>
+        <li class="fr mr20">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/index_icon.png" class="pt-index-icon">
+            <span class="cursor color4 lh100" onclick="setHome(this);">setHome</span>
+        </li>
+    </ul>
+</div>
+<div class="w100 pt-head-bg">
+    <div class="pt-head">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/static/image/logo.png" class="pt-logo" title="{$kx.config.sitename}">
+        <div class="pt-search-box">
+            <form action="{link=novel.search.result}">
+                <div class="pt-serachbg">
+                    <input type="text" name="searchkey" placeholder="Please enter the novel you want to search" class="pt-serarch-input" value="{$kx.get.searchkey}">
+                </div>
+                <button type="submit" class="pt-search-btn">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/search.png" class="pt-search-icon">
+                </button>
+            </form>
+        </div>
+        <ul class="inline-block size14 color4 fr pt-head-list">
+            <li>
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/person_icon.png" class="pt-person-icon">
+                {if ($islogin)}
+                <span class="color2 lh100">
+                    <a href="{link=user.index.index}" class="color2">{=$userinfo.nickname?:$userinfo.name}</a>
+                    <span>|</span>
+                    <a href="{link=user.pay.recharge}" class="color2">Pay</a>
+                </span>
+                {else}
+                <span class="color2 lh100"><a title="Login" href="{link=user.auth.login}" class="color2">Login</a> | <a title="Register" href="{link=user.auth.register}" class="color2">Register</a></span>
+                {/if}
+            </li>
+            <li>
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/book_icon.png" class="pt-book-icon">
+                <a rel="nofollow" href="{link=user.mark.index}" class="color4 lh100">Bookshelf</a>
+            </li>
+            <li class="inline-block">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/history_icon.png" class="pt-history-icon">
+                <a rel="nofollow" href="{link=user.history.index}" class="color4 lh100">History</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- 导航栏 -->
+<div class="pt-navbg">
+    <div class="pt-nav">
+        <a title="Index" href="{link=index.index}"{if $pagesign=='index'} class="pt-active"{/if}>Index</a>
+        <a title="Ranking" href="{link=novel.rank.index}"{if $pagesign=='rank'} class="pt-active"{/if}>Ranking</a>
+        <a title="Category" href="{link=novel.category.index}"{if $pagesign=='category'} class="pt-active"{/if}>Category</a>
+        <a title="Complete" href="{link=novel.over.index}"{if $pagesign=='over'} class="pt-active"{/if}>Complete</a>
+        <a title="BookList" href="{link=booklist.booklist.index}"{if $pagesign=='booklist'} class="pt-active"{/if}>BookList</a>
+        <a title="Special" href="{link=special.index}"{if $pagesign=='special'} class="pt-active"{/if}>Special</a>
+        <a title="UserCP" href="{link=user.index.index}" class="fr{if $pagesign=='user'}  pt-active{/if}">UserCP</a>
+        <a title="Author" href="{link=author.author.index}" class="fr" target="_blank">Author</a>
+    </div>
+</div>

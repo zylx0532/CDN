@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/css/global.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/flexible.min.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+    <style>
+        .tags {
+            width: 100%;
+            overflow-x:scroll;
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+        .tags ul {
+            width: 999px;
+            white-space: nowrap;
+        }
+        .tags li{
+            display: inline-block;
+            padding-left: 10px;
+            padding-right: 10px;
+            font-size: 14px;
+            color: #626267;
+            float: left;
+        }
+        .tags li.active{
+            border: 1px solid #f55;
+            border-radius: 14px;
+        }
+        .tags li.active a{
+            color: #f55 !important;
+        }
+    </style>
+</head>
+<body>
+	<div class="w100  bg-white flex-wrp flex-align-center flex-between lh100 plr15 ptb15 border-b">
+		<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/return.png" class="pt-return" onclick="window.history.back();">
+		<div class="size18 bold color37">书单列表</div>
+        <div>
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/ellipsis.png" class="mr5 pt-ellipsis">
+        </div>
+        <div class="pt5 pb5 pt-tip">
+            <a href="{link=index.index}" class="block color1 text-center pt-tip-item" title="{$kx.config.sitename}">前往首页</a>
+            <a href="{link=user.booklist.detail}" class="block color1 text-center pt-tip-item" title="{$novel.name}">创建书单</a>
+            <a href="{link=user.booklist.index}" class="block color1 text-center pt-tip-item">我的书单</a>
+        </div>
+	</div>
+    <div class="pt-popular-cont">
+        {block method=booklist.hottags name=hottags}
+        <div  class="tags">
+            <ul>
+                <li class="{=$kx.get.tagid?'':'active'}"><a href="{link=index}">全部</a></li>
+                {loop=hottags}
+                <li class="{=$kx.get.tagid && $kx.get.tagid==$loop.id?'active':''}"><a href="{link=index tagid=$loop.id}">{$loop.name}</a></li>
+                {/loop}
+            </ul>
+        </div>
+        {block method=booklist.count userid=$userinfo.id name=count tags=$kx.get.tagid}
+        {block method="pagination" name="paginate" page=$page limit=$pageSize count=$count maxpage=50 section=3}
+        {block method=booklist.list userid=$userinfo.id name=list tags=$kx.get.tagid num=$paginate.limit page=$paginate.current}
+        {section loop=$list item=$loop}
+        <a href="{link=detail booklistid=$loop.id}">
+            <div class="flex-wrp pt-popular-item">
+                <img src="{$loop.cover}" class="mr15" alt="{$loop.title}">
+                <div class="flex-item pt5">
+                    <div class="flex-wrp flex-between">
+                        <div class="size14">
+                            <span class="color7">{$loop.title}</span>
+                        </div>
+                    </div>
+                    <div class="size12 compulsory-row mb10 mt10 lh130 color4">
+                        {$loop.intro|showIntroLine}
+                    </div>
+                    <div class="size12">
+                        书籍 <span class="color2 mr5">{$loop.num_novel}</span><span class="color3 mr5">/</span>
+                        浏览 <span class="color2 mr5">{$loop.num_allvisit}</span><span class="color3 mr5">/</span>
+                        收藏 <span class="color2">{$loop.num_mark}</span>
+                    </div>
+                </div>
+            </div>
+        </a>
+        {/section}
+    </div>
+    {if $paginate.total > 1}
+    <div class="flex-wrp flex-between bg-white ptb15 plr15 mt10">
+        {if $paginate.first != $paginate.current}
+        <div class="flex-wrp flex-around flex-center pt-page4">
+            <a href="{link=booklist.booklist.index tagid=$kx.get.tagid page=$paginate.first}">
+                <span class="size14 color2">首页</span>
+            </a>
+        </div>
+        {/if}
+        {if $paginate.prev}
+        <div class="flex-wrp flex-around flex-center pt-page4">
+            <a href="{link=booklist.booklist.index tagid=$kx.get.tagid page=$paginate.prev}">
+                <span class="size14 color2">上一页</span>
+            </a>
+        </div>
+        {/if}
+        {if $paginate.next}
+        <div class="flex-wrp flex-around flex-center pt-page4">
+            <a href="{link=booklist.booklist.index tagid=$kx.get.tagid page=$paginate.next}">
+                <span class="size14 color2">下一页</span>
+            </a>
+        </div>
+        {/if}
+        {if $paginate.last != $paginate.current}
+        <div class="flex-wrp flex-around flex-center pt-page4">
+            <a href="{link=booklist.booklist.index tagid=$kx.get.tagid page=$paginate.last}">
+                <span class="size14 color2">尾页</span>
+            </a>
+        </div>
+        {/if}
+    </div>
+    {/if}
+
+    <!-- 底部版权 -->
+    {include file="/system/footer"}
+</body>
+</html>

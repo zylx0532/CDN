@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+	<title>账户绑定 - 用户中心 - {$kx.config.sitename}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/css/global.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/flexible.min.js"></script>
+</head>
+<body class="bg-f27">
+	<div class="relative w100  bg-white flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+		<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/return.png" class="pt-return">
+		<div class="size18 bold color37">账户绑定</div>
+        <div>
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/ellipsis.png" class="mr5 pt-ellipsis">
+        </div>
+        <div class="pt5 pb5 pt-tip">
+            <a href="{link=index.index}" class="block color1 text-center pt-tip-item" title="{$kx.config.sitename}">前往首页</a>
+            <a href="{link=novel.search.index}" class="block color1 text-center pt-tip-item">搜索小说</a>
+            <a href="{link=user.index.index}" class="block color1 text-center pt-tip-item" rel="nofollow">个人中心</a>
+        </div>
+	</div>
+
+	<!-- 星标置顶 -->
+	<div class="w100 bg-white lh100 mt10 pt-stick" style="margin-bottom: .56rem;">
+        <div class="bg-white mb10 pt-list">
+            {if $kx.config.oauth.power}
+                {block method=user.isbind type=qq userid=$userinfo.id name=isbind}
+                <a class="flex-wrp flex-align-center flex-between w100 mb25" href="{if $isbind}{link=user.auth.unbind type=qq}{else}{link=user.auth.third type=qq}{/if}">
+                    <div class="flex-wrp flex-align-center">
+                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/qq.png" class="mr10 pt-list-icon">
+                        <span class="size14 lh100 color7">QQ</span>
+                    </div>
+                    {block method=mark.num userid=$userinfo.id name=$marknum}
+                    {if $isbind}
+                    <div class="size12 color4">解绑</div>
+                    {else}
+                    <div class="size12 color4">绑定</div>
+                    {/if}
+                </a>
+                {block method=user.isbind type=weibo userid=$userinfo.id name=isbind}
+                <a class="flex-wrp flex-align-center flex-between w100 mb25" href="{if $isbind}{link=user.auth.unbind type=weibo}{else}{link=user.auth.third type=weibo}{/if}">
+                    <div class="flex-wrp flex-align-center">
+                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/wb.png" class="mr10 pt-list-icon">
+                        <span class="size14 lh100 color7">微博</span>
+                    </div>
+                    {block method=mark.num userid=$userinfo.id type=history name=$historynum}
+                    {if $isbind}
+                    <div class="size12 color4">解绑</div>
+                    {else}
+                    <div class="size12 color4">绑定</div>
+                    {/if}
+                </a>
+                {block method=user.isbind type=weixin userid=$userinfo.id name=isbind}
+                <a class="flex-wrp flex-align-center flex-between w100" href="{if $isbind}{link=user.auth.unbind type=weixin}{else}{link=user.auth.third type=weixin}{/if}">
+                    <div class="flex-wrp flex-align-center">
+                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/wx.png" class="mr10 pt-list-icon">
+                        <span class="size14 lh100 color7">微信</span>
+                    </div>
+                    {if $isbind}
+                    <div class="size12 color4">解绑</div>
+                    {else}
+                    <div class="size12 color4">绑定</div>
+                    {/if}
+                </a>
+            {/if}
+        </div>
+    </div>
+
+    <!-- 底部版权 -->
+    {include file="/system/footer"}
+    <!-- 底部按钮 -->
+    {include file="/system/footerbutton"}
+</body>
+</html>

@@ -1,0 +1,103 @@
+<title>蜘蛛规则列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>系统设置</cite></a>
+        <a><cite>蜘蛛规则管理</cite></a>
+        <a><cite>蜘蛛规则列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            list: '/manage/system/spider/list.json',
+            del: '/manage/system/spider/del.json',
+            change: '/manage/system/spider/change.json'
+        },
+        topButton: {
+            add: {},
+        },
+        actionButton: {
+            edit: {
+                action: function (obj) {
+                    location.hash = (layui.$(this).data('url') ? layui.$(this).data('url') : layui.router().href + 'edit') + '/key=' + obj.data.key;
+                }
+            },
+            del: {
+                action: function (obj) {
+                    if (obj.data.type === 'system') {
+                        return layer.msg('系统规则不允许删除');
+                    }
+                    layer.confirm('真的删除这条记录么', function (index) {
+                        layui.admin.req({
+                            url: config.api.del,
+                            data: {key: obj.data.key},
+                            method: 'POST',
+                            success: function (res) {
+                                layer.msg('删除成功');
+                                obj.del();
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }
+            },
+        },
+        switchAction: function (obj) {
+            layui.admin.req({
+                url: config.api.change,
+                data: {
+                    key: this.value,
+                    field: layui.$(this).data('field'),
+                    value: obj.elem.checked ? 1 : 0
+                },
+                method: 'POST',
+                success: function (res) {
+                    layer.tips('修改成功', obj.othis);
+                }
+            })
+        },
+        table: {
+            page: true,
+            limit: 30,
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'key', align: 'center', width: 100},
+                {field: 'name', title: '名称', width: 100},
+                {field: 'type', title: '类型', width: 100},
+                {field: 'keywords', title: '关键词'},
+                {field: 'status', title: '规则状态', templet: '#table-switch', width: 100, data: {text: '启用|禁用'}},
+                {field: 'block_access', title: '访问状态', templet: '#table-switch', width: 120, data: {text: '阻止|允许'}},
+                {title: '操作', width: 160, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+
+</script>

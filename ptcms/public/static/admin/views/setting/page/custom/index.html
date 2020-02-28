@@ -1,0 +1,76 @@
+<title>自定义页面列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营设置</cite></a>
+        <a><cite>自定义页面管理</cite></a>
+        <a><cite>自定义页面列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            batch: '/manage/system/custompage/batch.json',
+            list: '/manage/system/custompage/list.json',
+            change: '/manage/system/custompage/change.json',
+        },
+        search: {},
+        topButton: {
+            add: {},
+            enable: {
+                text: '启用',
+                field: 'status',
+                value: '1'
+            },
+            disable: {
+                style: 'layui-btn-danger',
+                text: '禁用',
+                field: 'status',
+                value: '0'
+            },
+        },
+        actionButton: {
+            edit: {},
+            del: {},
+        },
+        table: {
+            page: true,
+            limit: 30,
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'url', title: 'URL'},
+                {field: 'title', title: '标题', align: 'center'},
+                {field: 'desc', title: '描述'},
+                {field: 'status', title: '状态', templet: '#table-switch', align: 'center', width: 100},
+                {title: '操作', width: 160, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

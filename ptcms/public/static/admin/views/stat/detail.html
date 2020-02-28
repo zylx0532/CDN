@@ -1,0 +1,63 @@
+<title>统计详情</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>统计管理</cite></a>
+        <a><cite>统计详情</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            list: '/manage/system/stat/detail.json',
+        },
+        table: {
+            where: layui.router().search,
+            page: true,
+            limit: 30,
+            cols: [
+                layui.router().search.type === 'spider'
+                    ? [
+                        {field: 'datetime', title: '日期'},
+                        {field: 'domain', title: '域名'},
+                        {field: 'type', title: '蜘蛛'},
+                        {field: 'visit', title: '数量'},
+                    ]
+                    : [
+                        {field: 'datetime', title: '日期'},
+                        {field: 'domain', title: '域名'},
+                        {field: 'pv', title: 'PV'},
+                        {field: 'uv', title: 'UV'},
+                        {field: 'iv', title: 'IV'},
+                    ]
+            ],
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

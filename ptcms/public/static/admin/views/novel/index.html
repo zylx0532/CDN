@@ -1,0 +1,109 @@
+<title>书籍列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>书籍管理</cite></a>
+        <a><cite>书籍列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="novelStatus">
+    <input type="checkbox" lay-skin="switch" lay-text="{{d.VALUE>1?'开启|跳转':'开启|关闭'}}" lay-filter="table-switch"
+           data-field="{{d.FIELD}}" value="{{d.id}}" {{d.VALUE== 1 ? 'checked' : '' }} {{d.VALUE>1?'disabled':''}}>
+</script>
+<script type="text/html" id="novelName">
+    <a target="_blank" href="/novel/novel/index?novelid={{d.id}}" title="{{d.intro}}">{{d.is_sensitive_words?'<span
+            style="color:red">(含有敏感词)</span> ':''}}{{d.VALUE}}</a>
+</script>
+<script type="text/html" id="chapterName">
+    {{#if(parseInt(d.last_id)){}}
+    <a target="_blank" href="/novel/chapter/read?novelid={{d.id}}&chapterid={{d.last_id}}&siteid={{d.source_id}}">{{d.VALUE}}</a>
+    {{#}else{}}
+    {{d.VALUE}}
+    {{#}}}
+</script>
+<script>
+    var config;
+    layui.admin.req({
+        url: '/manage/content/novel/extra.json',
+        method: 'POST',
+        success: function (res) {
+            config = {
+                api: {
+                    batch: '/manage/content/novel/batch.json',
+                    list: '/manage/content/novel/list.json',
+                    del: '/manage/content/novel/del.json',
+                    change: '/manage/content/novel/change.json',
+                    clear: '/manage/content/novel/clear.json'
+                },
+                search: {
+                    name: {type: 'text', text: '书名'},
+                    author_id: {type: 'text', text: '作者', search: false},
+                    category_id: {type: 'select', text: '分类', data: res.data.category, search: true},
+                    source_id: {type: 'select', text: '源站', data: res.data.site, search: true},
+                    status: {type: 'select', text: '状态', data: {0: '关闭', 1: '开启'}, search: true},
+                },
+                topButton: {
+                    del: {},
+                },
+                actionButton: {
+                    chapter: {
+                        text: '章节管理', icon: 'layui-icon layui-icon-list', action: function (obj) {
+                            if (obj.data.source_id){
+                                layer.msg('非原创书籍');
+                                return false;
+                            }
+                            location.hash = '/novel/id=' + obj.data.id + '/chapter';
+                        }
+                    },
+                    edit: {},
+                    del: {},
+                },
+                table: {
+                    page: true,
+                    limit: 30,
+                    cols: [[
+                        {type: 'checkbox', fixed: 'left'},
+                        {field: 'id', title: 'ID', align: 'center', width: 60},
+                        {field: 'cover', title: '封面', align: 'center', templet: '#table-img', width: 60,},
+                        {field: 'name', title: '书名(简介)', templet: '#novelName'},
+                        {field: 'category_name', title: '分类', width: 60},
+                        {field: 'author_name', title: '作者', width: 120},
+                        {field: 'source_name', title: '源站', align: 'center'},
+                        {field: 'last_name', title: '最新章节', templet: '#chapterName'},
+                        {field: 'last_update', title: '修改时间', align: 'center', templet: '#datetimeTpl'},
+                        {field: 'is_over', title: '全本', align: 'center', width: 80},
+                        {field: 'status', title: '状态', templet: '#novelStatus', align: 'center', width: 100,},
+                        {title: '操作', width: 220, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+                    ]]
+                }
+            };
+            layui.use('curd/list', layui.factory('curd/list'));
+        }
+    });
+</script>

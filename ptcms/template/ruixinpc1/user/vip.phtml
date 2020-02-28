@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>VIP - UserCp - {$kx.config.sitename}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/global.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/style.css"/>
+</head>
+<body>
+
+	<!-- 头部 -->
+    {include file="/system/header"}
+	<!-- 内容 -->
+	<div class="pt-content">
+		<!-- 面包屑 -->
+		<div class="pt-crumb">
+			<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/crumb_icon.png" class="pt-crumb-icon">
+			<span class="color5">
+                <a href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > <a href="{link=user.index.index}" class="color5">UserCP</a> > <a href="{link=user.vip.index}">VIP</a>
+            </span>
+		</div>
+
+		<!-- 一楼 -->
+		<div class="pt-floor1">
+            {include file="/system/userleft"}
+			<div class="relative pt-rank pt-user text-center" style="padding: 0">
+                {block method=user.isvip userid=$userinfo.id name=$isvip}
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/vip1{=$isvip?'_active':''}.png" alt="{$userinfo.name}" class="mt50" style="width: 80px;height: 80px;">
+                {if $isvip}
+                <h1 class="size18 color32">Dear {=$userinfo.nickname?:$userinfo.name}</h1>
+                <p>{$userinfo.vip_expire_time|date='Y-m-d'} Expire.</p>
+                {else}
+                <h1 class="size18 color32">Dear {=$userinfo.nickname?:$userinfo.name}</h1>
+                <p>You haven't VIP</p>
+                {/if}
+                <a href="{link=user.pay.vip}" class="inline-block plr25 ptb10 bg-red color1 mtb20">{=$isvip?'Renewal VIP':'Opening VIP'}</a>
+                <div class="mt50 border-t pt35" style="height: 100px;text-align: left">
+                    <img class="ml40 mr20" style="vertical-align: middle" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/vip_privilege.png" alt="VIP Privilege">
+                    <span class="size16 color62 ml40 mr20">
+                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/vip_benefit_1.png" alt="First recharge exp" style="vertical-align: middle;">
+                        First recharge exp
+                    </span>
+                    <span class="size16 color62 ml40 mr20">
+                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/vip_benefit_2.png" alt="Discounts for Chapter Sub" style="vertical-align: middle;">
+                        Discounts for Chapter Sub
+                    </span>
+                    <span class="size16 color62 ml40">
+                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/vip_benefit_3.png" alt="Novel for free" style="vertical-align: middle;">
+                        Novel for free
+                    </span>
+                </div>
+			</div>
+            <div class="relative pt-user-table mt10">
+                <div style="line-height: 18px;margin-bottom:30px;">
+                    <span class="size18 color32 mr10 bold">VIP Free Read</span>
+                </div>
+                <div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th style="width: 150px;">Title</th>
+                            <th style="width: 60px;">Author</th>
+                            <th style="width: 60px;">Category</th>
+                            <th style="width: 250px;">Chapter</th>
+                            <th style="width: 65px;">Words</th>
+                            <th style="width: 50px;">Status</th>
+                            <th style="width: 65px;">Info</th>
+                        </tr>
+                        </thead>
+                        <tbody class="color32">
+                        {block method="novel.list" name=novellist userid=$userinfo.id num=10 type=2}
+                        {if empty($novellist)}
+                        <tr class="empty">
+                            <td colspan="7">No Data~~~</td>
+                        </tr>
+                        {else}
+                        {section loop=$novellist item=$loop}
+                        <tr>
+                            <td>{$loop.novel.name}</td>
+                            <td>{$loop.author.name}</td>
+                            <td>{$loop.category.name}</td>
+                            <td>{$loop.last.name}</td>
+                            <td>{$loop.data.words}万</td>
+                            <td>{=$loop.is_over?'Over':'Serialize'}</td>
+                            <td><a class="color2" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}">Read</a></td>
+                        </tr>
+                        {/section}
+                        {/if}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+	</div>
+	<!-- 底部版权-->
+    {include file="/system/footer"}
+	<!-- js-->
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/js/rankdetail.js"></script>
+</body>
+</html>

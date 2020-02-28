@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/style.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/jquery-3.3.1.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+</head>
+<body>
+<!-- 头部 -->
+{include file="/system/header"}
+<!-- 内容 -->
+<div class="pt-content mt10">
+    <div class="pt-crumb">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/crumb_icon.png" class="pt-crumb-icon">
+        <span class="color5">
+            <a title="{$kx.config.sitename}" href="{$kx.config.siteurl}">{$kx.config.sitename}</a> >
+            <a href="{link=index}" class="color5">专题</a> >
+            <a href="{link=detail specialid=$special.id}" class="color5">{$special.title}</a>
+        </span>
+    </div>
+    <!-- 一楼 -->
+    <div class="pt-floor1">
+        <div class="fl">
+            <!-- 排名 -->
+            <div class="relative plr20 pt30 bg-white" style="width: 950px;">
+                <h1 class="size24 mr20 color32">{$special.title} <span class="fr size14 color0" style="font-weight: normal">书籍 <b>{$special.num_novel}</b> / 历史浏览 <b>{$special.num_allvisit}</b></span></h1>
+                <span class="color0 mt20">创建于 {$special.create_time|date='Y-m-d H:i:s'}</span>
+                <div class="compulsory-row-three pt-bookdetail-intro mt20">
+                    <span class="color62">简介：</span>{$special.intro|showIntroLine}
+                </div>
+            </div>
+            <div class="relative plr20 pt30 pb5 bg-white" style="width: 950px;">
+                <ul>
+                    {loop=$special.novels}
+                    <li class="mb35" style="width: 100%;height: 225px;">
+                        <a href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}">
+                            <img class="fl" src="{$loop.novel.cover}" alt="{$loop.novel.name}" style="width: 160px;height: 224px;">
+                            <div class="fl ml30" style="width: 700px;">
+                                <h1 class="size24 mr20 color32">
+                                    {$loop.novel.name}
+                                    <div class="fr" style="width: 100px;margin-right: -40px;">
+                                        <span class="size14 color0 color32" style="font-weight: normal">综合评分 <b class="size26 color2">{$loop.data.star}</b></span>
+                                    </div>
+                                </h1>
+                                <span class="mr30 fl color62 w100">
+                                    <span class="mr20">作者：{$loop.author.name}</span>
+                                    <span class="mr30">类别：{$loop.category.name}</span>
+                                    <span><span class="color2">{$loop.data.allvisit}</span> 在读</span>
+                                </span>
+                                <div class="compulsory-row fl mt30  w100 color62" style="height: 60px;">
+                                    <span class="color3 bold">评语：</span>{$loop.comment|showIntroLine}
+                                </div>
+                                <button class="ptb10 plr20 bg-red color1 mt20">查看详情</button>
+                            </div>
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+            </div>
+        </div>
+        <div class="fr w240">
+            <!-- 新书推荐 -->
+            <div class="fr pt-new-recomment">
+                <div class="pt-new-recomment-title bold">热门推荐</div>
+                <ul class="pt-new-recomment-list">
+                    {block method=special.list num=10 page=1 order=allvisit name=list}
+                    {loop}
+                    <li>
+                        <span class="color3 bold" >[专题]</span>
+                        <a href="{link=detail specialid=$loop.id}" class="color4 pt-text" title="{$loop.intro}">{$loop.title}</a>
+                    </li>
+                    {/loop}
+                </ul>
+            </div>
+        </div>
+        <!-- 友情链接 -->
+    </div>
+
+    <!-- 底部版权-->
+    {include file="/system/footer"}
+    {if $kx.config.app.use_cdn}
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/api/stat/special/info.js"></script>
+    {/if}
+</body>
+</html>

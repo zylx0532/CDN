@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>用户登录 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/css/global.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/flexible.min.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+</head>
+<body>
+
+<div class="w100 vh100 bg-white">
+    <div class="relative w100  bg-white flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/return.png" class="pt-return">
+        <div class="size18 bold color37">账号登录</div>
+
+        <div>
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/ellipsis.png" class="mr5 pt-ellipsis">
+        </div>
+        <div class="pt5 pb5 pt-tip">
+            <a href="{link=index.index}" class="block color1 text-center pt-tip-item" title="{$kx.config.sitename}">前往首页</a>
+            <a href="{link=novel.search.index}" class="block color1 text-center pt-tip-item">搜索小说</a>
+            <a href="{link=user.index.index}" class="block color1 text-center pt-tip-item" rel="nofollow">个人中心</a>
+        </div>
+    </div>
+    <div class="w100 flex-wrp flex-center pt-login">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/user_logo.png">
+        <div>
+            <div class="size21 lh100 bold color37">{$kx.config.sitename}</div>
+            <!-- <div class="w100 flex-wrp"> -->
+            <div class="size16 pt-login-text">书友最喜欢的小说网站</div>
+            <!-- </div> -->
+
+        </div>
+    </div>
+    <form method="post" action="{link=user.auth.login}">
+        <input type="hidden" name="comeurl" value="{$comeurl}">
+        <!-- 账号 -->
+        <div class="flex-wrp flex-align-center color9 pt-account">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/user.png">
+            <input type="text" placeholder="请输入您的账号" class="size12 color9" name="username">
+        </div>
+
+        <!-- 密码 -->
+        <div class="flex-wrp flex-align-center color9 pt-password">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/lock.png">
+            <input type="text" placeholder="请输入您的密码" class="size12 color9" name="password">
+        </div>
+        <!-- 登录按钮 -->
+        <button class="pt-login-btn block">登录</button>
+        <div class="lh100 pt-forget">
+            <a href="{link=user.auth.register}" class="color2 fr text-right mt10 size14">还没有账号?</a>
+        </div>
+    </form>
+
+    <!-- 第三方登录 -->
+    {if $kx.config.oauth.power}
+    <div class="w100 text-center color9 pt-third-login-title size14">第三方登录</div>
+    <div class="flex-wrp flex-between w100 pt-third-login">
+        <div class="pt-qq">
+            <a href="{link=user.auth.third type=qq}">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/qq.png">
+            </a>
+        </div>
+        <div class="pt-wx">
+            <a href="{link=user.auth.third type=weixin}">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/wx.png">
+            </a>
+        </div>
+        <div class="pt-wb">
+            <a href="{link=user.auth.third type=weibo}">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/wb.png">
+            </a>
+        </div>
+    </div>
+    {/if}
+</div>
+<!-- 底部版权 -->
+{include file="/system/footer"}
+
+</body>
+</html>

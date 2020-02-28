@@ -1,0 +1,108 @@
+<title>书籍管理</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>书籍管理</cite></a>
+        <a><cite>修改</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">修改</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="hidden" name="id">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认修改</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/html" id="novelStatus">
+    <div class="layui-form-item">
+        <label class="layui-form-label">{{d.name}}</label>
+        <div class="layui-input-block">
+            <input type="radio" name="status_radio" lay-filter="status_radio" value="1" title="正常">
+            <input type="radio" name="status_radio" lay-filter="status_radio" value="0" title="禁用">
+            <input type="radio" name="status_radio" lay-filter="status_radio" value="redirect" title="跳转">
+        </div>
+    </div>
+    <div class="layui-form-item" id="statusBox">
+        <label class="layui-form-label">跳转书籍ID</label>
+        <div class="layui-input-block">
+            <input type="number" name="status" value="" class="layui-input">
+        </div>
+    </div>
+</script>
+<script>
+    var config;
+    layui.admin.req({
+        url: '/manage/content/novel/extra.json',
+        method: 'POST',
+        success: function (res) {
+            config = {
+                api: {
+                    submit: '/manage/content/novel/edit.json'
+                },
+                beforeFormAssign: function (layui, res) {
+                    if (parseInt(res.data.source_id) > 0) {
+                        layui.$('.novel_type').hide();
+                    }
+                },
+                done: function () {
+                    if (layui.$('input[name=status_radio]').val() !== 'redirect') {
+                        layui.$('#statusBox').hide();
+                    }
+                    layui.form.on('radio(status_radio)', function (obj) {
+                        if (obj.value == 'redirect') {
+                            layui.$('#statusBox').show();
+                            layui.$('#statusBox').find('input').val('');
+                        } else {
+                            layui.$('#statusBox').hide();
+                            layui.$('#statusBox').find('input').val(obj.value);
+                        }
+                    });
+                },
+                fields: [
+                    {name: 'id', key: 'id', type: 'hide',},
+                    {name: '书名', key: 'name', type: 'text',},
+                    {name: '简介', key: 'pinyin', type: 'text',},
+                    {name: '封面', key: 'cover', type: 'text',},
+                    {name: '摘要', key: 'caption', type: 'text',},
+                    {name: '简介', key: 'intro', type: 'textarea',},
+                    {name: '作者', key: 'author', type: 'text'},
+                    {name: '分类', key: 'category_id', type: 'select', extra: res.data.category},
+                    {name: '完本', key: 'is_over', type: 'switch', extra: '完本|连载中'},
+                    {name: '源站', key: 'source_id', type: 'select', extra: res.data.site, disabled: true},
+                    {name: '字数', key: 'num_words', type: 'num',},
+                    {name: '总点击', key: 'num_allvisit', type: 'num',},
+                    {name: '月点击', key: 'num_monthvisit', type: 'num',},
+                    {name: '周点击', key: 'num_weekvisit', type: 'num',},
+                    {name: '日点击', key: 'num_dayvisit', type: 'num',},
+                    {name: '推荐', key: 'num_vote', type: 'num',},
+                    {name: '下载', key: 'num_down', type: 'num',},
+                    {name: '收藏', key: 'num_mark', type: 'num',},
+                    {name: '总评分', key: 'num_star_score', type: 'num',},
+                    {name: '评分人数', key: 'num_star_time', type: 'num',},
+                    {name: '显示状态', key: 'status', templet: '#novelStatus'},
+                    {name: '书籍类型', key: 'type', type: 'radio', style: 'novel_type', extra: "0:免费\n1:收费\n2:收费-会员免费"},
+                ],
+            };
+            layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+        }
+    });
+</script>

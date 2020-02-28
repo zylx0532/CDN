@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/style.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/jquery-3.3.1.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+    <style>
+        .pt-bookdetail-info {
+            width: 720px;
+            border-right: none;
+            padding-right: 0;
+        }
+        .pt-booklist-detail {
+            width: 100% !important;
+            padding-bottom: 30px;
+        }
+
+        .pt-booklist-detail:hover {
+            background-color: #fff !important;
+        }
+
+        .pt-booklist-detail:not(:last-child) {
+            border-bottom: 1px solid #f9f9f9;
+        }
+
+        .pt-booklist-detail .pt-booklist-info {
+            width: 755px;
+        }
+
+        .pt-booklist-detail .compulsory-row {
+            height: 76px;
+            padding: 17px;
+            margin-bottom:5px;margin-top:8px;
+        }
+        .tags a:not(:last-child){
+            border-right: 1px solid #ff5555
+        }
+        .pt-bookdetail-btn .btn-mark:hover{
+            color: #fff;
+        }
+        .pt-bookdetail-btn .btn-mark{
+            color: #fff;
+            background: url('{$kx.config.pcurl}/template/kxwebno1/images/mark_icon_white.png') no-repeat;
+            background-color: #f55;
+            background-position: 10px 9px;
+            width: auto;
+        }
+        .pt-bookdetail-btn .btn-vote{
+            color: #000;
+            background: url('{$kx.config.pcurl}/template/kxwebno1/images/praise2_hover.png') no-repeat;
+            background-position: 10px 7px;
+            width: auto;
+        }
+    </style>
+</head>
+<body>
+<!-- 导航栏 -->
+{include file="/system/header"}
+<!-- 内容 -->
+<div class="pt-content">
+    <!-- 面包屑 -->
+    <div class="pt-crumb">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/crumb_icon.png" class="pt-crumb-icon">
+        <span class="color5">
+            <a title="{$kx.config.sitename}" href="{$kx.config.siteurl}">{$kx.config.sitename}</a> >
+            <a href="{link=index}" class="color5">书单</a> >
+            <a href="{link=detail booklistid=$booklist.id}" class="color5">{$booklist.title}</a>
+        </span>
+    </div>
+    <!-- 详情 -->
+    <div class="clearfix" style="width:100%">
+        <div class="fl" style="width:950px">
+            <div class="pt-chapter mtb10">
+                <img src="{$booklist.cover}" class="fl pt-bookdetail-img" title="{$booklist.title}" alt="{$booklist.title}">
+                <div class="fl pt-bookdetail-info">
+                    <div style="line-height: 40px;">
+                        <h1 class="size24 mr20 color2">{$booklist.title} <span class="fr size14 color0" style="font-weight: normal">书籍 <b>{$booklist.num_novel}</b> / 历史浏览 <b>{$booklist.num_allvisit}</b></span></h1>
+                        <span class="mr30 color5">书单作者：<span class="color5">{=$booklist.user.nickname?:$booklist.user.name}</span></span>
+                        <span class="color0 ml55">创建于 {$booklist.create_time|date='Y-m-d H:i:s'}</span>
+                    </div>
+                    <div style="max-height: 72px;overflow: hidden;position:relative" class="tags">
+                        <div>
+                            {loop=$booklist.tags}
+                            <a title="{$loop.name}" href="{link=index tagid=$loop.id}" class="mt10 color2 plr5">{$loop.name}</a>
+                            {/loop}
+                        </div>
+                    </div>
+                    <div class="compulsory-row-three pt-bookdetail-intro">
+                        {$booklist.intro|showIntro}
+                    </div>
+                    <div class="pt-bookdetail-btn">
+                        {block method=mark.check type='booklist' booklistid=$booklist.id name=$ismark userid=$userinfo.id}
+                        <a href="javascript:void(0);" class="pl35 pr10 btn-mark border-red"><span>{$ismark|default='加入收藏','取消收藏'}</span> (<span class="num-mark">{$booklist.num_mark}</span>)</a>
+                        {block method=user.isvote type='booklist' booklistid=$booklist.id name=$isvote userid=$userinfo.id}
+                        <a href="javascript:void(0);" class="pl35 pr10 btn-vote"><span>{$isvote|default='推荐','取消推荐'}</span> (<span class="num-vote">{$booklist.num_vote}</span>)</a>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-chapter">
+                <ul class="pt-booklist">
+                    {loop=$booklist.novels}
+                    <li class="pt-booklist-detail">
+                        <a href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}">
+                            <img class="fl pt-booklist-cover" src="{$loop.novel.cover}" alt="{$loop.novel.name}">
+                            <div class="fl pt-booklist-info">
+                                <span class="mr60 size24 color3">
+                                    <span class="bold">{$loop.novel.name}</span>
+                                        <span class="pt-photo fr">
+                                            <span title="不知所云">
+                                                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star{=$loop.star>=1?'1':''}.png" class="{=$loop.star>=1?'':'no'}high">
+
+                                            </span>
+                                            <span title="随便看看">
+                                                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star{=$loop.star>=2?'1':''}.png" class="{=$loop.star>=2?'':'no'}high">
+                                            </span>
+                                            <span title="值得一读">
+                                                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star{=$loop.star>=3?'1':''}.png" class="{=$loop.star>=3?'':'no'}high">
+                                            </span>
+                                            <span title="不容错过">
+                                                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star{=$loop.star>=4?'1':''}.png" class="{=$loop.star>=4?'':'no'}high">
+                                            </span>
+                                            <span title="经典必读">
+                                                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star{=$loop.star>=5?'1':''}.png" class="{=$loop.star>=5?'':'no'}high">
+                                            </span>
+                                        </span>
+                                </span>
+                                <span class="mr30 fl color62 w100">
+                                    <span>作者：{$loop.author.name}</span>
+                                    <span>类别：{$loop.category.name}</span>
+                                    <span><span class="color2">{$loop.data.allvisit}</span>在读</span>
+                                </span>
+                                <div class="compulsory-row fl w100 color92 bg-f9 border-e9">
+                                    <span class="color3 bold">评语：</span>{$loop.comment|showIntroLine}
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+            </div>
+            <div class="pt-chapter">
+                <div class="size18 color5 pt-chapter-title">
+                    <a href="{link=booklist.comment.list booklistid=$booklist.id}" class="pt-chapter-select">评论区</a>
+                </div>
+                <div>
+                    {block method="comment.list" name=commentlist type='booklist' userid=$userinfo.id typeid=$booklist.id}
+                    <div class="clear">
+                        <div class="size16 pt-chapter-cont-title"><a href="{link=booklist.comment.list booklistid=$booklist.id}" class="color2 "><span class="bold">全部评论 </span>({$booklist.num_comment}条)</a></div>
+                        <ul class="commentlist clearfix">
+                            {loop=commentlist}
+                            <li data-comment-id="{$loop.id}">
+                                <div class="fl">
+                                    <div class="avatar"><img src="{$loop.user.avatar}" alt="{$loop.user.name}"></div>
+                                </div>
+                                <div class="fr">
+                                    <div class="comment-title">
+                                        <div class="comment-name"><b>{$loop.user.name}</b> 发表了帖子</div>
+                                        <div class="comment-time">{$loop.datetime|date="Y-m-d H:i:s"}</div>
+                                    </div>
+                                    <div class="comment-content">
+                                        {$loop.content}
+                                    </div>
+                                    <div class="comment-btn {$loop.rating|boolval|default='','disable'}">
+                                        <div class="comment-btn-up mr30 {=$loop.rating=='good'?'active':''}">
+                                            <span class="comment-btn-up-btn"></span>
+                                            <span class="number">{$loop.good_num}</span>
+                                        </div>
+                                        <div class="comment-btn-down {=$loop.rating=='bad'?'active':''}">
+                                            <span class="comment-btn-down-btn"></span>
+                                            <span class="number">{$loop.bad_num}</span>
+                                        </div>
+                                        <a href="{link=booklist.comment.post booklistid=$booklist.id commentid=$loop.id}">
+                                            <span class="comment-btn-reply color2">{$loop.post_num} 条回复</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            {/loop}
+                        </ul>
+                    </div>
+                    <form onsubmit="return false;" class="addcomment">
+                        <textarea></textarea>
+                        <button>发表</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="fr" style="width:240px;">
+            <!-- 猜你喜欢 -->
+            <div class="fr pt-new-recomment mt10">
+                <div class="pt-new-recomment-title">猜你喜欢</div>
+                <ul class="pt-new-recomment-list">
+                    {block method="novel.list" name=list order=allvisit category=$category.id sort=desc num=15}
+                    {section loop=$list item=$loop}
+                    <li>
+                        <a class="color4 pt-text" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                    </li>
+                    {/section}
+                </ul>
+            </div>
+            <!-- 周榜、月榜 -->
+            <div class="pt-sexselect mt10">
+                {block method="rank.info" name=rankinfo key=weekvisit}
+                <div class="pt-sexselect-title border-b"><span class="fl pt-sexselect-title-icon"></span>{$rankinfo.name}
+                </div>
+                <ul class="pt-sexselect-list">
+                    {block method="novel.list" name=list order=$rankinfo.key num=20}
+                    {section loop=$list item=$loop}
+                    <li>
+                        <span class="{=$i.index<3?'bg-red':'bg-ccc'} pt-sexselect-square">{$i.order}</span>
+                        <a class="color5" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                        <a title="{$loop.author.name}" class="color3 fr" href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">{$loop.author.name}</a>
+                    </li>
+                    {/section}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- 底部版权-->
+{include file="/system/footer"}
+<!-- js -->
+<script>
+    var __BOOKLIST_ID='{$booklist.id}',
+        __BOOKLIST_NAME='{$booklist.title}',
+        __ADD_MARK='{link=user.mark.add}',
+        __DEL_MARK='{link=user.mark.del}',
+        __ADD_VOTE='{link=user.vote.add}',
+        __DEL_VOTE='{link=user.vote.del}',
+        __RATING_COMMENT='{link=booklist.comment.rating}',
+        __ADD_COMMENT='{link=booklist.comment.add}';
+</script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/booklist.js"></script>
+{if $kx.config.app.use_cdn}
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/api/stat/booklist/info.js"></script>
+{/if}
+</body>
+</html>

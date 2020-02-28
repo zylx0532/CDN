@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>我的书单 - {$kx.config.sitename}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/css/global.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/flexible.min.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+    <style>
+        html,body{
+            height: 100%;
+        }
+        .loading{
+            position: fixed;
+            left: 0;
+            top:0;
+            width: 100%;
+            height: 100%;
+            z-index: 100;
+            background-color: rgba(0,0,0,0.5) !important;
+            background: url("https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/loading.webp") no-repeat;
+            background-position: 50% 50%;
+            background-size: 32px 32px;
+        }
+        .pt-popular-cont{
+            display: none;
+            /*min-height: 100%;*/
+            width: 100%;
+            height: auto;
+        }
+        .pt-popular-cont.active{
+            display: block;
+        }
+        .btn-tag img{
+            width: .16rem;
+            height: .16rem;
+            transform:rotate(180deg);
+            float: right;
+        }
+
+        .pt-tags{
+            position: relative;
+        }
+        .pt-tags ul{
+            margin-bottom: 60px;
+        }
+        .pt-tags li{
+            display: inline-block;
+            padding: 2px 15px;
+            border: 1px solid #d5d5d5;
+            border-radius:20px;
+            margin: 5px 0 15px 0;
+        }
+        .pt-tags li.active{
+            background-color: #f55;
+            color: #fff;
+            border-color: #f55;
+        }
+        .pt-tags button,
+        .pt-novel button,
+        .pt-marks button,
+        .pt-search button{
+            box-shadow:0 0 16px 0 rgba(255,85,85,0.92);
+            border-radius:44px;
+        }
+        .pt-tags .btn,
+        .pt-novel .btn,
+        .pt-marks .btn,
+        .pt-search .btn{
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background-color: #fff;
+            width: 100%;
+        }
+        .pt-novel ul .pt-novel-del{
+            height: 16px;
+            width: 16px;
+            float: right;
+            background: url("https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/del.png") no-repeat;
+            -webkit-background-size: 100% 100%;
+            background-size: 100% 100%;
+        }
+        .pt-novel-comment{
+            height:63px;
+            border:1px solid #E9E9E9;
+        }
+        .pt-novel-select{
+            margin-top: 0.35rem;
+            width: 0.16rem;
+            height: 0.16rem;
+            background: url('https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/select.png') no-repeat;
+            -webkit-background-size: 100% 100% !important;
+            background-size: 100% 100% !important;
+        }
+        li.active .pt-novel-select{
+            background: url('https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/selected.png') no-repeat;
+        }
+        .pt-square{
+            margin-left: 0;
+            margin-right: 0;
+        }
+        .pt-square.active{
+            border-color: #f55;
+            background-color: #f55;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    {block method=booklist.info booklistid=$kx.get.id name=info}
+	<div class="w100  bg-white flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+		<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/return.png" class="pt-return">
+		<div class="size14 bold color89 pt-labs">{=empty($info)?'创建书单':'修改书单'}</div>
+        <div><button type="button" class="color2 bold size14 btn-next bg-white">下一步</button></div>
+	</div>
+    <form method="post">
+        {if !empty($info)}
+        <input type="hidden" name="id" value="{$info.id}">
+        {/if}
+        <div data-page="edit" class="pt-popular-cont pt-edit active" style="min-height: 100%">
+            <input class="bold size18 mt10 mb20 w100" type="text" name="title" placeholder="请输入书单名称" value="{$info.title}">
+            <div class="border-b size14 ptb10 btn-tag">
+                <select name="tags[]" class="none" multiple>
+                    {loop=$info.tags}
+                    <option value="{$loop.id}" selected>{$loop.name}</option>
+                    {/loop}
+                </select>
+                <input type="text" value="{=empty($info.tags)?'':join(',',array_column($info.tags,'name'))}" placeholder="请选择书单标签" readonly>
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/return.png">
+            </div>
+            <textarea class="size14 pt10 w100" name="intro" rows="6" placeholder="请输入书单简介">{$info.intro}</textarea>
+        </div>
+        <div data-page="tags" class="pt-popular-cont pt-tags">
+            {~$tags=array_column($info.tags,'id')}
+            {block method="tag" name=list}
+            <span class="color32 size18 bold">全部标签</span>
+            <ul>
+                {loop}
+                <li data-value="{$loop.id}" data-name="{$loop.name}" class="{=in_array($loop.id,$tags)?'active':''}">{$loop.name}</li>
+                {/loop}
+            </ul>
+            <div class="text-center ptb10 btn">
+                <button type="button" class="color1 bg-red ptb15 plr60 size16 bold mtb10">确认选择</button>
+            </div>
+        </div>
+        <div data-page="novel" class="pt-popular-cont pt-novel">
+            <div class="pt-booklist-title size16 color32 bold mt10">标题</div>
+            <div class="pt-booklist-tags size12 color32 mt10">标签</div>
+            <div class="compulsory-row w100 color32 size12 pt-booklist-intro mt10 border-t pt5" style="height: 84px;"></div>
+        </div>
+        <div data-page="novel" class="pt-popular-cont pt-novel mt10">
+            <ul>
+                {loop=$info.novels}
+                <li>
+                    <div class="flex-wrp pt-popular-item">
+                        <input type="hidden" name="novels[id][]" value="{$loop.novel.id}">
+                        <input type="hidden" name="novels[star][]" value="{$loop.star}">
+                        <img src="{$loop.novel.cover}" class="mr15" alt="{$loop.novel.name}">
+                        <div class="flex-item pt5">
+                            <div class="flex-wrp flex-between">
+                                <div class="size14">
+                                    <span class="color7 bold">{$loop.novel.name}</span>
+                                </div>
+                                <div class="pt-novel-del"></div>
+                            </div>
+                            <div class="size12">
+                                <span class="mr30">{$loop.author.name}</span>
+                                {$loop.category.name} | <span class="color2">{$loop.data.allvisit}</span>人在读
+                            </div>
+                            <div class="mt10">
+                                <span class="color32 size14">推荐指数</span>
+                                <span class="pt-photo">
+                                <span title="不知所云">
+                                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/star{=$loop.star>=1?'1':''}.png" class="{=$loop.star>=1?'':'no'}high">
+                                </span>
+                                <span title="随便看看">
+                                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/star{=$loop.star>=2?'1':''}.png" class="{=$loop.star>=2?'':'no'}high">
+                                </span>
+                                <span title="值得一读">
+                                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/star{=$loop.star>=3?'1':''}.png" class="{=$loop.star>=3?'':'no'}high">
+                                </span>
+                                <span title="不容错过">
+                                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/star{=$loop.star>=4?'1':''}.png" class="{=$loop.star>=4?'':'no'}high">
+                                </span>
+                                <span title="经典必读">
+                                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/star{=$loop.star>=5?'1':''}.png" class="{=$loop.star>=5?'':'no'}high">
+                                </span>
+                            </span>
+                            </div>
+                        </div>
+                    </div>
+                    <textarea class="pt-novel-comment compulsory-row plr10 ptb10 w100" name="novels[comment][]" readonly>{$loop.comment}</textarea>
+                </li>
+                {/loop}
+            </ul>
+            <div class="text-center ptb10 btn">
+                <button type="button" class="color1 bg-red ptb10 plr35 size16 bold mtb10 mr20 pt-mark-add">书架添加</button>
+                <button type="button" class="color1 bg-red ptb10 plr35 size16 bold mtb10 pt-search-add">书城添加</button>
+            </div>
+        </div>
+        <div data-page="marks" class="pt-popular-cont pt-marks">
+            <ul>
+                {block method=mark.list userid=$userinfo.id name=marklist order=$order}
+                {loop=marklist}
+                <li data-id="{$loop.novel.id}" data-name="{$loop.novel.name}" data-cover="{$loop.novel.cover}" data-author="{$loop.author.name}" data-category="{$loop.category.name}" data-allvisit="{$loop.data.allvisit}">
+                    <div class="flex-wrp pt-popular-item">
+                        <img src="{$loop.novel.cover}" class="mr15" alt="{$loop.novel.name}">
+                        <div class="flex-item pt5">
+                            <div class="flex-wrp flex-between">
+                                <div class="size14">
+                                    <span class="color7 bold">{$loop.novel.name}</span>
+                                </div>
+                            </div>
+                            <div class="size12">
+                                <span class="mr30">{$loop.author.name}</span>
+                                {$loop.category.name}
+                            </div>
+                            <div class="mt10 size12">{$loop.last.name}</div>
+                        </div>
+                        <div class="pt-novel-select"></div>
+                    </div>
+                </li>
+                {/loop}
+            </ul>
+            <div class="text-center ptb10 btn">
+                <button type="button" class="color2 bg-white border-red ptb10 plr35 size16 bold mtb10 mr20">取消返回</button>
+                <button type="button" class="color1 bg-red ptb10 plr35 size16 bold mtb10 btn-success">完成添加 (<span>0</span>)</button>
+            </div>
+        </div>
+        <div data-page="search" class="pt-popular-cont pt-search">
+            <div class="w100 bg-white flex-wrp flex-between flex-align-center pt-search">
+                <div class="flex-wrp flex-align-center pt-search-box" style="width: 80vw;">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/search.png" class="mr10 pt-search-icon" >
+                    <input type="text" class="size12 color4 searchkey w100" placeholder="请输入您要搜索的关键书名">
+                </div>
+                <div class="btn-search color2 size14 mr5">搜索</div>
+            </div>
+            <ul></ul>
+            <div class="clearfix"></div>
+            <div class="text-center ptb10 btn">
+                <button type="button" class="color2 bg-white border-red ptb10 plr35 size16 bold mtb10 mr20">取消返回</button>
+                <button type="button" class="color1 bg-red ptb10 plr35 size16 bold mtb10 btn-success">完成添加 (<span>0</span>)</button>
+            </div>
+        </div>
+    </form>
+    <!-- 底部版权 -->
+    {include file="/system/footer"}
+    <script id="searchTpl" type="text/html">
+        {{# $.each(d,function(k,v){ }}
+        <li data-id="{{v.id}}" data-name="{{v.name}}" data-cover="{{v.cover}}" data-author="{{v.author}}" data-category="{{v.category}}" data-allvisit="{{v.allvisit}}">
+            <div class="flex-wrp pt-popular-item">
+                <img src="{{ v.cover }}" class="mr15" alt="{{ v.name }}">
+                <div class="flex-item pt5">
+                    <div class="flex-wrp flex-between">
+                        <div class="size14"><span class="color7 bold">{{ v.name }}</span></div>
+                    </div>
+                    <div class="size12">
+                        <span class="mr30"{{ v.author }}</span>
+                        <span>{{ v.category }}</span> | <span class="color2">{{ v.allvisit }}</span>人在读
+                    </div>
+                    <div class="mt10 size12">{{ v.last.name }}</div>
+                </div>
+                <div class="pt-novel-select"></div>
+            </div>
+        </li>
+        {{# }) }}
+    </script>
+    <script id="novelTpl" type="text/html">
+        <li>
+            <div class="flex-wrp pt-popular-item">
+                <input type="hidden" name="novels[id][]" value="{{d.id}}">
+                <input type="hidden" name="novels[star][]" value="5">
+                <img src="{{d.cover}}" class="mr15" alt="{{d.name}}">
+                <div class="flex-item pt5">
+                    <div class="flex-wrp flex-between">
+                        <div class="size14">
+                            <span class="color7 bold">{{d.name}}</span>
+                        </div>
+                        <div class="pt-novel-del"></div>
+                    </div>
+                    <div class="size12">
+                        <span class="mr30">{{d.author}}</span> {{d.category}} | <span class="color2">{{d.allvisit}}</span>人在读
+                    </div>
+                    <div class="mt10">
+                        <span class="color32 size14">推荐指数</span>
+                        <span class="pt-photo">
+                                <span title="不知所云">
+                                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/star1.png" class="high">
+                                </span>
+                                <span title="随便看看">
+                                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/star1.png" class="high">
+                                </span>
+                                <span title="值得一读">
+                                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/star1.png" class="high">
+                                </span>
+                                <span title="不容错过">
+                                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/star1.png" class="high">
+                                </span>
+                                <span title="经典必读">
+                                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/star1.png" class="high">
+                                </span>
+                            </span>
+                    </div>
+                </div>
+            </div>
+            <textarea class="pt-novel-comment compulsory-row plr10 ptb10 w100" name="novels[comment][]" readonly></textarea>
+
+        </li>
+    </script>
+    <script id="novelEditTpl" type="text/html">
+        <div class="flex-wrp flex-flow-row flex-around plr10 mt10">
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square {{d.star==1?'active':''}}" data-value="1"><span class="size14">1</span>分</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square {{d.star==2?'active':''}}" data-value="2"><span class="size14">2</span>分</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square {{d.star==3?'active':''}}" data-value="3"><span class="size14">3</span>分</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square {{d.star==4?'active':''}}" data-value="4"><span class="size14">4</span>分</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square {{d.star==5?'active':''}}" data-value="5"><span class="size14">5</span>分</div>
+        </div>
+        <div style="text-align: center;">
+            <textarea rows="5" class="border-c9" style="width: 90%;padding: 5px;" placeholder="请输入评价">{{d.comment}}</textarea>
+        </div>
+        <div class="flex-wrp flex-center size14 ptb10 bg-red color1 pt-submit w50 mt10" style="margin: auto;border-radius: 20px;">确认提交</div>
+    </script>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/layer/mobile/layer.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/laytpl.js"></script>
+    <script>
+        var btn_next = $('.btn-next'),
+            btn_return = $('.pt-return'),
+            pt_edit = $('.pt-popular-cont.pt-edit'),
+            pt_tags = $('.pt-popular-cont.pt-tags'),
+            pt_novel = $('.pt-popular-cont.pt-novel'),
+            pt_marks = $('.pt-popular-cont.pt-marks'),
+            pt_search = $('.pt-popular-cont.pt-search');
+        //返回按钮事件
+        btn_return.off('click').click(function () {
+            switch ($('.pt-popular-cont.active').data('page')) {
+                case 'edit':
+                    if (confirm('确认离开此页?')) {
+                        window.history.back();
+                    }
+                    break;
+                case 'tags':
+                    $('.pt-tags button').click();
+                    break;
+                case 'novel':
+                    pt_novel.removeClass('active');
+                    pt_edit.addClass('active');
+                    btn_next.text('下一步');
+                    break;
+                case 'marks':
+                    pt_novel.addClass('active');
+                    pt_marks.removeClass('active');
+                    btn_next.show();
+                    break;
+                case 'search':
+                    pt_novel.addClass('active');
+                    pt_search.removeClass('active');
+                    btn_next.show();
+                    break;
+
+            }
+        });
+        //下一步按钮事件
+        btn_next.click(function(){
+            if ($('.pt-popular-cont.active').data('page') === 'edit'){
+                if (!($('input[name=title]').val())) {
+                    layer.open({content:'标题不能为空',btn:'我知道了'});
+                    return false;
+                }
+                if ($('select[name="tags[]"]').val().length > 3) {
+                    layer.open({content:'标签不能多于3个',btn:'我知道了'});
+                    return false;
+                }
+                this.innerHTML = '发布';
+                pt_edit.removeClass('active');
+                pt_novel.addClass('active');
+                $('.pt-booklist-title').html($('input[name=title]').val());
+                $('.pt-booklist-tags').html($('.pt-popular-cont.pt-edit .btn-tag input').val());
+                $('.pt-booklist-intro').html($('textarea[name=intro]').val());
+            }else{
+                if (!($('input[name=title]').val())) {
+                    layer.open({content:'书单名称不能为空',btn:'我知道了'});
+                    return false;
+                }
+                if ($('select[name="tags[]"]').val().length > 3) {
+                    layer.open({content:'标签不能多于3个',btn:'我知道了'});
+                    return false;
+                }
+                if (!$('textarea[name=intro]').val().length) {
+                    layer.open({content:'简介不能为空',btn:'我知道了'});
+                    return false;
+                }
+                if ($('input[name="novels[id][]"]').length < 3) {
+                    layer.open({content:'书籍不能少于三本',btn:'我知道了'});
+                    return false;
+                }
+                for (var i = 0; i < $('input[name="novels[id][]"]').length; i++) {
+                    if (!$('textarea[name="novels[comment][]"]:eq(' + i + ')').val()) {
+                        layer.open({content:'书评不能为空',btn:'我知道了'});
+                        return false;
+                    }
+                    star = parseInt($('input[name="novels[star][]"]:eq(' + i + ')').val());
+                    if (!star || star < 1 || star > 5) {
+                        layer.open({content:'评分必须介于1 - 5之间',btn:'我知道了'});
+                        return false;
+                    }
+                }
+                $('form').submit();
+            }
+        });
+        //选择标签事件
+        $('.btn-tag').click(function () {
+            $(this).parent().removeClass('active');
+            pt_tags.addClass('active');
+            btn_next.hide();
+        });
+        //选择标签页面确认按钮事件
+        $('.pt-tags button').click(function () {
+            $(this).parents('.pt-popular-cont').removeClass('active');
+            pt_edit.addClass('active');
+            var lis = $('.pt-tags li.active'),
+                select = $('.pt-popular-cont.pt-edit .btn-tag select'),
+                names = [];
+            select.html('');
+            for (i = 0; i < lis.length; i++) {
+                names.push(lis.eq(i).data('name'));
+                select.append('<option value="' + lis.eq(i).data('value') + '" selected></option>');
+            }
+            $('.pt-popular-cont.pt-edit .btn-tag input').val(names.length ? names.join(',') : '');
+            btn_next.show();
+        });
+        // 选择标签页面标签点击事件
+        $('.pt-tags li').click(function () {
+            if ($(this).hasClass('active')) {
+                $(this).removeClass('active');
+            } else {
+                if ($('.pt-tags li.active').length >= 3) {
+                    alert('最多只能选择三个标签');
+                    return false;
+                }
+                $(this).addClass('active');
+            }
+        });
+
+        //书籍页 移除书籍
+        pt_novel.on('click', 'textarea,.pt-photo', function () {
+            var othis = $(this).parents('li');
+            laytpl($('#novelEditTpl').html()).render({
+                star:parseInt(othis.find('input[name="novels[star][]"]').val()),
+                comment:othis.find('textarea[name="novels[comment][]"]').val()
+            }, function (html) {
+                var index = layer.open({
+                    type: 1,
+                    content: html,
+                    anim: 'up',
+                    style: 'position:fixed; bottom:0; left:0; width: 100%; height: 200px; padding:10px 0; border:none;',
+                    success: function (obj) {
+                        $(obj).on('click', '.pt-square', function () {
+                            $(this).addClass('active').siblings('.active').removeClass('active');
+                        }).on('click', '.pt-submit', function () {
+                            var star = $(obj).find('.pt-square.active').data('value'),
+                                comment = $(obj).find('textarea').val();
+                            othis.find('input[name="novels[star][]"]').val(star);
+                            othis.find('textarea[name="novels[comment][]"]').val(comment);
+                            othis.find('.pt-photo img').attr('src', 'https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/star.png');
+                            othis.find('.pt-photo img:lt(' + star + ')').attr('src', 'https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/star1.png');
+                            layer.close(index)
+                        })
+                    }
+                })
+            });
+        }).on('click', '.pt-novel-del', function () {
+            $(this).parents('li').remove();
+        }).on('click', '.pt-mark-add', function () {
+            pt_novel.removeClass('active');
+            pt_marks.addClass('active');
+            btn_next.hide();
+        }).on('click', '.pt-search-add', function () {
+            pt_novel.removeClass('active');
+            pt_search.addClass('active');
+            btn_next.hide();
+            $('.btn-search').click();
+        });
+
+        //书籍添加页 点击事件
+        $('.pt-marks,.pt-search').on('click', 'li', function () {
+            var othis = $(this), num = 0;
+            if (othis.hasClass('active')) {
+                othis.removeClass('active');
+                num = $(this).siblings(".active").length;
+            } else {
+                othis.addClass('active');
+                num = $(this).siblings(".active").length + 1;
+            }
+            $(this).parents('.pt-popular-cont').find('.btn-success').find('span').html(num)
+        }).on('click', 'button.bg-white', function () {
+            btn_return.click();
+        }).on('click', 'button.btn-success', function () {
+            $(this).parents('.pt-popular-cont').find('li.active').each(function (l, v) {
+                v = $(v);
+                if (!pt_novel.find('input[name="novels[id][]"][value=' + v.data('id') + ']').length) {
+                    laytpl($('#novelTpl').html()).render({
+                        id: v.data('id'),
+                        name: v.data('name'),
+                        cover: v.data('cover'),
+                        category: v.data('category'),
+                        author: v.data('author'),
+                        allvisit: v.data('allvisit')
+                    }, function (html) {
+                        pt_novel.find('ul').append(html);
+                    });
+                }
+            });
+            btn_return.click();
+        });
+        $('.btn-search').click(function () {
+            $.ajax({
+                url: '{link=novel.search.result responsetype=json}',
+                method: 'POST',
+                data: {'searchkey':$('.pt-search input.searchkey').val()},
+                dataType: 'json',
+                beforeSend: function () {
+                    $('body').append('<div class="loading"><div>')
+                },
+                success: function (res) {
+                    if (res.code) {
+                        alert(res.msg);
+                    } else {
+                        var ul = pt_search.find('ul');
+                        ul.html('');
+                        laytpl($('#searchTpl').html()).render(res.data, function (html) {
+                            ul.append(html);
+                        });
+                    }
+                },
+                complete: function () {
+                    $('body div.loading').remove();
+                },
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<title>蜘蛛规则修改</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>系统设置</cite></a>
+        <a><cite>蜘蛛规则管理</cite></a>
+        <a><cite>蜘蛛规则修改</cite></a>
+    </div>
+</div>
+
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">蜘蛛规则修改</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认修改</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            submit: '/manage/system/spider/edit.json'
+        },
+        loadEditData: function () {
+            layui.admin.req({
+                url: config.api.submit + '?key=' + layui.router().search.key,
+                success: function (res) {
+                    layui.form.val('LAY-info-form', res.data);
+                }
+            });
+        },
+        fields: [
+            {name: 'key', key: 'key', type: 'label'},
+            {name: '名称', key: 'name', type: 'text',},
+            {name: '关键词', key: 'keywords', type: 'textarea', intro: '每行一个'},
+            {name: '规则状态', key: 'status', type: 'switch', extra: '启用|禁用'},
+            {name: '访问状态', key: 'block_access', type: 'switch', extra: '阻止|允许'},
+        ],
+    };
+    layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+</script>

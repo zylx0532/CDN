@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/css/global.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/flexible.min.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-4678019962533509",
+          enable_page_level_ads: true
+     });
+</script>
+</head>
+<body>
+<!-- 内容 -->
+<div class="relative color32 pt-read mt20">
+    <div class="size18 w100 text-center lh100 pt30 pb15">{$chapter.name}</div>
+    <div class="plr15 ptb10 size14 color62">
+        <div class="flex-wrp w100 border-c">
+            <div class="pt-prechapter"><a href="{$prevurl}">{$prevpage|default="上一章","上一页"}</a></div>
+            <div class="pt-catalogue color62"><a href="{link=novel.novel.dir novelid=$novel.id pinyin=$novel.pinyin}">返回目录</a></div>
+            <div class="pt-collect"><a href="{link=user.mark.add novelid=$novel.id chapterid=$chapter.id}">{$ismark|default="加入收藏","更新书签"}</a></div>
+            <div class="pt-nextchapter"><a href="{$nexturl}">{$nextpage|default="下一章","下一页"}</a></div>
+        </div>
+    </div>
+    <div  class="size14 lh150 plr15 pt10 relative pt-read-cont">
+        <div id="pt-pop">
+            {$chapter.content|showchapter}
+            {if $chapter.type == \App\Model\Novel\Chapter::TYPE_TOLL && ($novel.type == \App\Model\Novel\Novel::TYPE_TOLL || $novel.type == \App\Model\Novel\Novel::TYPE_VIP_FREE && !\App\Model\User\User::I()->isVip($userId))}
+                {block method="chapter.issubscribe" userid=$userinfo.id novelid=$novel.id chapterid=$chapter.id name=$issubscribe}
+                {if !$issubscribe}
+                    <div class="pt-read-toll text-center pt10">
+                        {block method=novel.charge novelid=$novel.id name=$charge}
+                        {~$charge = $userinfo.vip_expire_time < time()?$charge.words_money:$charge.words_vip_money}
+                        {block method=chapter.calculatePriceByPrice wordsnum=$chapter.words price=$charge name=$price}
+                        <span >价格{$price}{$kx.config.user.money_caption}，当前余额 <span class="color2">{$userinfo.assets.balance}</span>{$kx.config.user.money_caption}</span>
+                        <div class="button mt30">
+                            <a href="{link=novel.novel.dir novelid=$novel.id pinyin=$novel.pinyin subscribe=1}" data-subscribe="1" class="color62">批量订阅</a>
+                            {if $price > $userinfo.assets.balance}
+                            <a href="{link=user.pau.recharge}" class="color1">立即充值</a>
+                            {else}
+                            <a href="{link=novel.novel.subscribe novelid=$novel.id chapters=$chapter.id}" data-subscribe="1" class="color1">订阅本章</a>
+                            {/if}
+                        </div>
+                        <div class="mt15 mb15">
+                            <input type="checkbox" id="auto_subscribe" checked="checked"><label for="auto_subscribe">以后不用提醒我，自动订阅下一章</label>
+                        </div>
+                    </div>
+                {/if}
+            {/if}
+        </div>
+    </div>
+    <div class="plr15 ptb10 size14 color62">
+        <div class="flex-wrp w100 border-c">
+            <div class="pt-prechapter"><a href="{$prevurl}">{$prevpage|default="上一章","上一页"}</a></div>
+            <div class="pt-catalogue color62"><a href="{link=novel.novel.dir novelid=$novel.id pinyin=$novel.pinyin}">返回目录</a></div>
+            <div class="pt-collect"><a href="{link=user.mark.add novelid=$novel.id chapterid=$chapter.id}">{$ismark|default="加入收藏","更新书签"}</a></div>
+            <div class="pt-nextchapter"><a href="{$nexturl}">{$nextpage|default="下一章","下一页"}</a></div>
+        </div>
+    </div>
+    <!-- 点击弹出 -->
+    <div class="relative pt-mask">
+        <div class="w100 relative flex-wrp flex-between plr15 pt-mask-title">
+            <div class="flex-wrp flex-align-center">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/return-white.png" class="mr20 pt-return">
+                <div class="size14 bold color1">{$novel.name}</div>
+            </div>
+            <div>
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/ellipsis_white.png" class="mr5 pt-ellipsis">
+            </div>
+            <!-- tip -->
+            <div class="flex-wrp flex-cell flex-around pt5 pb5 pt-tip">
+                <a href="{link=user.mark.add novelid=$novel.id chapterid=$chapter.id}" class="block color1 text-center lh100 pt-tip-item">{$ismark|default="加入收藏","更新书签"}</a>
+                <a href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}" class="block color1 text-center lh100 pt-tip-item">书籍详情</a>
+                <a href="{link=user.mark.index}" class="block color1 lh100 text-center pt-tip-item">我的书架</a>
+            </div>
+        </div>
+        <div class="w100 relative pt-source-tip ">
+            <a href="{$chapter.source}" rel="nofollow" class="color62 w100 compulsory-row-one">{$chapter.source}</a>
+        </div>
+
+        <a href="{$prevurl}"><div class="size14 color1 pt-pre-btn">{$prevpage|default="上一章","上一页"}</div></a>
+        <a href="{$nexturl}"><div class="size14 color1 pt-next-btn">{$nextpage|default="下一章","下一页"}</div></a>
+
+        <!-- 底部设置 -->
+        <div class="w100 flex-wrp flex-align-center flex-around pt-mask-btm">
+            <div class="flex-wrp flex-cell flex-center pt-catalogue-btn">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_catalog_icon.png" class="pt-catalog-icon">
+                <div class="size10 color1">目录</div>
+            </div>
+            <div class="flex-wrp flex-cell flex-center pt-source-btn">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_change_source.png" class="pt-catalog-icon">
+                <div class="size10 color1">换源</div>
+            </div>
+            <div class="flex-wrp flex-cell flex-center pt-set-btn">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_seting.png" class="pt-catalog-icon">
+                <div class="size10 color1">设置</div>
+            </div>
+            <div class="flex-wrp flex-cell flex-center pt-night"  data-color="#1a1a1a">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_night.png" class="pt-catalog-icon">
+                <div class="size10 color1">夜间</div>
+            </div>
+            <div class="flex-wrp flex-cell flex-center pt-daytime" data-color="#ffffff">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_daytime.png" class="pt-catalog-icon">
+                <div class="size10 color1">日间</div>
+            </div>
+            <div class="flex-wrp flex-cell flex-center pt-feedback-btn">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_error.png" class="pt-catalog-icon">
+                <div class="size10 color1">报错</div>
+            </div>
+        </div>
+        <!-- 目录弹出 -->
+        <div class="vw100 vh100 relative pt-pop-shade pt-pop-catalogue-shade">
+            <div class="pt-pop-catalogue">
+                <div class="flex-wrp flex-between plr15 ptb15 border-b">
+                    <div class="size14 color32 lh100 pt-pop-catalogue-title">章节目录</div>
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_pop_catalogue_close.png" class="pt-pop-catalogue-close">
+                </div>
+                <div class="dir-content"></div>
+            </div>
+        </div>
+        <!-- 换源弹出 -->
+        <div class="vw100 vh100 relative pt-pop-shade pt-pop-source-shade">
+            <div class="pt-pop-source">
+                <div class="flex-wrp flex-between plr15 ptb15 border-b">
+                    <div class="size14 color32 lh100 pt-pop-source-title">换源阅读</div>
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_pop_catalogue_close.png" class="pt-pop-source-close">
+                </div>
+                <div class="source-content"></div>
+            </div>
+        </div>
+        <!-- 设置 -->
+        <div class="pt-pop-set">
+            <!-- 字体大小 -->
+            <div class="w100 flex-wrp flex-around flex-align-center">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/font_reduce.png" class="pt-font-reduce">
+                <div class="pt-line">
+                    <div class="pt-lined"></div>
+                </div>
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/font_add.png" class="pt-font-add">
+            </div>
+            <!-- 背景色 -->
+            <div class="flex-wrp flex-between flex-align-center pt-bgcolor">
+                <div class="flex-wrp flex-center pt-bgcolor1" data-color="#ffffff">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_bg_selecd.png" class="pt-bgcolor-select">
+                </div>
+                <div class="flex-wrp flex-center pt-bgcolor2"  data-color="#cadae9">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_bg_selecd.png" class="pt-bgcolor-select">
+                </div>
+                <div class="flex-wrp flex-center pt-bgcolor3" data-color="#ddcda8">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_bg_selecd.png" class="pt-bgcolor-select">
+                </div>
+                <div class="flex-wrp flex-center pt-bgcolor4" data-color="#c2ecc2">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_bg_selecd.png" class="pt-bgcolor-select">
+                </div>
+            </div>
+        </div>
+        <!-- 反馈弹出 -->
+        <div class="vw100 vh100 relative pt-pop-shade pt-pop-feedback-shade">
+            <div class="pt-pop-feedback">
+                <div class="flex-wrp flex-between plr15 ptb15 border-b">
+                    <div class="size14 color32 lh100 pt-pop-feedback-title">章节报错</div>
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_pop_catalogue_close.png" class="pt-pop-feedback-close">
+                </div>
+                <div class="pt-pop-feedback-body">
+                    <textarea id="pt-feedback-content" placeholder="请在此输入报错内容"></textarea>
+                    <button id="pt-feedback-submit" class="flex-wrp flex-center pt-bgcolor2">提交</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="tishi">
+    <div class="tishi-wrap">
+        <p>点击弹出菜单</p>
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/hand.png" alt="提示">
+    </div>
+</div>
+<style>
+    .pt-pop-tts .play,
+    .pt-pop-tts .pt-tts-pre .pt-tts-select{
+        color: #f55;
+        border: 1px solid #f55;
+        border-radius: 0.05rem;
+        padding-top: 0.05rem;
+        padding-bottom: 0.05rem;
+    }
+</style>
+<div class="headset"></div>
+<div class="pt-pop-tts">
+    <!-- 字体大小 -->
+    <div class="w100 flex-wrp flex-around flex-align-center pt-tts-spd" data-value="1" data-step="0.25" data-min="0.25" data-max="2">
+        <span class="minus">速度-</span>
+        <div class="pt-line">
+            <div class="pt-lined"></div>
+        </div>
+        <span class="plus">速度+</span>
+    </div>
+    <div class="w100 flex-wrp flex-around flex-align-center mt10 pt-tts-vol" data-value="1" data-step="0.25" data-min="0.25" data-max="1">
+        <span class="minus">音量-</span>
+        <div class="pt-line">
+            <div class="pt-lined"></div>
+        </div>
+        <span class="plus">音量+</span>
+    </div>
+    <div class="flex-wrp flex-between flex-align-center mt10 pt-tts-pre">
+        <div class="flex-wrp flex-center plr25" data-value="1">男声</div>
+        <div class="flex-wrp flex-center plr25 pt-tts-select"  data-value="0">女声</div>
+        <div class="flex-wrp flex-center plr25" data-value="3">逍遥</div>
+        <div class="flex-wrp flex-center plr25" data-value="4">软萌</div>
+    </div>
+    <div class="flex-wrp flex-between flex-align-center mt10">
+        <div class="flex-wrp flex-center play" style="margin: auto;padding: 0.05rem 1rem">开始播放</div>
+    </div>
+    </div>
+<script id="dirTpl" type="text/html">
+    <div class="flex-wrp flex-between plr15 ptb15">
+        <div class="size14 color92 mr20">{$novel.is_over|default="连载中","已完结"} 共 {{ d.length }} 章</div>
+        <div class="size14 color32 pt-pop-catalogue-sort">正序</div>
+    </div>
+    <div class="pt-pop-catalogue-list">
+        {{# $.each(d,function(k,v){ }}
+        {{# var cc=(v.id== '{$chapter.id}') ?'color2':'' }}
+        <div class="flex-wrp flex-between flex-align-center color62 pt-pop-catalogue-item" data-chapter-id="{{ v.id }}">
+            <div class="size12">
+                <a href="{{ v.url }}">
+                    <span class="mr15 {{ cc }}">{{ v.name }}</span>
+                </a>
+            </div>
+            {{# if (cc){ }}
+            <div class="size12 color2 pt-current-reading">当前阅读</div>
+            {{# } }}
+        </div>
+        {{# }) }}
+    </div>
+</script>
+<script id="sourceTpl" type="text/html">
+    <div class="flex-wrp plr15 ptb15">
+        <div class="size14 color92 mr20">共 {{ d.length }} 条小说来源</div>
+    </div>
+    <div class="pt-pop-source-list">
+        {{# $.each(d,function(k,v){ }}{{# var cc=(v.site.id== '{$site.id}') ?'color2':'color62' }}
+        <a href="{{ v.url }}">
+            <div class="flex-wrp flex-align-center pt-pop-source-item">
+                <span class="mr5 size14 color32 pt-websites {{ cc }}">{{ v.site.name }}</span>
+                <span class="size12 color62 {{ cc }}">{{ v.name }}</span>
+            </div>
+        </a>
+        {{# }) }}
+    </div>
+</script>
+
+<!-- 底部版权 -->
+{include file="/system/footer"}
+<script type="text/javascript">
+    var __ADD_STAR = '{link=user.star.add}'
+        , __NOVEL_NAME = '{$novel.name}'
+        , __ADD_MARK = '{link=user.mark.add}'
+        , __DEL_MARK = '{link=user.mark.del}'
+        , __ADD_VOTE = '{link=user.vote.add}'
+        , __RATING_COMMENT = '{link=novel.comment.rating}'
+        , __ADD_COMMENT = '{link=novel.comment.add}'
+        , __ADD_FEEDBACK = '{link=novel.novel.feedback}'
+
+        , __NOVEL_ID = '{$novel.id}'
+        , __CHAPTER_ID = '{$chapter.id}'
+        , __SITE_ID_QUERY = '{$siteid}'
+
+        , __API_CHAPTER_SAME = '{link=api.novel.chapter.same responsetype=json}'
+        , __API_NOVEL_DIR = '{link=api.novel.novel.dir responsetype=json}'
+
+        , __SHOW_TYPE = '{$show_type}'
+        , __API_CHAPTER_TRANSCODE = '{link=api.novel.chapter.transcode novelid=$novel.id chapterid=$chapter.id}'
+        , __CHAPTER_PAGE = '{$current_page}';
+</script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/layer/mobile/layer.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/read.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/laytpl.js"></script>
+</body>
+</html>

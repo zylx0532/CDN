@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据统计 - 原创专区 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/author/css/style.css"/>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico"/>
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__"/>
+    <style>
+        .body ul {
+            height: 54px;
+        }
+        .body ul.label li{
+            float: left;
+            width: 130px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            background: #E5E5E5;
+            margin-top: 4px;
+        }
+        .body ul.label li.active{
+            background-color: #fff;
+            color: #323237;
+            border-top: 4px solid #f55;
+            margin-top: 0;
+        }
+        .body table {
+            width: 100%;
+            text-align: center;
+            color: #323237;
+        }
+
+        .body table th {
+            height: 48px;
+            background-color: #F5F5F7;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .body table thead tr {
+            border: 1px solid #F5F5F5;
+        }
+
+        .body table td {
+            height: 48px;
+        }
+
+        .body table tbody tr {
+            border: 1px solid #E9E9E9;
+        }
+    </style>
+</head>
+<body>
+{include file="/author/system/header"}
+<div class="body">
+    {include file="/author/system/left"}
+    <div class="right h100">
+        <ul class="label">
+            <a href="{link=author.income.manage}"><li>提现管理</li></a>
+            <a href="{link=author.income.guarantee}"><li class="active">收益保障</li></a>
+        </ul>
+        <div class="bg-white" style="min-height: 695px;">
+            <div class="border-b mb30 plr30 ptb30 text-center" style="border-bottom-width: 7px;border-color: #f5f4f5">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/author/images/icon_guarantee{=empty($signingnovels)?:'_active'}.png" alt="收益保障">
+                <h1 class="size18 color32 bold">尊敬的 {$authorinfo.name}</h1>
+                <p>您好，很荣幸您能够成为本站的签约作家，以下是您的收益签约协议</p>
+            </div>
+            <div class="mlr20 mb20 size14 color32" style="line-height: 32px;">
+                为保证双方权益，您需要保证每月持续更新<span class="color2">30</span>章，约<span class="color2">10</span>万字，届时除基本权益之外，方可获额外收益，本也内容仅供参考，不具备法律效益
+            </div>
+            <table class="mlr20" style="width: 950px;">
+                <thead>
+                <tr>
+                    <th>书籍</th>
+                    <th>千字价格(会员)</th>
+                    <th>千字价格(非会员)</th>
+                    <th>收益比例(会员)</th>
+                    <th>收益比例(非会员)</th>
+                    <th>{$kx.config.user.ticket_caption}兑换比例</th>
+                    <th>{$kx.config.user.money_caption}提现比例</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop=$signingnovels}
+                <tr>
+                    <td>{$loop.novel.name}</td>
+                    <td>{$loop.charge.words_money}</td>
+                    <td>{=$loop.novel.type == \App\Model\Novel\Novel::TYPE_VIP_FREE?0:$loop.charge.words_vip_money}</td>
+                    <td>{$loop.charge.subscription_revenue_ratio}%</td>
+                    <td>{=$loop.novel.type == \App\Model\Novel\Novel::TYPE_VIP_FREE?0:$loop.charge.vip_subscription_revenue_ratio}%</td>
+                    <td>{$kx.config.ticket.author}</td>
+                    <td>{=$kx.config.author.withdraw_ratio>0?1/$kx.config.author.withdraw_ratio:0}</td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+            {if $paginate.total>1}
+            <div class="pt-pages">
+                <div class="pt30 color5">
+                    {if $paginate.prev}
+                    <a href="{link=author.income.record type=$type page=$paginate.prev}"><span><</span></a>
+                    {else}
+                    <span class="disable"><</span>
+                    {/if}
+                    {loop=paginate.items}
+                    <a href="{link=author.income.record type=$type page=$loop.num}">
+                        <span class="{$loop.status|default='','pt-pages-select'}">{$loop.num}</span>
+                    </a>
+                    {/loop}
+                    {if $paginate.next}
+                    <a href="{link=author.income.record type=$type page=$paginate.next}"><span>></span></a>
+                    {else}
+                    <span class="disable">></span>
+                    {/if}
+                </div>
+            </div>
+            {/if}
+        </div>
+    </div>
+</div>
+{include file="/author/system/footer"}
+<script>
+
+</script>
+</body>
+</html>

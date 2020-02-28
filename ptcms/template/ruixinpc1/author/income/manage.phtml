@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据统计 - 原创专区 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/css/style.css"/>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico"/>
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__"/>
+    <style>
+        .body ul.label {
+            height: 54px;
+        }
+        .body ul.label li{
+            float: left;
+            width: 130px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            background: #E5E5E5;
+            margin-top: 4px;
+        }
+        .body ul.label li.active{
+            background-color: #fff;
+            color: #323237;
+            border-top: 4px solid #f55;
+            margin-top: 0;
+        }
+        .body table {
+            width: 100%;
+            text-align: center;
+            color: #323237;
+        }
+
+        .body table th {
+            height: 48px;
+            background-color: #F5F5F7;
+            text-align: center;
+            font-weight: 700;
+        }
+
+        .body table thead tr {
+            border: 1px solid #F5F5F5;
+        }
+
+        .body table td {
+            height: 48px;
+        }
+
+        .body table tbody tr {
+            border: 1px solid #E9E9E9;
+        }
+        .moneylist li{
+            float: left;
+            height: 50px;
+            width: 115px;
+            border: 1px solid #E9E9E9;
+            background-color: #F9F9F9;
+            text-align: center;
+            line-height: 50px;
+            margin-right: 40px;
+            margin-top: 25px;
+        }
+        .moneylist li:hover,.moneylist li.active{
+            background:rgba(255,85,85,0.2);
+            border:1px solid #f55;
+            color: #f55;
+        }
+        .moneyinput{
+            margin-left: 100px;
+            width: 300px;
+            height: 40px;
+            line-height: 40px;
+        }
+        .moneyinput + a{
+            display: inline-block;
+            height: 42px;
+            width: 100px;
+            border: 1px solid #E9E9E9;
+            background-color: #F9F9F9;
+            text-align: center;
+            line-height: 42px;
+            position: relative;
+            top: -3px;
+        }
+    </style>
+</head>
+<body>
+{include file="/author/system/header"}
+<div class="body">
+    {include file="/author/system/left"}
+    <div class="right h100">
+        <ul class="label">
+            <a href="{link=author.income.manage}"><li class="active">提现管理</li></a>
+            <a href="{link=author.income.guarantee}"><li>收益保障</li></a>
+            <a class="inline-block plr20 ptb10 bg-red color0 fr mt5 btn-withdraw" href="javascript:void(0);">
+                <img class="mr10" style="vertical-align: middle;margin-top: -2px;" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/images/icon-money-active.png" alt="我要提现">我要提现
+            </a>
+        </ul>
+        <div class="bg-white" style="min-height: 695px;">
+            <div class="border-b mb30 plr30 ptb30">
+                <div class="size18 color32 bold">当前可提现(元)</div>
+                <div class="color2 bold" style="font-size: 40px" title="{$stat.balance}{$kx.config.user.money_caption}">
+                    {if empty($stat.balance)}
+                    0
+                    {else}
+                    {=$stat.balance/$kx.config.author.withdraw_ratio}
+                    {/if}
+                </div>
+                <span class="color62 size14">累计获取稿酬{=$stat.redeemed+$stat.frozen+$stat.balance}{$kx.config.user.money_caption}，已提现{=$stat.redeemed+$stat.frozen}{$kx.config.user.money_caption}</span>
+            </div>
+            <table class="mlr20" style="width: 950px;">
+                <thead>
+                <tr>
+                    <th>时间</th>
+                    <th>{$kx.config.user.money_caption}</th>
+                    <th>金额</th>
+                    <th>类型</th>
+                    <th>备注</th>
+                    <th>状态</th>
+                </tr>
+                </thead>
+                <tbody>
+                {loop=$records}
+                <tr>
+                    <td>{$loop.create_time|date='Y-m-d'}</td>
+                    <td><span class="color2">{$loop.money}</span>{$kx.config.user.money_caption}</td>
+                    <td><span class="color2">{$loop.amount}</span>元</td>
+                    <td>提现</td>
+                    <td></td>
+                    <td>{$loop.status|default='未知','审核中','拒绝','通过'}</td>
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+            {if $paginate.total>1}
+            <div class="pt-pages">
+                <div class="pt30 color5">
+                    {if $paginate.prev}
+                    <a href="{link=author.income.record type=$type page=$paginate.prev}"><span><</span></a>
+                    {else}
+                    <span class="disable"><</span>
+                    {/if}
+                    {loop=paginate.items}
+                    <a href="{link=author.income.record type=$type page=$loop.num}">
+                        <span class="{$loop.status|default='','pt-pages-select'}">{$loop.num}</span>
+                    </a>
+                    {/loop}
+                    {if $paginate.next}
+                    <a href="{link=author.income.record type=$type page=$paginate.next}"><span>></span></a>
+                    {else}
+                    <span class="disable">></span>
+                    {/if}
+                </div>
+            </div>
+            {/if}
+        </div>
+    </div>
+</div>
+<div class="pt-withdraw-model" data-type="moneylist" style="display: none;">
+    {if empty($authorinfo.data.truename) || empty($authorinfo.data.alipay)}
+    <h1 class="size18 color62 pl20 mb20" style="height: 50px;line-height:50px;background-color:#f5f5f7;">提示</h1>
+    <p class="color32 size24 bold mtb40 ptb40 text-center">请先前往作者资料设置账户信息</p>
+    <div class="text-center mt30"><a href="{link=author.author.info}" class="plr20 ptb10 bg-red color1">立即前往</a></div>
+    {else}
+    <h1 class="size18 color62 pl20" style="height: 50px;line-height:50px;background-color:#f5f5f7;">我要提现</h1>
+    <input type="number" class="moneyinput mt40 color2 bold size24 pl20" style="display: none" value="100"><a style="display:none;cursor: pointer">取消</a>
+    <ul class="moneylist mt20" style="margin-left: 100px;">
+        <li data-money="100">100元</li>
+        <li data-money="300">300元</li>
+        <li data-money="500">500元</li>
+        <li data-money="1000">1000元</li>
+        <li data-money="3000">3000元</li>
+        <li data-money="other">其他金额</li>
+    </ul>
+    <div style="clear: both"></div>
+    <p class="color62 mt40" style="margin-left: 100px;">您的账户余额为 <span class="color2">{if empty($stat.balance)}0{else}{=$stat.balance/$kx.config.author.withdraw_ratio}{/if}</span> 元，请选择您要提现金额</p>
+    <div class="text-center mt30">
+        <button class="plr20 ptb10 bg-red color1 btn-withdraw-submit">立即提交</button>
+    </div>
+    {/if}
+</div>
+{include file="/author/system/footer"}
+<script>
+    $('.btn-withdraw').click(function () {
+        var othis = $(this);
+        layer.open({
+            type: 1,
+            title: false,
+            closeBtn: 0,
+            shadeClose: true,
+            area: ['640px', '400px'],
+            content: $('.pt-withdraw-model'),
+            success: function (layero, index) {
+                layero.find('.label li').removeClass('pt-active');
+                if (othis.hasClass('btn-interactive-reward')) {
+                    layero.find('.label li[data-type=reward]').addClass('pt-active');
+                } else if (othis.hasClass('btn-interactive-vote')) {
+                    layero.find('.label li[data-type=vote]').addClass('pt-active');
+                }
+                if (parseInt('{$islogin}')) {
+                    if (othis.hasClass('btn-interactive-reward')) {
+                        layero.find('.container li').removeClass('pt-active').siblings('.reward').addClass('pt-active');
+                    } else if (othis.hasClass('btn-interactive-vote')) {
+                        layero.find('.container li').removeClass('pt-active').siblings('.vote').addClass('pt-active');
+                    }
+                }
+            }
+        });
+    });
+    $('.pt-withdraw-model').on('click', '.moneylist li', function () {
+        $(this).addClass('active').siblings().removeClass('active');
+        if ($(this).data('money') === 'other') {
+            $(this).parents('.pt-withdraw-model').data('type', 'moneyinput').find('.moneylist').hide().find('li').removeClass('active');
+            $(this).parents('.pt-withdraw-model').find('.moneyinput,.moneyinput + a').show();
+        }
+    }).on('click', '.moneyinput + a', function () {
+        $(this).parents('.pt-withdraw-model').data('type', 'moneylist').find('.moneylist').show().find('li').removeClass('active');
+        $(this).parents('.pt-withdraw-model').find('.moneyinput,.moneyinput + a').hide();
+    }).on('click', '.btn-withdraw-submit', function () {
+        var parent = $(this).parents('.pt-withdraw-model'), money = 0, loading = null;
+        if (parent.data('type') === 'moneyinput') {
+            money = parent.find('.moneyinput').val();
+            if (money === '') {
+                return layer.msg('请输入提现金额');
+            }
+        } else {
+            money = parent.find('.moneylist li.active').data('money');
+            if (typeof money === 'undefined') {
+                return layer.msg('请选择提现金额');
+            }
+        }
+        $.ajax('{link=author.income.withdraw}', {
+            type: 'post',
+            dataType: 'json',
+            data: {'money': parseInt(money)},
+            beforeSend: function () {
+                if (loading == null) {
+                    loading = layer.load(1, {shade: [0.1, '#000']});
+                }
+            },
+            complete: function () {
+                if (loading != null) {
+                    layer.close(loading);
+                    loading = null;
+                }
+            },
+            success: function (res) {
+                if (res.code) {
+                    layer.alert(res.msg, {icon: 2,}, function (index) {
+                        if (res.data.redirect) {
+                            window.location.href = res.data.redirect;
+                        } else {
+                            layer.close(index);
+                        }
+                    });
+                } else {
+                    layer.msg('操作成功!');
+                    window.location.reload();
+                }
+            },
+            error: function () {
+                layer.alert('提现失败，请稍后重试！', {icon: 2,});
+            }
+        });
+    });
+</script>
+</body>
+</html>

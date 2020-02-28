@@ -1,0 +1,64 @@
+<title>会员充值选项</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>系统设置</cite></a>
+        <a><cite>付费管理</cite></a>
+        <a><cite>会员类型</cite></a>
+        <a><cite>会员充值选项</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            list: '/manage/system/vip/list.json',
+            del: '/manage/system/vip/del.json'
+        },
+        topButton: {
+            add: {}
+        },
+        actionButton: {
+            edit: {},
+            del: {}
+        },
+        table: {
+            where: {user_id: 0},
+            cols: [[
+                {field: 'money', title: '金额(元)', width: 100},
+                {field: 'day', title: '时长(天)', width: 100},
+                {field: 'reward', title: '奖励时长(天)', width: 120},
+                {field: 'name', title: '显示名称', width: 160},
+                {field: 'one_level_user_reward_money', title: '上级用户奖励金币', width: 150},
+                {field: 'two_level_user_reward_money', title: '上上级用户奖励金币', width: 160},
+                {field: 'remark', title: '备注'},
+                {title: '操作', align: 'center', fixed: 'right', toolbar: '#table-curd-list', width: 160}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

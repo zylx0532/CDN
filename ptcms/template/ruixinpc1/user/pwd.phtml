@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>修改密码 - 用户中心 - {$kx.config.sitename}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/global.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/style.css"/>
+</head>
+<body>
+	<!-- 头部 -->
+    {include file="/system/header"}
+
+	<!-- 内容 -->
+	<div class="pt-content">
+		<!-- 面包屑 -->
+		<div class="pt-crumb">
+			<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/crumb_icon.png" class="pt-crumb-icon">
+			<span class="color5">
+                <a href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > <a href="{link=user.index.index}" class="color5">用户中心</a> > <a href="{link=user.info.pwd}">修改密码</a>
+            </span>
+		</div>
+		<!-- 一楼 -->
+		<div class="pt-floor1">
+            {include file="/system/userleft"}
+			<!-- 推荐 -->
+			<div class="relative pt-rank">
+				<!-- 书架title -->
+				<div class="pt-rank-head">
+					<span class="mr10 size16 color2 bold">修改密码</span>
+				</div>
+				<div class="pt-info-cont mt30">
+                    <form action="" method="post">
+                        <div class="mb20 pt-info-cont-name">
+                            <span class="inline-block color8 w80">原始密码</span>
+                            <input class="color32" type="password" name="old_pwd">
+                            <span class="color4">您之前的密码，如果为第三方登录用户请留空</span>
+                        </div>
+
+                        <div class="mb20 pt-info-cont-name">
+                            <span class="inline-block color8 w80">新密码</span>
+                            <input class="color32" type="password" name="new_pwd">
+                            <span class="color4">您要设置的新密码</span>
+                        </div>
+                        <div class="mb20 pt-info-cont-name">
+                            <span class="inline-block color8 w80">重复密码</span>
+                            <input class="color32" type="password" id="repeat_pwd">
+                            <span class="color4">请重复输入您的新密码</span>
+                        </div>
+                        <button type="submit" class="fl cursor pt-info-cont-save mb10 bg-white">提交保存</button>
+                    </form>
+				</div>
+			</div>
+		</div>
+		<!-- 广告位 -->
+	</div>
+
+	<!-- 底部版权-->
+    {include file="/system/footer"}
+    <script>
+        $('form').submit(function(){
+            if (!$(this).find('input[name=old_pwd]').val()){
+                layer.msg('原始密码不能为空，请检查后重试！');
+                return false;
+            }
+            if (!$(this).find('input[name=new_pwd]').val()){
+                layer.msg('新密码不能为空，请检查后重试！');
+                return false;
+            }
+            if ($(this).find('input[name=new_pwd]').val() != $(this).find('#repeat_pwd').val()){
+                $(this).find('input[name=new_pwd]').val('');
+                $(this).find('#repeat_pwd').val('');
+                layer.msg('两次输入密码不一致，请检查后重试！');
+                return false;
+            }
+            return true;
+        });
+    </script>
+    <!-- js-->
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/js/rankdetail.js"></script>
+</body>
+</html>

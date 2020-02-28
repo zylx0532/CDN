@@ -1,0 +1,73 @@
+<title>pagesign</title>
+<style>
+  .layui-form-label{
+    width: 170px !important;
+  }
+  .layui-input-block{
+    margin-left: 200px !important;;
+  }
+</style>
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>开发选项</cite></a>
+    <a><cite>pagesign</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+      <div class="layui-card">
+        <div class="layui-card-header">pagesign</div>
+        <div class="layui-card-body" pad15>
+          <div class="layui-form" wid100 lay-filter="LAY-info-form">
+            <div class="layui-fields">
+
+            </div>
+            <div class="layui-card">
+              <div class="layui-form-item">
+                <div class="layui-input-block" style="padding-bottom: 10px">
+                  <button class="layui-btn mb" lay-submit lay-filter="submit">确认修改</button>
+                  <button class="layui-btn mb btn-add">添加</button>
+                  <button class="layui-btn mb btn-del">删除模式</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    var api = '/manage/setting/pagesign.json';
+    layui.use('curd/set', layui.factory('curd/set'));
+    layui.$('.btn-add').click(function(){
+        if ( !layui.$(this).hasClass('layui-btn-disabled')){
+            layui.layer.prompt({title: '请输入路由地址(a.b.c)'}, function(key, index){
+                layui.layer.close(index);
+                var newK = key.split(".").join("@");
+                layui.$('.layui-fields').append('<div class="layui-form-item undefined">\n' +
+                    '<label class="layui-form-label">'+key+'</label>\n' +
+                    '<div class="layui-input-block"><input type="text" name="field['+newK+']" lay-verify="" value="" class="layui-input"></div>\n' +
+                    '</div>');
+            });
+        }
+    });
+    layui.$('.btn-del').click(function(){
+        if (layui.$(this).hasClass('layui-btn-danger')) {
+            layui.$(this).removeClass('layui-btn-danger');
+            layui.$(this).siblings().removeClass('layui-btn-disabled');
+            layui.$('.layui-fields .layui-form-label').off('dblclick.del');
+        }else{
+            layui.$(this).addClass('layui-btn-danger');
+            layui.$(this).siblings().addClass('layui-btn-disabled');
+            layui.$('.layui-fields .layui-form-label').on('dblclick.del',function(){
+                console.log(this);
+                layui.$(this).parent().remove();
+            });
+            layui.layer.msg('删除模式已开启,双击路由名称删除')
+        }
+    });
+</script>

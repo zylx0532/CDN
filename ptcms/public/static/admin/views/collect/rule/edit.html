@@ -1,0 +1,459 @@
+<title>编辑列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>规则管理</cite></a>
+        <a><cite>编辑规则</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">编辑规则</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="hidden" name="id">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认修改</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var $ = layui.$;
+
+    function initRuleView(obj) {
+        value = obj.value ? JSON.parse(obj.value) : {};
+        var parent = layui.$(obj).parent();
+        parent.data('rule', value);
+        layui.each(value, function (k, v) {
+            switch (k) {
+                case 'ignorecase':
+                case 'singleline':
+                    v && parent.find('.rule_field_' + k).attr('checked', true);
+                    break;
+                case 'replace':
+                    layui.each(v, function (k, v) {
+                        var options = [];
+
+                        let search = v.search;
+                        let replace = v.replace ? v.replace : "";
+                        let type = v.type;
+                        let ignorecase = v.ignorecase;
+                        let singleline = v.singleline;
+
+                        if (v.type == "1") options.push('正则模式');
+                        if (v.ignorecase != "false") options.push('不区分大小写');
+                        if (v.singleline != "false") options.push('单行模式');
+                        options = options.length ? options.join('，') : '';
+
+                        html = '<tr>' +
+                            '<td><textarea style="display:none" data-field="search">' + search + '</textarea>' + htmlEncode(search) + '</td>' +
+                            '<td><textarea style="display:none" data-field="replace">' + replace + '</textarea>' + htmlEncode(replace) + '</td>' +
+                            '<td>' +
+                            '<input type="hidden" data-field="type" value="' + type + '">' +
+                            '<input type="hidden" data-field="ignorecase" value="' + ignorecase + '">' +
+                            '<input type="hidden" data-field="singleline" value="' + singleline + '">' +
+                            options + '</td>' +
+                            '<td><button type="button" class="layui-btn layui-btn-danger" onclick="layui.$(this).parents(\'tr\').remove()">删除</button></td>' +
+                            '</tr>';
+
+                        parent.find('tbody').append(html);
+                    });
+                    if (v.length) {
+                        parent.find('.btn-replace-rule').click();
+                    }
+                    break;
+                default:
+                    parent.find('.rule_field_' + k).val(v);
+            }
+        });
+    }
+</script>
+<script type="text/html" id="collect_rule_url_field">
+    <div class="layui-form-item collect_rule_field {{d.style}}">
+        <input type="hidden" name="{{d.key}}" value="" onchange="initRuleView(this)">
+        <label class="layui-form-label">{{d.name}}{{#if(d.require){}} <span
+                style="color: #ff5555;">*</span>{{#}}}</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea rule_field_rule"></textarea>
+            <div class="layui-row" style="margin-top: 10px;">
+                <div class="layui-col-md3">
+                    <select class="rule_field_charset" lay-filter="LAY-rule-select">
+                        <option value="auto">自动判断页面编码</option>
+                        <option value="utf-8">UTF-8</option>
+                        <option value="utf-16">UTF-16</option>
+                        <option value="gbk">GBK系列</option>
+                    </select>
+                </div>
+                <div class="layui-col-md9" style="padding-left: 15px;">
+                    <button type="button" class="layui-btn btn-set-error">页面错误标识</button>
+                    <button type="button" class="layui-btn btn-replace-rule">内容替换规则</button>
+                    <button type="button" class="layui-btn layui-btn-normal add-replace-rule layui-hide">添加规则</button>
+                </div>
+            </div>
+            <div class="layui-row replace-rule-box layui-hide">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="35%">
+                        <col width="35%">
+                        <col width="20%">
+                        <col width="10%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>要替换的内容</th>
+                        <th>替换后</th>
+                        <th>参数</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            {{# if(d.intro){ }}
+            <div class="layui-form-mid layui-word-aux">{{d.intro}}</div>
+            {{# } }}
+        </div>
+    </div>
+</script>
+<script type="text/html" id="collect_rule_field">
+    <div class="layui-form-item collect_rule_field {{d.style}}">
+        <input type="hidden" name="{{d.key}}" value="" onchange="initRuleView(this)">
+        <label class="layui-form-label">{{d.name}}{{#if(d.require){}} <span
+                style="color: #ff5555;">*</span>{{#}}}</label>
+        <div class="layui-input-block">
+            <textarea class="layui-textarea rule_field_rule"></textarea>
+            <div class="layui-row" style="margin-top: 10px;">
+                <div class="layui-col-md4">
+                    <input type="checkbox" class="rule_field_ignorecase" lay-filter="LAY-rule-checkbox" title="不区大小写">
+                    <input type="checkbox" class="rule_field_singleline" lay-filter="LAY-rule-checkbox" title="单行模式">
+                </div>
+                <div class="layui-col-md6" style="padding-left: 15px;">
+                    <button type="button" class="layui-btn btn-replace-rule">内容替换规则</button>
+                    <button type="button" class="layui-btn layui-btn-normal add-replace-rule layui-hide">添加规则</button>
+                </div>
+            </div>
+            <div class="layui-row replace-rule-box layui-hide">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="35%">
+                        <col width="35%">
+                        <col width="20%">
+                        <col width="10%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>要替换的内容</th>
+                        <th>替换后</th>
+                        <th>参数</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+            {{# if(d.intro){ }}
+            <div class="layui-form-mid layui-word-aux">{{d.intro}}</div>
+            {{# } }}
+        </div>
+    </div>
+</script>
+<script>
+    function htmlEncode(value) {
+        return $('<div/>').text(value).html();
+    }
+
+    function htmlDecode(value) {
+        return $('<div/>').html(value).text();
+    }
+
+    var config, apipower = 0;
+    layui.admin.req({
+        url: '/manage/data/response.json',
+        method: 'POST',
+        data: {site: 'select'},
+        success: function (res) {
+            config = {
+                api: {submit: '/manage/collect/rule/edit.json'},
+                beforeSubmit: function (obj) {
+                    $ = layui.$;
+                    // 清空替换
+                    $('.collect_rule_field').each(function (k, v) {
+                        var data = $(v).data('rule');
+                        if (typeof data === 'undefined') data = {};
+                        if (data.replace && data.replace.length) {
+                            data.replace = {};
+                        }
+                        $(this).data('rule', data);
+                    });
+                    //更新内容替换规则到data
+                    $('.replace-rule-box').each(function (k, v) {
+                        var data = $(v).parents('.collect_rule_field').data('rule');
+                        var replace = [];
+                        $(v).find('tr').each(function (k, v) {
+                            item = {};
+                            $(v).find('input').each(function (k, v) {
+                                item[v.getAttribute('data-field')] = v.value;
+                            });
+                            $(v).find('textarea').each(function (k, v) {
+                                item[v.getAttribute('data-field')] = v.value;
+                            });
+                            if (Object.keys(item).length) {
+                                replace.push(item);
+                            }
+                        });
+                        if (Object.keys(replace).length) {
+                            data.replace = replace;
+                        }
+                        $(v).parents('.collect_rule_field').data('rule', data);
+                    });
+                    //序列化规则内容
+                    $('.collect_rule_field').each(function (k, v) {
+                        var fieldName = $(v).children('input[type=hidden]').attr('name');
+                        var fieldValue = $(v).data('rule');
+                        obj.field[fieldName] = typeof fieldValue === 'object' && Object.keys(fieldValue).length
+                            ? JSON.stringify(fieldValue)
+                            : '';
+                    });
+                },
+                beforeFormAssign: function (layui, res) {
+                    if (parseInt(res.data.api_power)) {
+                        $('.match_rule_field').hide();
+                        $('.down_rule_field').hide();
+                        $('input[name=api_key]').parents('.layui-form-item').show();
+                    } else {
+                        switch (res.data.down_power) {
+                            case '0':
+                                $('.down_rule_field').hide();
+                                $('.match_rule_field').show();
+                                break;
+                            case '1':
+                                $('.down_rule_field').show();
+                                $('.match_rule_field').show();
+                                break;
+                            case '2':
+                                $('.match_rule_field').hide();
+                                $('.down_rule_field').show();
+                                break;
+                        }
+                        $('input[name=api_key]').parents('.layui-form-item').hide();
+                    }
+                },
+                done: function (layui) {
+                    $ = layui.$;
+                    layui.form.on('checkbox(LAY-rule-checkbox)', function (data) {
+                        rule = $(data.elem).parents('.layui-form-item').data('rule');
+                        field = data.elem.getAttribute('class').replace('rule_field_', '');
+                        rule[field] = data.elem.checked ? 1 : 0;
+                        $(data.elem).parents('.layui-form-item').data('rule', rule);
+                    });
+                    //页面编码下拉框
+                    layui.form.on('select(LAY-rule-select)', function (data) {
+                        rule = $(data.elem).parents('.layui-form-item').data('rule');
+                        field = data.elem.getAttribute('class').replace('rule_field_', '');
+                        rule[field] = data.elem.value;
+                        $(data.elem).parents('.layui-form-item').data('rule', rule);
+                    });
+                    //API采集选项
+                    layui.form.on('switch(api_power)', function (data) {
+                        if (data.elem.checked) {
+                            apipower = 1;
+                            $('.match_rule_field').hide();
+                            $('.down_rule_field').hide();
+                            $('input[name=api_key]').parents('.layui-form-item').show();
+                        } else {
+                            apipower = 0;
+                            switch ($('input[name=down_power]:checked').val()) {
+                                case '0':
+                                    $('.down_rule_field').hide();
+                                    $('.match_rule_field').show();
+                                    break;
+                                case '1':
+                                    $('.down_rule_field').show();
+                                    $('.match_rule_field').show();
+                                    break;
+                                case '2':
+                                    $('.match_rule_field').hide();
+                                    $('.down_rule_field').show();
+                                    break;
+                            }
+                            $('input[name=api_key]').parents('.layui-form-item').hide();
+                        }
+                    });
+                    //下载选项
+                    layui.form.on('radio(down_power)', function (data) {
+                        if (apipower == 0) {
+                            switch (data.value) {
+                                case '0':
+                                    $('.down_rule_field').hide();
+                                    $('.match_rule_field').show();
+                                    break;
+                                case '1':
+                                    $('.down_rule_field').show();
+                                    $('.match_rule_field').show();
+                                    break;
+                                case '2':
+                                    $('.match_rule_field').hide();
+                                    $('.down_rule_field').show();
+                                    break;
+                            }
+                        }
+                    });
+                    //规则文本域
+                    $('.rule_field_rule').on('change', function () {
+                        rule = $(this).parents('.layui-form-item').data('rule');
+                        rule['rule'] = $(this).val();
+                        $(this).parents('.layui-form-item').data('rule', rule);
+                    });
+                    //页面错误标识
+                    $('.btn-set-error').on('click', function () {
+                        var othis = $(this), data = othis.parents('.collect_rule_field').data('rule');
+                        layui.layer.prompt({
+                            formType: 2,
+                            value: data.error,
+                            title: '页面错误标识',
+                            area: ['500px', '200px'],
+                            yes: function (index, layero) {
+                                data.error = layero.find('textarea').val();
+                                othis.parents('.collect_rule_field').data('rule', data);
+                                layui.layer.close(index);
+                            }
+                        });
+                    });
+                    //内容规则替换按钮
+                    $('.btn-replace-rule').on('click', function () {
+                        var replaceRuleBox = $(this).parents('.layui-form-item').find('.replace-rule-box');
+                        if (replaceRuleBox.hasClass('layui-hide')) {
+                            replaceRuleBox.removeClass('layui-hide');
+                            $(this).addClass('layui-btn-primary').siblings('.add-replace-rule').removeClass('layui-hide');
+                        } else {
+                            replaceRuleBox.addClass('layui-hide');
+                            $(this).removeClass('layui-btn-primary').siblings('.add-replace-rule').addClass('layui-hide');
+                        }
+                    });
+
+                    //添加规则
+                    $('.add-replace-rule').on('click', function () {
+                        var tbody = $(this).parents('.layui-form-item').find('tbody');
+                        layui.layer.open({
+                            type: 1,
+                            skin: 'layui-layer-rim',
+                            area: '500px',
+                            btn: ['确定', '取消'],
+                            title: '添加替换规则',
+                            content:
+                                '<fieldset class="layui-elem-field"><legend>要替换的内容</legend><div class="layui-field-box"><textarea  id="search" class="layui-textarea" style="resize: none;"></textarea></div></fieldset>' +
+                                '<fieldset class="layui-elem-field"><legend>替换后的内容</legend><div class="layui-field-box"><textarea id="replace" class="layui-textarea" style="resize: none;"></textarea></div></fieldset>' +
+                                '<fieldset class="layui-elem-field"><legend>替换参数</legend><div class="layui-field-box">' +
+                                '<input type="checkbox" id="preg"> <label for="preg">正则模式</label>&nbsp;&nbsp;&nbsp;' +
+                                '<input type="checkbox" id="ignorecase"> <label for="ignorecase">不区分大小写</label>&nbsp;&nbsp;&nbsp;' +
+                                '<input type="checkbox" id="singleline"> <label for="singleline">单行模式</label>&nbsp;&nbsp;&nbsp;' +
+                                ' </div></fieldset>',
+                            yes: function (index, layero) {
+                                let search = layero.find('#search').val();
+                                let replace = layero.find('#replace').val();
+                                let type = layero.find('#preg').prop('checked') ? 1 : 0;
+                                let ignorecase = layero.find('#ignorecase').prop('checked');
+                                let singleline = layero.find('#singleline').prop('checked');
+
+                                let options = [];
+                                if (type) options.push('正则模式');
+                                if (ignorecase) options.push('不区分大小写');
+                                if (singleline) options.push('单行模式');
+                                options = options.length ? options.join('，') : '';
+                                html = '<tr>' +
+                                    '<td><textarea style="display:none" data-field="search">' + search + '</textarea>' + htmlEncode(search) + '</td>' +
+                                    '<td><textarea style="display:none" data-field="replace">' + replace + '</textarea>' + htmlEncode(replace) + '</td>' +
+                                    '<td>' +
+                                    '<input type="hidden" data-field="type" value="' + type + '">' +
+                                    '<input type="hidden" data-field="ignorecase" value="' + ignorecase + '">' +
+                                    '<input type="hidden" data-field="singleline" value="' + singleline + '">' +
+                                    options + '</td>' +
+                                    '<td><button type="button" class="layui-btn layui-btn-danger" onclick="layui.$(this).parents(\'tr\').remove()">删除</button></td>' +
+                                    '</tr>';
+                                tbody.append(html);
+                                layui.layer.close(index);
+                            }
+                        });
+                    });
+                },
+                fields: [
+                    {name: '规则信息', type: 'set'},
+                    {name: '规则名称', key: 'name', type: 'text', require: true},
+                    {name: '站点分类', key: 'sex', type: 'radio', extra: '0:先男后女 1:先女后男 2:纯男 3:纯女', require: true, value: "0"},
+                    {name: '所属站点', key: 'site_id', type: 'select', extra: res.data.site.select, require: true},
+                    {name: '使用API', key: 'api_power', type: 'switch', filter: 'api_power', extra: '是|否', intro: '接口采集需要遵循数据规范，详情参考官方文档', require: true},
+                    {name: 'API KEY', key: 'api_key', type: 'text', intro: '接口时接口方需要您填写的key内容'},
+                    {name: '跳过始章', key: 'discard_start_num', type: 'num', intro: '在目录页跳过最初的几个章节', require: true, value: 0, style: 'match_rule_field'},
+                    {name: '跳过尾章', key: 'discard_end_num', type: 'num', intro: '在目录页跳过末尾的几个章节', require: true, value: 0, style: 'match_rule_field'},
+                    {name: '章节名纠错', key: 'repair_chapter_name', type: 'num', intro: '修复最后几个章节章节名的防采集干扰字符，非常影响效率，0为不处理', require: true, value: 0},
+                    {name: '过滤重复章节', key: 'ignore_same_chapter', type: 'switch', intro: '过滤重复章节,请配合处理乱序功能使用，否则可能导致章节错乱', require: true, value: "1", style: 'match_rule_field'},
+                    {name: '处理乱序', key: 'dir_sort', type: 'switch', intro: '章节目录乱序处理,需要章节id为数字方可使用', require: true, value: "1", style: 'match_rule_field'},
+                    {name: '使用代理', key: 'proxy_power', type: 'switch', intro: '采集本站是否使用代理采集', extra: '是|否', require: true, style: 'match_rule_field'},
+                    {name: '下载选项', key: 'down_power', type: 'radio', filter: 'down_power', extra: '0:不支持下载 1:支持下载 2:仅下载', value: '0'},
+
+                    {name: '更新列表规则', type: 'set', style: 'match_rule_field down_rule_field'},
+                    {name: '列表页地址', key: 'url_list', templet: '#collect_rule_url_field', require: true, style: 'match_rule_field down_rule_field', intro: "如果要做多页采集，请使用 [page] 表示页码"},
+                    {name: '小说名称', key: 'list_novelname', templet: '#collect_rule_field', style: 'match_rule_field down_rule_field'},
+                    {name: '小说书号', key: 'list_novelid', templet: '#collect_rule_field', require: true, style: 'match_rule_field down_rule_field'},
+                    {name: '更新标识', key: 'list_lastid', templet: '#collect_rule_field', require: false, style: 'match_rule_field down_rule_field'},
+
+                    {name: '信息页规则', type: 'set', style: 'match_rule_field down_rule_field'},
+                    {name: '信息页地址', key: 'url_info', templet: '#collect_rule_url_field', require: true, style: 'match_rule_field down_rule_field'},
+                    {name: '小说名称', key: 'info_novelname', templet: '#collect_rule_field', require: true, style: 'match_rule_field down_rule_field'},
+                    {name: '小说作者', key: 'info_author', templet: '#collect_rule_field', require: true, style: 'match_rule_field down_rule_field'},
+                    {name: '小说封面', key: 'info_cover', templet: '#collect_rule_field', style: 'match_rule_field down_rule_field'},
+                    {name: '小说频道', key: 'info_channel', templet: '#collect_rule_field', style: 'match_rule_field down_rule_field'},
+                    {name: '小说分类', key: 'info_category', templet: '#collect_rule_field', style: 'match_rule_field down_rule_field'},
+                    {name: '小说子类', key: 'info_subcategory', templet: '#collect_rule_field', style: 'match_rule_field down_rule_field'},
+                    {name: '小说简介', key: 'info_intro', templet: '#collect_rule_field', style: 'match_rule_field down_rule_field'},
+                    {name: '小说进度', key: 'info_isover', templet: '#collect_rule_field', style: 'match_rule_field down_rule_field'},
+                    {name: '小说字数', key: 'info_words', templet: '#collect_rule_field', style: 'match_rule_field down_rule_field'},
+                    {name: '小说标签', key: 'info_tags', templet: '#collect_rule_field', style: 'match_rule_field down_rule_field'},
+
+                    {name: '目录页规则', type: 'set', style: 'match_rule_field'},
+                    {name: '目录页地址', key: 'url_dir', templet: '#collect_rule_url_field', require: true, style: 'match_rule_field'},
+                    {name: '目录分页地址', key: 'url_dir_page', templet: '#collect_rule_field', style: 'match_rule_field', intro: "在分页的情况下才有的下一页的地址，只能获取不能拼接"},
+                    {name: '章节ID', key: 'dir_chapterid', templet: '#collect_rule_field', require: true, style: 'match_rule_field'},
+                    {name: '章节名称', key: 'dir_chaptername', templet: '#collect_rule_field', require: true, style: 'match_rule_field'},
+                    {name: '章节地址', key: 'dir_chapterurl', templet: '#collect_rule_url_field', require: true, style: 'match_rule_field'},
+
+                    {name: '章节页规则', type: 'set', style: 'match_rule_field'},
+                    {name: '章节接口地址', key: 'url_chapter', templet: '#collect_rule_url_field', style: 'match_rule_field', intro: "在使用章节API获取内容的时候填写"},
+                    {name: '章节名称', key: 'chapter_name', templet: '#collect_rule_field', style: 'match_rule_field'},
+                    {name: '章节分页地址', key: 'chapter_page', templet: '#collect_rule_field', style: 'match_rule_field', intro: "在分页的情况下才有的下一页的地址，只能获取不能拼接"},
+                    {name: '章节内容', key: 'chapter_content', templet: '#collect_rule_field', require: true, style: 'match_rule_field'},
+                    {
+                        name: '章节VIP标识',
+                        key: 'chapter_vip',
+                        type: 'textarea',
+                        intro: '获取到的章节页面HTML中含有这个字段标识则为VIP章节,不支持正则',
+                        require: false,
+                        style: 'match_rule_field'
+                    },
+
+                    {name: '下载页规则', type: 'set', style: 'down_rule_field'},
+                    {name: '下载页地址', key: 'url_down', templet: '#collect_rule_url_field', style: 'down_rule_field'},
+                    {name: '下载格式', key: 'down_format', templet: '#collect_rule_field', style: 'down_rule_field'},
+                    {name: '下载内容', key: 'down_content', templet: '#collect_rule_field', style: 'down_rule_field'},
+
+                ],
+            };
+            layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+        }
+    });
+</script>

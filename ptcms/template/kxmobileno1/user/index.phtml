@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>用户中心 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/css/global.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/flexible.min.js"></script>
+    <style>
+        .btn-sign {
+            background-color: #ff5555;
+            color: #fff;
+            width: 0.6rem;
+            height: 0.17rem;
+            border-radius: 0.1rem;
+            text-align: center;
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+<div class="w100">
+    <div class="w100  bg-white flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/return.png" class="pt-return">
+        <div class="size18 bold color37">个人中心</div>
+
+        <div>
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/ellipsis.png" class="mr5 pt-ellipsis">
+        </div>
+        <div class="pt5 pb5 pt-tip">
+            <a href="{link=index.index}" class="block color1 text-center pt-tip-item" title="{$kx.config.sitename}">前往首页</a>
+            <a href="{link=novel.search.index}" class="block color1 text-center pt-tip-item">搜索小说</a>
+        </div>
+    </div>
+
+    <div class="flex-wrp bg-white flex-cell flex-center bold ptb20">
+        <img src="{$userinfo.avatar}" class="pt-avatar">
+        <div class="size16 color7 pt10 pb10">
+            {block method=user.isvip userid=$userinfo.id name=$isvip}
+            <a href="{link=user.vip.index}">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/vip{=$isvip?'_active':''}.png" alt="超级会员" style="position: absolute;margin-left: -40px;height: 16px;margin-top: 2px">
+            </a>
+            {=$userinfo.nickname?:$userinfo.name}
+        </div>
+        <div class="size12 color4">
+            <a href="{link=user.info.index}">编辑资料</a>
+        </div>
+    </div>
+    <div class="bg-white ptb10 text-center" style="height: .8rem;">
+        <a class="inline-block fl h100 border-r" style="width:25%" href="{link=user.invite.index}">
+            <p class="size21 color32 bold">{$userinfo.data.invite_reg_num}</p>
+            <span class="size14">邀请</span>
+        </a>
+        <a href="{link=user.ticket.index}">
+            <div class="inline-block fl h100 border-r" style="width:25%">
+                <p class="size21 color32 bold">{$userinfo.assets.surplus_ticket}</p>
+                <span class="size14">{$kx.config.user.ticket_caption}</span>
+            </div>
+        </a>
+        <a href="{link=user.assets.index}">
+            <div class="inline-block fl h100 border-r" style="width:25%">
+                <p class="size21 color32 bold">{$userinfo.assets.balance}</p>
+                <span class="size14">{$kx.config.user.money_caption}</span>
+            </div>
+        </a>
+        <div class="inline-block fl h100" style="width:24%">
+            <a href="{link=user.pay.recharge}">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/recharge.png" alt="去充值" style="width: .3rem;height: .3rem">
+                <p class="color2 size14">去充值</p>
+            </a>
+        </div>
+    </div>
+    <div class="bg-white mb10 ptb10" style="height: .4rem;">
+        <img class="pl20" style="width: .18rem" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/vip2.png" alt="超级会员">
+        <img style="width: .6rem" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/super_vip.png" alt="超级会员">
+        <a class="fr mr20 size14" href="{link=user.vip.index}">前往开通 ></a>
+    </div>
+    <div class="bg-white mb10 pt-list">
+        <a class="flex-wrp flex-align-center flex-between w100 mb25" href="{link=user.mark.index}">
+            <div class="flex-wrp flex-align-center">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/my_bookrack_hover.png" class="mr10 pt-list-icon">
+                <span class="size14 lh100 color7">我的书架</span>
+            </div>
+            {block method=mark.num userid=$userinfo.id name=$marknum}
+            <div class="size12 color4">已收藏 {$marknum} 本</div>
+        </a>
+        <a class="flex-wrp flex-align-center flex-between w100 mb25" href="{link=user.history.index}">
+            <div class="flex-wrp flex-align-center">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/history.png" class="mr10 pt-list-icon">
+                <span class="size14 lh100 color7">我阅读过</span>
+            </div>
+            {block method=mark.num userid=$userinfo.id type=history name=$historynum}
+            <div class="size12 color4">历史阅读 {$historynum} 本</div>
+        </a>
+        <a class="flex-wrp flex-align-center flex-between w100" href="{link=user.booklist.index}">
+            <div class="flex-wrp flex-align-center">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/mark_hover.png" class="mr10 pt-list-icon">
+                <span class="size14 lh100 color7">我的书单</span>
+            </div>
+            {block method=booklist.count userid=$userinfo.id type='mark' name=$marknum}
+            {block method=booklist.count userid=$userinfo.id type='create' name=$createnum}
+            <div class="size12 color4">创建 {$createnum} / 收藏 {$marknum}</div>
+        </a>
+    </div>
+
+    <div class="bg-white mb10 pt-list">
+        <a href="{link=user.vote.index}">
+            <div class="flex-wrp flex-align-center flex-between w100 mb25">
+                <div class="flex-wrp flex-align-center">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/recomment.png" class="mr10 pt-list-icon">
+                    <span class="size14 lh100 color7">我的推荐</span>
+                </div>
+                <div class="size12 color4">推荐了 {$userinfo.data.vote_num} 本好书</div>
+            </div>
+        </a>
+        <a href="{link=user.comment.publish}">
+            <div class="flex-wrp flex-align-center flex-between w100 mb25">
+                <div class="flex-wrp flex-align-center">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/comment.png" class="mr10 pt-list-icon">
+                    <span class="size14 lh100 color7">我评论过</span>
+                </div>
+                <div class="size12 color4">共评论了 {$userinfo.data.comment_num} 条</div>
+            </div>
+        </a>
+        {block method="sign" name=signlist userid=$userinfo.id num=1}
+        <a href="{link=user.sign.index}">
+            <div class="flex-wrp flex-align-center flex-between w100 mb25">
+                <div class="flex-wrp flex-align-center">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/sign.png" class="mr10 pt-list-icon">
+                    <span class="size14 lh100 color7">我的签到</span>
+                </div>
+                {if empty($signlist[0]['date']) || $signlist[0]['date'] != date('Ymd')}
+                <button class="btn-sign">未签到</button>
+                {else}
+                {if !empty($signlist[0]['num'])}
+                <div class="size12 color4">连续签到 {$signlist[0]['num']} 次</div>
+                {/if}
+                {/if}
+            </div>
+        </a>
+        <a href="{link=user.invite.index}">
+            <div class="flex-wrp flex-align-center flex-between w100 mb25">
+                <div class="flex-wrp flex-align-center">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/invite.png" class="mr10 pt-list-icon">
+                    <span class="size14 lh100 color7">我的邀请</span>
+                </div>
+                <div class="size12 color4">邀请了 {=$userinfo.data.invite_reg_num+$userinfo.data.invite_visit_num} 个用户</div>
+            </div>
+        </a>
+        <a href="{link=user.star.index}">
+            <div class="flex-wrp flex-align-center flex-between w100">
+                <div class="flex-wrp flex-align-center">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/rank_collect.png" class="mr10 pt-list-icon">
+                    <span class="size14 lh100 color7">我的评分</span>
+                </div>
+                <div class="size12 color4">对 {$userinfo.data.star_num} 本书进行了评分</div>
+            </div>
+        </a>
+    </div>
+
+    <div class="bg-white mb10 pt-list">
+        <a href="{link=page.detail key=about}">
+            <div class="flex-wrp flex-align-center flex-between w100 mb25">
+                <div class="flex-wrp flex-align-center">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/about_us.png" class="mr10 pt-list-icon">
+                    <span class="size14 lh100 color7">关于我们</span>
+                </div>
+                <!-- <div class="size12 color4">已收藏 6 本</div> -->
+            </div>
+        </a>
+        <div class="flex-wrp flex-align-center flex-between w100">
+            <div class="flex-wrp flex-align-center">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/message_feedback.png" class="mr10 pt-list-icon">
+                <span class="size14 lh100 color7">留言反馈</span>
+            </div>
+            <!-- <div class="size12 color4">已收藏 6 本</div> -->
+        </div>
+    </div>
+
+    <div class="mb10 pt-list">
+        <a class="pt-login-btn block" style="width:90vw;color:#fff" href="{link=user.auth.logout}">退出登录</a>
+    </div>
+
+</div>
+
+<!-- 底部版权 -->
+{include file="/system/footer"}
+<script>var __ADD_SIGN = '{link=user.sign.do}';</script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/layer/mobile/layer.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/userindex.js"></script>
+</body>
+</html>

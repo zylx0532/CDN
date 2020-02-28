@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>我发布的评论 - 用户中心 - {$kx.config.sitename}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/style.css"/>
+</head>
+<body>
+	<!-- 头部 -->
+    {include file="/system/header"}
+	<!-- 内容 -->
+	<div class="pt-content">
+		<!-- 面包屑 -->
+		<div class="pt-crumb">
+			<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/crumb_icon.png" class="pt-crumb-icon">
+			<span class="color5">
+                <a href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > <a href="{link=user.index.index}" class="color5">用户中心</a> > <a href="{link=user.comment.publish}">我发布的评论</a>
+            </span>
+		</div>
+		<!-- 一楼 -->
+		<div class="pt-floor1">
+			{include file="/system/userleft"}
+			<!-- 推荐 -->
+			<div class="relative pt-rank">
+				<!-- 书架title -->
+				<div class="pt-rank-head">
+					<a href="{link=user.comment.publish}" class="color7 bold mr10">我评论的</a>
+					<span class="mr10">|</span>
+					<a href="{link=user.comment.reply}" class="color5">我回复的</a>
+				</div>
+                {block method="pagination" name="paginate" page=$page limit=$pagesize count=$userinfo.data.comment_num maxpage=50 section=3}
+                {block method="user.commentList" name=commentlist userid=$userinfo.id page=$page}
+                {if empty($commentlist)}
+                    <div style="text-align: center;line-height: 40px">您似乎来到了没有数据存在的荒原~~~</div>
+                {else}
+                {/if}
+                {loop=commentlist}
+                <div class="pt-reply-cont">
+                    <div class="fl"><img src="{$userinfo.avatar}" class="pt-user-photo"></div>
+                    <div class="fl pt-reply-cont-right">
+                        <div class="mb10">
+                            <span class="color2">{=$userinfo.nickname?:$userinfo.name}</span>
+                            <span class="color5">发表评论</span>
+                            <a href="{link=novel.novel.index novelid=$loop.novel.novel.id pinyin=$loop.novel.novel.pinyin}"><span class="color2">《{$loop.novel.novel.name}》</span></a>
+                            <span class="fr color4">{$loop.datetime|date="Y-m-d H:i:s"}</span>
+                        </div>
+                        <div class="color4 mb10">{$loop.content}</div>
+                        <div>
+                            <div class="fl mr40">
+                                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/praise{=$loop.rating=='good'?'_hover':''}.png" class="fl mr10" style="width:18px;height:18px">
+                                <span class="{=$loop.rating=='good'?'color2':''}">{$loop.good_num}</span>
+                            </div>
+                            <div class="fl">
+                                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/tread{=$loop.rating=='bad'?'_hover':''}.png" class="fl mr10" style="width:18px;height:18px">
+                                <span class="{=$loop.rating=='bad'?'color2':''}">{$loop.bad_num}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {/loop}
+                <div class="clear"></div>
+                {if !empty($commentlist) && $paginate.total>1}
+                <div class="pt-pages" style="border: none;">
+                    <div class="pt30 color5">
+                        {if $paginate.prev}
+                        <a href="{link=user.comment.publish page=$paginate.prev}"><span><</span></a>
+                        {else}
+                        <span class="disable"><</span>
+                        {/if}
+                        {loop=paginate.items}
+                        <a href="{link=user.comment.publish page=$loop.num}">
+                            <span class="{$loop.status|default='','pt-pages-select'}">{$loop.num}</span>
+                        </a>
+                        {/loop}
+                        {if $paginate.next}
+                        <a href="{link=user.comment.publish page=$paginate.next}"><span>></span></a>
+                        {else}
+                        <span class="disable">></span>
+                        {/if}
+                    </div>
+                </div>
+                {/if}
+            </div>
+		</div>
+		<!-- 广告位 -->
+	</div>
+
+	<!-- 底部版权-->
+    {include file="/system/footer"}
+
+
+    <!-- js-->
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/rankdetail.js"></script>
+</body>
+</html>

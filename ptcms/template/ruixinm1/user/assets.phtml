@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>我的资产 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/css/global.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/flexible.min.js"></script>
+</head>
+<body>
+<div class="w100">
+    <div class="w100 bg-red flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/return-white2.png" class="pt-return">
+        <div class="size18 color1">我的资产</div>
+        <div></div>
+    </div>
+    <div class="bg-red color1 pt10 pl20">
+        <p>账户余额（{$kx.config.user.money_caption}）</p>
+        <span class="bold" style="font-size: 40px;">{$userinfo.assets.balance}</span>
+    </div>
+    <style>
+
+    </style>
+    <a href="{link=user.pay.recharge}">
+        <div class="bg-white mb10 ptb10 pb10 pl20">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/recharge.png" style="width: .2rem;vertical-align: middle;margin-top: -.05rem;" alt="充值">
+            <span class="size18 color32 bold pl10">充值</span>
+            <img class="fr mr20 pt-arrow-right" style="margin-top: .08rem;" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/arrow_right.png" alt="">
+        </div>
+    </a>
+    <div class="bg-white mb10 pt-list money_list">
+        <ul class="label">
+            <li data-type="recharge" class="active">充值记录</li>
+            <li data-type="reward">赠送记录</li>
+            <li data-type="use">消费记录</li>
+        </ul>
+        <ul class="container">
+            {block method="user.moneyList" name=moneys userid=$userinfo.id type=1 num=30}
+            <li class="recharge active">
+                <ul>
+                    {loop=$moneys}
+                    <li>
+                        <span class="inline-block">{$loop.create_time|date='Y-m-d'}</span>
+                        <span class="inline-block">{$loop.type|default="未知","充值","赠送","消费"}</span>
+                        <span class="inline-block fr color32">+{$loop.num}{$kx.config.user.money_caption}</span>
+                    </li>
+                    {/loop}
+                </ul>
+            </li>
+            {block method="user.moneyList" name=moneys userid=$userinfo.id type=2 num=30}
+            <li class="reward">
+                <ul>
+                    {loop=$moneys}
+                    <li>
+                        <span class="inline-block">{$loop.create_time|date='Y-m-d'}</span>
+                        <span class="inline-block">{$loop.type|default="未知","充值","赠送","消费"}</span>
+                        <span class="inline-block fr color32">+{$loop.num}{$kx.config.user.money_caption}</span>
+                    </li>
+                    {/loop}
+                </ul>
+            </li>
+            {block method="user.moneyList" name=moneys userid=$userinfo.id type=3 num=30}
+            <li class="use">
+                <ul>
+                    {loop=$moneys}
+                    <li>
+                        <span class="inline-block">{$loop.create_time|date='Y-m-d'}</span>
+                        <span class="inline-block">
+                        {if $loop.ext.type == 'subscribe'}
+                            {block method=novel.info id=$loop.ext.novel_id name=$novelinfo}
+                            订阅《{$novelinfo.novel.name}》
+                        {else if $loop.ext.type == 'reward'}
+                            {block method=novel.info id=$loop.ext.novel_id name=$novelinfo}
+                            打赏《{$novelinfo.novel.name}》
+                        {else}
+                            {$loop.type|default="未知","充值","赠送","消费"}
+                        {/if}
+                        </span>
+                        <span class="inline-block fr color32">-{$loop.num}{$kx.config.user.money_caption}</span>
+                    </li>
+                    {/loop}
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- 底部版权 -->
+{include file="/system/footer"}
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/layer/mobile/layer.js"></script>
+<script>
+    $('.money_list .label li').click(function () {
+        $(this).addClass('active').siblings().removeClass('active');
+        $('.money_list .container .' + $(this).data('type')).addClass('active').siblings().removeClass('active');
+    });
+</script>
+</body>
+</html>

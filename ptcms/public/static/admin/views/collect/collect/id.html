@@ -1,0 +1,203 @@
+<title>执行规则</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>书号采集</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">书号采集</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认执行</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var config;
+    layui.admin.req({
+        url: '/manage/data/response.json',
+        method: 'POST',
+        data: {rule: 'select'},
+        success: function (res) {
+            config = {
+                submit: function (obj) {
+                    if (obj.field.mode === 'page') {
+                        layui.layer.open({
+                            type: 2,
+                            title: '执行脚本',
+                            shadeClose: false,
+                            shade: false,
+                            maxmin: true,
+                            area: ['893px', '600px'],
+                            content: '/manage/collect/collect/id.html?&ruleid=' + obj.field.ruleid + '&start=' + obj.field.start + '&end=' + obj.field.end + '&ids=' + obj.field.ids + '&type=' + obj.field.type + '&limit=' + obj.field.limit + '&interval=' + obj.field.interval + '&access_token=' + encodeURIComponent(layui.data('layuiAdmin').access_token)
+                        });
+                    } else {
+                        var t = Math.round(new Date().getTime() / 1000), interval = null;
+                        layui.admin.req({
+                            url: '/manage/collect/collect/id.json',
+                            data: {
+                                ruleid: obj.field.ruleid,
+                                start: obj.field.start,
+                                end: obj.field.end,
+                                ids: obj.field.ids,
+                                type: obj.field.type,
+                                t: t
+                            },
+                            method: 'POST',
+                            success: function () {
+                                layui.layer.open({
+                                    type: 1,
+                                    title: '执行脚本',
+                                    shadeClose: false,
+                                    shade: false,
+                                    maxmin: true,
+                                    area: ['893px', '600px'],
+                                    content: '',
+                                    success: function (layero, index) {
+                                        interval = setInterval(function () {
+                                            layui.admin.req({
+                                                url: '/manage/collect/collect/log.json',
+                                                data: {
+                                                    type: 'id',
+                                                    t: t
+                                                },
+                                                success: function (res) {
+                                                    if (res.data.content.search('<!-- end -->') >= 0) {
+                                                        clearInterval(interval);
+                                                        interval = null;
+                                                    }
+                                                    layero.find('.layui-layer-content').html(res.data.content)[0].scroll(0, 999999);
+                                                }
+                                            });
+                                        }, 1000);
+                                        if (parseInt(obj.field.interval) > 0) {
+                                            setTimeout(function () {
+                                                clearInterval(interval);
+                                                interval = null;
+                                            }, parseInt(obj.field.interval) * 1000)
+                                        }
+                                    },
+                                    end: function () {
+                                        if (interval !== null) clearInterval(interval);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    return false;
+                },
+                done: function (layui) {
+                    layui.$('[name=ids]').parents('.layui-form-item').hide();
+                    layui.form.on('radio', function (obj) {
+                        if (obj.elem.name === 'type') {
+                            if (obj.value === 'list') {
+                                layui.$('[name=ids]').parents('.layui-form-item').hide();
+                                layui.$('[name=start]').parents('.layui-form-item').show();
+                                layui.$('[name=end]').parents('.layui-form-item').show();
+                                layui.$('[name=interval]').parents('.layui-form-item').show();
+                                layui.$('[name=limit]').parents('.layui-form-item').show();
+                            } else {
+                                layui.$('[name=ids]').parents('.layui-form-item').show();
+                                layui.$('[name=start]').parents('.layui-form-item').hide();
+                                layui.$('[name=end]').parents('.layui-form-item').hide();
+                                layui.$('[name=interval]').parents('.layui-form-item').hide();
+                                layui.$('[name=limit]').parents('.layui-form-item').hide();
+                            }
+                        } else if (obj.elem.name === 'mode') {
+                            if (obj.value === 'shell') {
+                                layui.$('.page_param').hide();
+                            } else {
+                                layui.$('.page_param').show();
+                            }
+                        }
+                    });
+                },
+                fields: [
+                    {
+                        name: '采集模式',
+                        key: 'mode',
+                        type: 'radio',
+                        extra: 'page:前台页面采集 shell:后台离线采集',
+                        require: true,
+                        value: 'page',
+                        intro: "后台采集可以关闭浏览器运行，在手动采集日志中查看进度；前台页面采集必须保证浏览器是打开状态"
+                    },
+                    {
+                        name: '选用规则',
+                        key: 'ruleid',
+                        type: 'select',
+                        extra: res.data.rule.select,
+                        require: true,
+                        value: layui.router().search.ruleid
+                    },
+                    {
+                        name: '采集形式',
+                        key: 'type',
+                        type: 'radio',
+                        extra: 'list:列表形式 multi:批量书号形式',
+                        require: true,
+                        value: 'list'
+                    },
+                    {
+                        name: '开始ID',
+                        key: 'start',
+                        type: 'num',
+                        require: true,
+                        value: 1,
+                        intro: '请输入要开始采集的书号',
+                    },
+                    {
+                        name: '结束ID',
+                        key: 'end',
+                        type: 'num',
+                        value: '',
+                        intro: '请输入要结束采集的书号',
+                    },
+                    {
+                        name: '批量书号',
+                        key: 'ids',
+                        type: 'textarea',
+                        value: '',
+                        intro: '书号之间请用","分隔',
+                    },
+                    {
+                        name: '单次书号',
+                        key: 'limit',
+                        type: 'num',
+                        value: 200,
+                        intro: '每采集多少本做一次翻页处理，请合适加大或者减小该值，防止一个停留太长时间',
+                        style: 'page_param',
+                    },
+                    {
+                        name: '翻页间隔',
+                        key: 'interval',
+                        type: 'num',
+                        value: 10,
+                        intro: '翻页等待多长时间',
+                        style: 'page_param',
+                    },
+                ],
+            };
+            layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+        }
+    });
+</script>

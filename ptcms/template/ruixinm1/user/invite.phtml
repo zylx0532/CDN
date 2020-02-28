@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+	<title>我的邀请 - 用户中心 - {$kx.config.sitename}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/css/global.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/flexible.min.js"></script>
+    <style>.layui-m-layercont{padding: 10px !important;}</style>
+</head>
+<body class="bg-f27">
+	<div class="relative w100  bg-white flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+		<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/return.png" class="pt-return">
+		<div class="size18 bold color37">我的邀请</div>
+
+        <div>
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/ellipsis.png" class="mr5 pt-ellipsis">
+        </div>
+        <div class="pt5 pb5 pt-tip">
+            <a href="{link=index.index}" class="block color1 text-center pt-tip-item" title="{$kx.config.sitename}">前往首页</a>
+            <a href="{link=user.index.index}" class="block color1 text-center pt-tip-item" rel="nofollow">个人中心</a>
+            <a href="javascript:void(0);" class="block color1 text-center pt-tip-item share">分享邀请</a>
+        </div>
+	</div>
+
+	<!-- 星标置顶 -->
+	<div class="w100 bg-white lh100 mt10 pt-stick" style="margin-bottom: .56rem;">
+        {block method="pagination" name="paginate" page=$page limit=$pagesize count=$userinfo.data.invite_reg_num maxpage=50 section=3}
+        {block method="user.inviteList" name=invitelist userid=$userinfo.id}
+        <div class="pt-stick-cont">
+            {if $invitelist}
+            {loop=$invitelist}
+            <div class="flex-wrp pt-stick-item"  data-novel-id="{$loop.novel.id}">
+                <div class="flex-item flex-wrp flex-cell flex-between pt5">
+                    <div class="flex-wrp flex-between pt5">
+                        <div class="size14 color7">类型：{$loop.type|default="注册","访问"}</div>
+                        <div class="size14 color7">{$loop.type|default="用户","IP"}：<span class="color2">{$loop.ext}</span></div>
+                    </div>
+                    <div class="size12 compulsory-row-one lh130 color4  pt5">
+                        {$kx.config.user.exp_caption}奖励：{$loop.exp}<span class="plr15">|</span>
+                        {$kx.config.user.point_caption}奖励：{$loop.point}
+                    </div>
+                    <div class="flex-wrp pt5">
+                        <div class="color5 size12">时间：{$loop.datetime|date="Y-m-d H:i:s"}</div>
+                    </div>
+                </div>
+            </div>
+            {/loop}
+            {else}
+            <div class="flex-wrp pt-stick-item"  data-novel-id="{$loop.novel.id}">
+                您暂时还没有邀请到小伙伴哦
+            </div>
+            {/if}
+		</div>
+        {if $paginate.total > 1}
+        <div class="flex-wrp flex-between bg-white ptb15 plr15 mt10">
+            {if $paginate.first != $paginate.current}
+            <div class="flex-wrp flex-around flex-center pt-page4">
+                <a href="{link=user.invite.index page=$paginate.first}">
+                    <span class="size14 color2">首页</span>
+                </a>
+            </div>
+            {/if}
+            {if $paginate.prev}
+            <div class="flex-wrp flex-around flex-center pt-page4">
+                <a href="{link=user.invite.index page=$paginate.prev}">
+                    <span class="size14 color2">上一页</span>
+                </a>
+            </div>
+            {/if}
+            {if $paginate.next}
+            <div class="flex-wrp flex-around flex-center pt-page4">
+                <a href="{link=user.invite.index page=$paginate.next}">
+                    <span class="size14 color2">下一页</span>
+                </a>
+            </div>
+            {/if}
+            {if $paginate.last != $paginate.current}
+            <div class="flex-wrp flex-around flex-center pt-page4">
+                <a href="{link=user.invite.index page=$paginate.last}">
+                    <span class="size14 color2">尾页</span>
+                </a>
+            </div>
+            {/if}
+        </div>
+        {/if}
+    </div>
+    <!-- 底部版权 -->
+    {include file="/system/footer"}
+    <!-- 底部按钮 -->
+    {include file="/system/footerbutton"}
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/layer/mobile/layer.js"></script>
+    <script>
+        $('.share').click(function () {
+            layer.open({
+                title:['分享链接','background-color: #f55; color:#fff;'],
+                content: '<input id="share-box" value="{$kx.config.siteurl}/?fr={$userinfo.id}" style="border:1px solid #f55;height: 24px;width: 100%;"/>',
+                btn: ['复制', '取消'],
+                yes: function(index){
+                    document.getElementById("share-box").select();
+                    document.execCommand("Copy");
+                    layer.open({content: '复制成功',skin: 'msg',time: 2});
+                    layer.close(index);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

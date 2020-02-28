@@ -1,0 +1,25 @@
+<div class="pt-copyright">
+    <div class="size12  w100 text-center mt15 mb10"><a title="隐私声明" href="{link=page.detail key=privacy}" class="color4">隐私声明</a> | <a title="免责声明" href="{link=page.detail key=disdaimer}" class="color4">免责声明</a> | <a title="关于我们" href="{link=page.detail key=about}" class="color4">关于我们</a></div>
+    <div class="size12 color4 w100 text-center mb10">Copyright © 2009-{=date(Y)} {$kx.config.beian}</div>
+    <div class="size12  w100 text-center">__RUNINFO__</div>
+</div>
+<!-- js -->
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/jquery-3.3.1.js"></script>
+<script>
+    $('.pt-return,.pt-recall').click(function(){
+        window.history.back();
+    });
+    $('.pt-ellipsis').click(function(){
+        $('.pt-tip').toggle()
+    });
+    $('.pt-tip .pt-tip-item').click(function(){
+        $('.pt-tip').toggle()
+    });
+</script>
+<div class="none">
+    {$kx.config.tongji.mobile}
+    {if $kx.config.app.use_cdn}
+    <script src="/api/stat/novel/info.js"></script>
+    <script src="/api/stat/novel/read.js"></script>
+    {/if}
+</div>

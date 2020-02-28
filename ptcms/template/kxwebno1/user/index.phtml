@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>用户中心 - {$kx.config.sitename}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/style.css"/>
+</head>
+<body>
+
+	<!-- 头部 -->
+    {include file="/system/header"}
+	<!-- 内容 -->
+	<div class="pt-content">
+		<!-- 面包屑 -->
+		<div class="pt-crumb">
+			<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/crumb_icon.png" class="pt-crumb-icon">
+			<span class="color5">
+                <a href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > <a href="{link=user.index.index}" class="color5">用户中心</a>
+            </span>
+		</div>
+
+		<!-- 一楼 -->
+		<div class="pt-floor1">
+            {include file="/system/userleft"}
+			<div class="relative pt-rank pt-user">
+				<div class="pt-user-first">
+                    <div class="inline-block fl mr20">
+                        <img src="{$userinfo.avatar}" alt="{$userinfo.name}">
+                    </div>
+                    <div class="inline-block fl pt-user-info">
+                        <div>
+                            {block method=user.isvip userid=$userinfo.id name=$isvip}
+                            <a href="{link=user.vip.index}">
+                                <img class="mr15" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/vip{=$isvip?'_active':''}.png" alt="超级会员" style="vertical-align: middle;margin-top: -5px;">
+                            </a>
+                            <span class="inline-block size18 bold color6 mr40 username">{=$userinfo.nickname?:$userinfo.name}</span>
+                            {if date('Ymd')>$userinfo.data.sign_day}
+                            <button class="btn-sign">签到</button>
+                            {else}
+                            <button class="btn-sign btn-signed">已签到</button>
+                            {/if}
+                        </div>
+                        <div class="color6 pt-user-data">
+                            <div class="inline-block fl">
+                                <ul>
+                                    <li>我的等级：<span class="user-level-name">{$userinfo.group.name}</span></li>
+                                    <li>我的{$kx.config.user.exp_caption}：<span class="user-exp">{$userinfo.exp}</span></li>
+                                    <li>我的{$kx.config.user.point_caption}：<span class="user-print">{$userinfo.point}</span></li>
+                                    <li>登录次数：{$userinfo.data.login_num}次</li>
+                                    <li>{$kx.config.user.money_caption}余额：<span class="color2 user-money">{$userinfo.assets.balance}</span></li>
+                                    <li>{$kx.config.user.ticket_caption}数量：<span class="color2 user-free-money">{$userinfo.assets.surplus_ticket}</span></li>
+                                </ul>
+                            </div>
+                            <div class="inline-block fl">
+                                <div>
+                                    我的登录进度：
+                                    <div class="inline-block pt-user-level">
+                                        <div class="inline-block user-level-name">{$userinfo.group.name}</div>
+                                        <div class="inline-block w120 progress">
+                                            {if empty($userinfo.group.next)}
+                                            <div class="progress-bar" style="width: 100%;"></div>
+                                            {else}
+                                            <div class="progress-bar" style="width: {=$userinfo.group.next.progress}%;"></div>
+                                            {/if}
+                                        </div>
+                                        {if !empty($userinfo.group.next)}
+                                        <div class="inline-block color2 user-next-level-name">{$userinfo.group.next.name}</div>
+                                        {/if}
+                                    </div>
+                                </div>
+                                <div>
+                                    上次登录时间：{$userinfo.data.login_time|date="Y-m-d H:i:s"}
+                                </div>
+                                <div>
+                                    上次登录地址：{$userinfo.data.login_ip}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-user-stat">
+                    <ul class="text-center">
+                        {block method=mark.num userid=$userinfo.id name=$marknum}
+                        <li class="inline-block mt30">
+                            <div><span class="size24 color6">{$marknum}</span> <span>本</span></div>
+                            <div><span class="size16">我收藏的</span></div>
+                        </li>
+                        <li class="inline-block mt30">
+                            <div><span class="size24 color6">{=$userinfo.data.vote_num?:0}</span> <span>本</span></div>
+                            <div><span class="size16">我推荐过</span></div>
+                        </li>
+                        <li class="inline-block mt30">
+                            <div><span class="size24 color6">{=$userinfo.data.star_num?:0}</span> <span>本</span></div>
+                            <div><span class="size16">我打分过</span></div>
+                        </li>
+                        <li class="inline-block mt30">
+                            <div><span class="size24 color6">{=$userinfo.data.comment_num?:0}</span> <span>本</span></div>
+                            <div><span class="size16">我评论过</span></div>
+                        </li>
+                    </ul>
+                </div>
+			</div>
+            <div class="relative pt-user-table mt10">
+                <div style="line-height: 18px;margin-bottom:30px;">
+                    <span class="size18 color2 mr10">签到记录</span>
+                    <a class="fr" href="{link=user.sign.index}">查看全部+</a>
+                </div>
+                <div>
+                    <table class="sign-records">
+                        <thead>
+                            <tr>
+                                <th>签到时间</th>
+                                <th>连签次数</th>
+                                <th>{$kx.config.user.exp_caption}奖励</th>
+                                <th>{$kx.config.user.point_caption}奖励</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {block method="sign" name=signList userid=$userinfo.id num=5}
+                        {if empty($signList)}
+                        <tr>
+                            <td colspan="5">您似乎来到了没有数据存在的荒原~~~</td>
+                        </tr>
+                        {else}
+                        {section loop=$signList item=$loop}
+                        <tr>
+                            <td>{$loop.datetime|date="Y-m-d H:i:s"}</td>
+                            <td>{$loop.num}</td>
+                            <td>{$loop.exp}</td>
+                            <td>{$loop.point}</td>
+                        </tr>
+                        {/section}
+                        {/if}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="relative pt-user-table mt10">
+                <div style="line-height: 18px;margin-bottom:30px;">
+                    <span class="size18 color2 mr10">邀请记录</span>
+                    <a class="fr" href="{link=user.invite.index}">查看全部+</a>
+                </div>
+                <div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>用户/IP</th>
+                            <th>类型</th>
+                            <th>{$kx.config.user.exp_caption}奖励</th>
+                            <th>{$kx.config.user.point_caption}奖励</th>
+                            <th>签到时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {block method="user.inviteList" name=inviteList userid=$userinfo.id}
+                        {if empty($inviteList)}
+                        <tr class="empty">
+                            <td colspan="6">您似乎来到了没有数据存在的荒原~~~</td>
+                        </tr>
+                        {else}
+                        {section loop=$inviteList item=$loop}
+                        <tr>
+                            <td>{$i.order}</td>
+                            <td class="color2">{$loop.ext}</td>
+                            <td>>{$loop.type|default="注册","访问"}</td>
+                            <td>{$loop.exp}</td>
+                            <td>{$loop.point}</td>
+                            <td>{$loop.datetime|date="Y-m-d H:i:s"}</td>
+                        </tr>
+                        {/section}
+                        {/if}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+	</div>
+
+	<!-- 底部版权-->
+    {include file="/system/footer"}
+
+    <script>
+        var loading = null;
+        $('.btn-sign').click(function(){
+            var self = $(this);
+            if (self.hasClass('btn-signed')){
+                layer.msg('您今天已经签过到了，等明天再来吧！');
+            }else{
+                $.ajax('{link=user.sign.do}', {
+                    type: 'post',
+                    dataType: 'json',
+                    beforeSend: function () {
+                        if (loading == null) {
+                            loading = layer.load(1, {shade: [0.1, '#000']});
+                        }
+                    },
+                    complete: function () {
+                        if (loading != null) {
+                            layer.close(loading);
+                            loading = null;
+                        }
+                    },
+                    success: function (res) {
+                        if (res.code) {
+                            layer.alert(res.msg, {icon: 2,}, function (index) {
+                                if (res.data.redirect) {
+                                    window.location.href = res.data.redirect;
+                                } else {
+                                    layer.close(index);
+                                }
+                            });
+                        } else {
+                            var userDataBox = $('.pt-user-data');
+                            var userLevelBox = $('.pt-user-level');
+                            userDataBox.find('.user-level-name').text(res.data.name);
+                            userDataBox.find('.user-exp').text(res.data.exp);
+                            userDataBox.find('.user-print').text(res.data.print);
+                            if (res.data.next) {
+                                userLevelBox.find('.user-level-name').text(res.data.name);
+                                userLevelBox.find('.user-next-level-name').text(res.data.next.name);
+                                userLevelBox.find('.progress div').css('width', res.data.next.progress);
+                            } else {
+                                userLevelBox.find('.progress div').css('width', '100%');
+                                userLevelBox.find('.user-next-level-name').hide();
+                            }
+                            var signRecordsBox = $('.sign-records tbody');
+                            var trs = signRecordsBox.find('tr');
+                            if (trs.length >= 10 || trs.length === 1 && trs.hasClass('empty')) {
+                                signRecordsBox.find('tr:last').remove();
+                            }
+                            signRecordsBox.prepend('<tr><td>' + res.data.record.datetime + '</td><td>' + res.data.record.num + '</td><td>' + res.data.record.exp + '</td><td>' + res.data.record.point + '</td></tr>');
+                            self.addClass('btn-signed').text('已签到');
+                            layer.msg(res.msg);
+                        }
+                    },
+                    error: function () {
+                        layer.alert('推荐失败，请刷新页面后重试！', {icon: 2,});
+                    }
+                });
+            }
+        });
+    </script>
+
+	<!-- js-->
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/rankdetail.js"></script>
+</body>
+</html>

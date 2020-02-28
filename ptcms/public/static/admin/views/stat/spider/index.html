@@ -1,0 +1,67 @@
+<title>统计列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>蜘蛛统计</cite></a>
+        <a><cite>统计汇总</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var config;
+    layui.admin.req({
+        url: '/manage/system/stat/spider/indexfields.json',
+        method: 'get',
+        success: function (res) {
+            config = {
+                api: {
+                    list: '/manage/system/stat/spider/index.json',
+                },
+                // search: {
+                //     domain: {type: 'select', text: '域名', data: res.data.domains, search: true},
+                // },
+                actionButton: {
+                    spiderDetail: {
+                        text: '详情',
+                        icon: 'layui-icon layui-icon-list',
+                        action: function (obj) {
+                            href = layui.router().href + 'detail/datetime=' + obj.data.datetime;
+                            location.hash = typeof layui.router().search.domain !== 'undefined' ? href + '/domain=' + layui.router().search.domain : href;
+                        }
+                    },
+                },
+                table: {
+                    page: false,
+                    limit: 30,
+                    cols: [res.data.fields]
+                }
+            };
+            layui.use('curd/list', layui.factory('curd/list'));
+        }
+    });
+</script>

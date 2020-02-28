@@ -1,0 +1,200 @@
+<title>导入规则</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>规则管理</cite></a>
+        <a><cite>导入规则</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">导入规则</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">导入规则</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var config;
+    layui.admin.req({
+        url: '/manage/data/response.json',
+        method: 'POST',
+        data: {site: 'select', rule: 'select'},
+        success: function (res) {
+            config = {
+                api: {submit: '/manage/collect/rule/import.json'},
+                done: function (layui) {
+                    layui.form.on('radio(site-type)', function (obj) {
+                        if (parseInt(obj.value)) {
+                            layui.$('.site_id').hide();
+                            layui.$('.site_config_option').show();
+                        } else {
+                            layui.$('.site_id').show();
+                            layui.$('.site_config_option').hide();
+                        }
+                    });
+                    layui.form.on('radio(rule-type)', function (obj) {
+                        if (parseInt(obj.value)) {
+                            layui.$('.rule_id').hide();
+                            layui.$('.rule_config_option').show();
+                        } else {
+                            layui.$('.rule_id').show();
+                            layui.$('.rule_config_option').hide();
+                        }
+                    });
+                    layui.$('.rule_id').hide();
+                    layui.$('.site_config_option').hide();
+                },
+                submitSuccess: function (res) {
+                    layui.admin.success('导入成功', {
+                        yes: function (index) {
+                            location.hash = config.url.index + 'edit/id=' + res.data.id;
+                        },
+                        btn2: function () {
+                            location.hash = config.url.index;
+                        }
+                    })
+                },
+                fields: [
+                    {
+                        name: '规则文件',
+                        key: 'rule_file',
+                        type: 'file',
+                        url: '/manage/collect/rule/upload.json',
+                        readonly: true,
+                    },
+                    {name: '站点选项', type: 'set'},
+                    {
+                        name: '站点分类',
+                        key: 'site_type',
+                        filter: 'site-type',
+                        type: 'radio',
+                        extra: '0:老站点 1:新站点',
+                        value: '0'
+                    },
+                    {
+                        name: '所属站点',
+                        key: 'site_id',
+                        type: 'select',
+                        extra: res.data.site.select,
+                        style: 'site_id'
+                    },
+                    {name: '添加新书', key: 'site[new_add]', type: 'switch', style: 'site_config_option'},
+                    {
+                        name: '替换原站',
+                        key: 'site[new_replace]',
+                        type: 'switch',
+                        intro: '第一次入库的时候是否替换源站为本站',
+                        style: 'site_config_option'
+                    },
+                    {
+                        name: '最少章节',
+                        key: 'site[new_limit_chapternum]',
+                        type: 'num',
+                        intro: '添加新书最少章节数',
+                        style: 'site_config_option',
+                        value: 0
+                    },
+                    {
+                        name: '最少字数',
+                        key: 'site[new_limit_fontsize]',
+                        type: 'num',
+                        intro: '添加新书最少字数',
+                        style: 'site_config_option',
+                        value: 0
+                    },
+                    {
+                        name: '添加条件',
+                        key: 'site[new_limit_exp]',
+                        type: 'select',
+                        extra: {
+                            0: '或 [ OR ] 关系，最少章节与最少字数满足一个即可',
+                            1: '与 [ AND ] 关系，最少章节和最少字数必须都满足',
+                        },
+                        intro: '添加新书的条件',
+                        style: 'site_config_option',
+                        value: "0"
+                    },
+
+                    {name: '分类选项', type: 'set'},
+                    {
+                        name: '导入方式',
+                        key: 'rule_type',
+                        filter: 'rule-type',
+                        type: 'radio',
+                        extra: '0:更新老规则 1:创建新规则',
+                        value: 1
+                    },
+                    {name: '所属规则', key: 'rule_id', type: 'select', extra: res.data.rule.select, style: 'rule_id'},
+                    {
+                        name: '站点分类',
+                        key: 'rule[sex]',
+                        type: 'radio',
+                        extra: '0:先男后女 1:先女后男 2:纯男 3:纯女',
+                        style: 'rule_config_option',
+                        value: "0"
+                    },
+                    {
+                        name: '跳过始章',
+                        key: 'rule[discard_start_num]',
+                        type: 'num',
+                        intro: '在目录页跳过最初的几个章节',
+                        style: 'rule_config_option',
+                        value: 0
+                    },
+                    {
+                        name: '跳过尾章',
+                        key: 'rule[discard_end_num]',
+                        type: 'num',
+                        intro: '在目录页跳过末尾的几个章节',
+                        style: 'rule_config_option',
+                        value: 0
+                    },
+                    {
+                        name: '章节名纠错',
+                        key: 'rule[repair_chapter_name]',
+                        type: 'num',
+                        intro: '修复最后几个章节章节名的防采集干扰字符，非常影响效率，0为不处理',
+                        style: 'rule_config_option',
+                        value: 0
+                    },
+                    {
+                        name: '处理乱序',
+                        key: 'rule[dir_sort]',
+                        type: 'switch',
+                        intro: '章节目录乱序处理',
+                        style: 'rule_config_option',
+                        value: '1'
+                    },
+                    {
+                        name: '使用代理',
+                        key: 'rule[proxy_power]',
+                        type: 'switch',
+                        intro: '采集本站是否使用代理采集',
+                        extra: '是|否',
+                        style: 'rule_config_option'
+                    },
+
+                ],
+            };
+            layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+        }
+    });
+</script>

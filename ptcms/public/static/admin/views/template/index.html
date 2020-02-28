@@ -1,0 +1,169 @@
+<title>模板列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>系统设置</cite></a>
+        <a><cite>信息管理</cite></a>
+        <a><cite>模板管理</cite></a>
+        <a><cite>模板列表</cite></a>
+    </div>
+</div>
+<style>
+    tbody .layui-table-cell {
+        height: 160px;
+        /*line-height: 64px;*/
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="theme-info">
+    <b>{{d.name}}</b><br/>
+    作者：{{d.author}}<br/>
+    邮箱：{{d.email}}<br/>
+    网址：{{d.url}}<br/>
+    简介：{{d.description}}<br/>
+</script>
+<script type="text/html" id="theme-amp">
+    {{# if(d.amp){}}
+    <span class="layui-badge layui-bg-green">使用中</span>
+    {{#}}}
+</script>
+<script type="text/html" id="theme-mip">
+    {{# if(d.mip){}}
+    <span class="layui-badge layui-bg-green">使用中</span>
+    {{#}}}
+</script>
+<script type="text/html" id="theme-pc">
+    {{# if(d.pc){}}
+    <span class="layui-badge layui-bg-green">使用中</span>
+    {{#}}}
+</script>
+<script type="text/html" id="theme-wap">
+    {{# if(d.wap){}}
+    <span class="layui-badge layui-bg-green">使用中</span>
+    {{#}}}
+</script>
+<script>
+    var config = {
+        api: {
+            list: '/manage/template/list.json',
+            set: '/manage/template/set.json',
+        },
+        search: {},
+        actionButton: {
+            set: {
+                text: '使用',
+                icon: 'layui-icon layui-icon-ok',
+                action(obj) {
+                    var setTemplate = function (type, template) {
+                        layui.admin.req({
+                            url: config.api.set,
+                            data: {type: type, template: template},
+                            method: 'POST',
+                            success: function (res) {
+                                layui.table.reload('LAY-curd-table');
+                                layui.layer.msg('操作成功');
+                            }
+                        })
+                    };
+
+                    if (obj.data.type === 'all') {
+                        layui.layer.msg('当前模板支持多平台,请问您要为哪个平台设置?', {
+                            time: false,
+                            btn: ['全部', '电脑', '手机', 'AMP', 'MIP'],
+                            yes: function (index) {
+                                setTemplate('all', obj.data.path);
+                            },
+                            btn2: function (index) {
+                                setTemplate('pc', obj.data.path);
+                            },
+                            btn3: function (index) {
+                                setTemplate('wap', obj.data.path);
+                            },
+                            btn4: function (index) {
+                                setTemplate('amp', obj.data.path);
+                            },
+                            btn5: function (index) {
+                                setTemplate('mip', obj.data.path);
+                            }
+                        });
+                    } else {
+                        layui.admin.req({
+                            url: config.api.set,
+                            data: {type: obj.data.type, template: obj.data.path},
+                            method: 'POST',
+                            success: function (res) {
+                                layui.table.reload('LAY-curd-table');
+                                layui.layer.msg('操作成功');
+                            }
+                        })
+                    }
+                }
+            },
+            preview: {
+                text: '预览',
+                icon: 'layui-icon layui-icon-search',
+                action(obj) {
+                    index = layui.layer.open({
+                        type: 2,
+                        title: '主题预览',
+                        shadeClose: false,
+                        shade: false,
+                        maxmin: true,
+                        area: obj.data.type === 'wap' ? ['360px', '640px'] : [],
+                        content: '/?template=' + obj.data.path
+                    });
+                    if (obj.data.type !== 'wap') {
+                        layer.full(index);
+                    }
+                }
+            },
+            config: {
+                text: '参数',
+                icon: 'layui-icon layui-icon-set',
+                action(obj) {
+                    window.location.hash = layui.router().href + 'config/template=' + obj.data.path;
+                }
+            },
+        },
+        table: {
+            page: false,
+            height: 0,
+            cols: [[
+                {field: 'demo', title: '预览', templet: '#table-img', width: 120},
+                {field: 'key', title: '模板信息', templet: '#theme-info'},
+                {field: 'version', title: '版本', width: 120},
+                {field: 'typename', title: '类型', width: 120},
+                {field: 'pc', title: 'PC模板', templet: '#theme-pc', align: 'center', width: 100},
+                {field: 'wap', title: '手机模板', templet: '#theme-wap', align: 'center', width: 100},
+                {field: 'amp', title: 'AMP模板', templet: '#theme-amp', align: 'center', width: 100},
+                {field: 'mip', title: 'MIP模板', templet: '#theme-mip', align: 'center', width: 100},
+                {title: '操作', width: 220, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

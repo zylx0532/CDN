@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>我的书架 - 用户中心 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/css/global.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/flexible.min.js"></script>
+</head>
+<body class="bg-f27">
+<div class="relative w100  bg-white flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/return.png" class="pt-return">
+    <div class="size18 bold color37">我的书架</div>
+    <div>
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/ellipsis.png" class="mr5 pt-ellipsis" data-order="{$order}">
+    </div>
+    <!-- tip -->
+    <div class="pt5 pb5 pt-tip">
+        <div class="text-center pt-tip-item pt-order">时间排序</div>
+        <a href="{link=novel.search.index}" class="block color1 text-center pt-tip-item">查找添加</a>
+        <a href="{link=index.index}" class="block color1 text-center pt-tip-item">前往首页</a>
+    </div>
+</div>
+{block method=mark.list userid=$userinfo.id name=list isstar=#true order=$order}
+<div style="min-height:85vh">
+
+    <!-- 星标置顶 -->
+    <div class="w100 bg-white lh100 mt10 pt-stick  {if empty($list)}none{/if}">
+        <div class="flex-wrp">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/stick.png" class="pt-stick-icon">
+            <div class="color4 size14">星标置顶</div>
+        </div>
+        <div class="border-b pt-stick-cont">
+            {loop}
+            <div class="flex-wrp pt-stick-item" data-novel-id="{$loop.novel.id}" data-is-star="{$loop.markinfo.is_star}">
+                <img src="{$loop.novel.cover}" class="mr15" data-url="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}">
+                <div class="flex-item flex-wrp flex-cell flex-between pt5">
+                    <div class="flex-wrp flex-between">
+                        <a href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}">
+                            <div class="size14 color7">{$loop.novel.name}</div>
+                        </a>
+                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/ellipsis_gray.png" class="pt-ellipsis-white">
+                    </div>
+                    <a href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">
+                        <div class="size12 color4">[ {$loop.author.name} ]</div>
+                    </a>
+                    <a href="{link=novel.chapter.read novelid=$loop.novel.id pinyin=$loop.novel.pinyin chapterid=$loop.last.id}">
+                        <div class="size12 compulsory-row-one lh130 color4">{$loop.novel.is_over|default='连载','完结'} - {$loop.last.name}</div>
+                    </a>
+                    <div class="flex-wrp">
+                        {if $loop.markinfo.chapterid}
+                        <div class="flex-wrp flex-align-center color5 size12">
+                            <a href="{link=novel.chapter.read novelid=$loop.novel.id pinyin=$loop.novel.pinyin chapterid=$loop.markinfo.chapterid}">书签 - {$loop.markinfo.name}</a>
+                        </div>
+                        {/if}
+                        {if $loop.markinfo.name && $loop.markinfo.newnum > 0}
+                        <span class="plr15">|</span>
+                        {/if}
+                        {if $loop.markinfo.newnum > 0}
+                        <div class="flex-wrp flex-align-center color4 size12">
+                            <a href="{link=novel.chapter.read novelid=$loop.novel.id pinyin=$loop.novel.pinyin chapterid=$loop.markinfo.nextid}">{$loop.markinfo.newnum}章未读</a>
+                        </div>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+            {/loop}
+        </div>
+    </div>
+    {block method=mark.list userid=$userinfo.id name=list isstar=#false order=$order}
+    <div class="w100 bg-white lh100 mt10 pt-read {if empty($list)}none{/if}">
+        <div class="flex-wrp">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/recently_read.png" class="pt-stick-icon">
+            <div class="color4 size14">我的收藏</div>
+        </div>
+        <div class="pt-stick-cont">
+            {loop}
+            <div class="flex-wrp pt-stick-item" data-novel-id="{$loop.novel.id}" data-is-star="{$loop.markinfo.is_star}">
+                <img src="{$loop.novel.cover}" class="mr15" data-url="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}">
+                <div class="flex-item flex-wrp flex-cell flex-between pt5">
+                    <div class="flex-wrp flex-between">
+                        <a href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}">
+                            <div class="size14 color7">{$loop.novel.name}
+                                {if $loop.markinfo.newnum > 0}
+                                <span class="color4 size12">[<span class="color2">{$loop.markinfo.newnum}</span> 章未读]</span>
+                                {/if}
+                            </div>
+                        </a>
+                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/ellipsis_gray.png" class="pt-ellipsis-white">
+                    </div>
+                    <a href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">
+                        <div class="size12 color4">[ {$loop.author.name} ]</div>
+                    </a>
+                    <a href="{link=novel.chapter.read novelid=$loop.novel.id pinyin=$loop.novel.pinyin chapterid=$loop.last.id}">
+                        <div class="size12 compulsory-row-one lh130 color4">{$loop.novel.is_over|default='连载','完结'} - {$loop.last.name}</div>
+                    </a>
+                    <div class="flex-wrp">
+                        {if $loop.markinfo.chapterid}
+                        <a class="color5 size12 compulsory-row-one" href="{link=novel.chapter.read novelid=$loop.novel.id pinyin=$loop.novel.pinyin chapterid=$loop.markinfo.chapterid}">
+                            书签 - {$loop.markinfo.name}
+                        </a>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+            {/loop}
+        </div>
+    </div>
+</div>
+<!-- 底部版权 -->
+{include file="/system/footer"}
+<!-- 底部按钮 -->
+{include file="/system/footerbutton"}
+
+<!-- 遮罩 -->
+<div class="pt-mask-mark">
+    <div class="pt-mask-mark-shade"></div>
+    <div class="flex-wrp bg-white pt-mask-mark-bottom">
+        <div class="flex-wrp flex-center border-r w50 pt-star">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/stick.png" class="pt-stick-icon">
+            <span class="size14 color62">设为星标</span>
+        </div>
+        <div class="flex-wrp flex-center size14 color2 w50 pt-remove">移出书架</div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/layer/mobile/layer.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/mark.js"></script>
+<!-- js -->
+<script>
+    var __ADD_MARK_STAR = '{link=user.mark.star action=add}',
+        __DEL_MARK_STAR = '{link=user.mark.star action=remove}',
+        __DEL_MARK = '{link=user.mark.del}',
+        __ORDER_READ = '{link="" order=read}',
+        __ORDER_ADD = '{link="" order=add}';
+</script>
+</body>
+</html>

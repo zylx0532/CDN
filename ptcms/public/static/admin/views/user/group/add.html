@@ -1,0 +1,188 @@
+<title>用户组管理</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>用户管理</cite></a>
+        <a><cite>用户组管理</cite></a>
+        <a><cite>添加用户组</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">添加用户组</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户组名称 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" value="" class="layui-input" lay-verify="required">
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">升级经验 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="exp" value="" class="layui-input" lay-verify="required|num">
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">用户组备注</label>
+                            <div class="layui-input-block">
+                                <textarea name="intro" class="layui-textarea"></textarea>
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">收藏藏书数 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="limitmark" value="" class="layui-input" lay-verify="required|num">
+                                <div class="layui-form-mid layui-word-aux">书架的最大藏书数目</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">第日评分上限 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="limitstar" value="" class="layui-input" lay-verify="required|num">
+                                <div class="layui-form-mid layui-word-aux">一天最多可以进行的评分次数</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单日推荐上限 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="limitvote" value="" class="layui-input" lay-verify="required|num">
+                                <div class="layui-form-mid layui-word-aux">一天最多可以进行的推荐次数</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单日评论上限 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="limitcomment" value="" class="layui-input" lay-verify="required|num">
+                                <div class="layui-form-mid layui-word-aux">一天最多可以进行的评论次数</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单日评论回复上限 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="limitcommentreply" value="" class="layui-input" lay-verify="required|num">
+                                <div class="layui-form-mid layui-word-aux">一天最多可以进行的评论回复次数</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单日评论评分上限 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="limitcommentrating" value="" class="layui-input" lay-verify="required|num">
+                                <div class="layui-form-mid layui-word-aux">一天最多可以进行的评论评分次数</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">连签上限 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="max_sign" value="" class="layui-input" lay-verify="required|num">
+                                <div class="layui-form-mid layui-word-aux">最大获取到的连签奖励,比如设置10 连签10次以上的奖励为 签到奖励+10*连签奖励</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单日最大评分 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="max_star" value="" class="layui-input" lay-verify="required|num">
+                                <div class="layui-form-mid layui-word-aux">一天最多可以获得积分奖励的评分次数,小于等于单日评分上限,超过之后不再计分</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单日最大推荐 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="max_vote" value="" class="layui-input" lay-verify="required|num">
+                                <div class="layui-form-mid layui-word-aux">一天最多可以获得积分奖励的评分次数,小于等于单日评分上限,超过之后不再计分</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单日最大评论 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="max_comment" value="" class="layui-input" lay-verify="required|num">
+                                <div class="layui-form-mid layui-word-aux">一天最多可以获得积分奖励的评论次数,小于等于单日评论上限,超过之后不再计分</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单日最大评论回复 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="max_comment" value="" class="layui-input" lay-verify="required|num">
+                                <div class="layui-form-mid layui-word-aux">一天最多可以获得积分奖励的评论次数,小于等于单日评论回复上限,超过之后不再计分</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单日最大评论评分 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="max_comment" value="" class="layui-input" lay-verify="required|num">
+                                <div class="layui-form-mid layui-word-aux">一天最多可以获得积分奖励的评论次数,小于等于单日评论评分上限,超过之后不再计分</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单日最大邀请访问 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="max_invite_visit" value="" class="layui-input" lay-verify="required|num">
+                                <div class="layui-form-mid layui-word-aux">一天最多可以获得积分奖励的邀请访问的用户数,超过之后不再计分</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单日最大邀请注册 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="max_invite_reg" value="" class="layui-input" lay-verify="required|num">
+                                <div class="layui-form-mid layui-word-aux">一天最多可以获得积分奖励的邀请注册的用户数,超过之后不再计分</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <input type="hidden" name="id">
+                                <button class="layui-btn" lay-submit lay-filter="submit">确认修改</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var api_submit = '/manage/user/group/add.json',
+        url_index = '/user/group/index';
+    layui.use(['form'], function (exports) {
+        //渲染
+        var $ = layui.$,
+            layer = layui.layer,
+            laytpl = layui.laytpl,
+            setter = layui.setter,
+            view = layui.view,
+            admin = layui.admin,
+            form = layui.form;
+
+        var $body = $('body');
+
+        form.render();
+
+        form.on('submit(submit)', function (obj) {
+            obj.field.expire_time = (new Date(obj.field.expire_time)).getTime()/1000;
+            //提交修改
+            admin.req({
+                url: api_submit,
+                data: obj.field,
+                method: 'POST',
+                success: function (res) {
+                    admin.success('添加成功', {
+                        yes: function () {
+                            location.reload()
+                        },
+                        btn2: function () {
+                            location.hash = url_index
+                        }
+                    })
+                }
+            });
+            return false;
+        });
+    });
+</script>

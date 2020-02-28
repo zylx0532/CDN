@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/global.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/style.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/js/jquery-3.3.1.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+</head>
+<body>
+<!-- 导航栏 -->
+{include file="/system/header"}
+<!-- 内容 -->
+<div class="pt-content">
+    <!-- 面包屑 -->
+    <div class="pt-crumb">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/crumb_icon.png" class="pt-crumb-icon">
+        <span class="color5"><span class="color5"><a title="{$kx.config.sitename}" href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > <a title="{$category.name}" href="{link=novel.category.list categoryid=$category.id key=$category.key}" class="color5">{$category.name}</a> > <a title="{$novel.name}" href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}" class="color5">{$novel.name}</a></span> > <a href="{link=novel.comment.list novelid=$novel.id pinyin=$novel.pinyin}">{$novel.name}评论区</a></span>
+    </div>
+    <!-- 章节 -->
+    <div class="clearfix" style="width:100%">
+        <div class="fl" style="width:950px">
+            <div class="pt-chapter">
+                <div class="size18 color5 pt-chapter-title">
+                    <a title="{$novel.name}评论区" href="{link=novel.comment.list novelid=$novel.id pinyin=$novel.pinyin}" class="pt-chapter-select">{$novel.name}评论区</a>
+                </div>
+                <div>
+                    <div class="clear">
+                        {block method="pagination" name="paginate" page=$page limit=$pagesize count=$data.comment maxpage=50 section=3}
+                        {block method="comment.list" name=commentlist type='novel' typeid=$novel.id userid=$userinfo.id num=$paginate.limit page=$paginate.current}
+                        <ul class="commentlist clearfix">
+                            {loop=commentlist}
+                            <li data-comment-id="{$loop.id}">
+                                <div class="fl">
+                                    <div class="avatar"><img src="{$loop.user.avatar}" alt="{$loop.user.name}"></div>
+                                </div>
+                                <div class="fr">
+                                    <div class="comment-title">
+                                        <div class="comment-name"><b>{$loop.user.name}</b> 发表了帖子</div>
+                                        <div class="comment-time">{$loop.datetime|date="Y-m-d H:i:s"}</div>
+                                    </div>
+                                    <div class="comment-content">
+                                        {$loop.content}
+                                    </div>
+                                    <div class="comment-btn">
+                                        <div class="comment-btn-up mr30 {$loop.rating|boolval|default='','disable'}">
+                                            <span class="comment-btn-up-btn  {=$loop.rating=='good'?'active':''}"></span>
+                                            <span class="number">{$loop.good_num}</span>
+                                        </div>
+                                        <div class="comment-btn-down {=$loop.rating=='bad'?'active':''}">
+                                            <span class="comment-btn-down-btn"></span>
+                                            <span class="number">{$loop.bad_num}</span>
+                                        </div>
+                                        <a href="{link=novel.comment.post novelid=$novel.id pinyin=$novel.pinyin commentid=$loop.id}">
+                                            <span class="comment-btn-reply color2">{$loop.post_num} 条回复</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            {/loop}
+                        </ul>
+                    </div>
+                    <!-- 分页 -->
+                    {if !empty($commentlist) && $paginate.total>1}
+                    <div class="pt-pages">
+                        <div class="pt30 color5">
+                            {if $paginate.prev>1}
+                            <a href="{link=list novelid=$novel.id pinyin=$novel.pinyin page=$paginate.prev}"><span><</span></a>
+                            {else}
+                            <span class="disable"><</span>
+                            {/if}
+                            {loop=paginate.items}
+                            <a href="{link=list novelid=$novel.id pinyin=$novel.pinyin page=$loop.num}">
+                                <span class="{$loop.status|default='','pt-pages-select'}">{$loop.num}</span>
+                            </a>
+                            {/loop}
+                            {if $paginate.next}
+                            <a href="{link=list novelid=$novel.id pinyin=$novel.pinyin page=$paginate.next}"><span>></span></a>
+                            {else}
+                            <span class="disable">></span>
+                            {/if}
+                        </div>
+                    </div>
+                    {/if}
+                    <form onsubmit="return false;" class="addcomment">
+                        <textarea></textarea>
+                        <button>发表</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="fr" style="width:240px;">
+            <div class="fr pt-new-recomment">
+                <div class="pt-new-recomment-title">评论区信息</div>
+                <div class="pt-new-recomment-list">
+                    <div class="mb20 lh100">
+                        <span class="color5">小说书名：</span>
+                        <span class="color7"><a href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}" class="color2" title="{$novel.name}">{$novel.name}</a></span>
+                    </div>
+                    <div class="mb20 lh100">
+                        <span class="color5 ">专区版主：</span>
+                        <span class="color7"><a title="{$author.name}" href="{link=author.space.index authorid=$author.id pinyin=$author.pinyin name=$author.name}" class="color2">{$author.name}</a></span>
+                    </div>
+                    <div class="mb20 lh100">
+                        <span class="color5 ">评论数量：</span>
+                        <span class="color7">{$data.comment}</span>
+                    </div>
+                    <div class="mb20 lh100">
+                        <span class="color5 ">回帖数量：</span>
+                        <span class="color7">{$data.comment}</span>
+                    </div>
+                    <div class="mb20 lh100">
+                        <span class="color5 ">评论人数：</span>
+                        <span class="color7">{$data.comment}</span>
+                    </div>
+                </div>
+            </div>
+            <!-- 猜你喜欢 -->
+            <div class="fr pt-new-recomment">
+                <div class="pt-new-recomment-title">猜你喜欢</div>
+                <ul class="pt-new-recomment-list">
+                    {block method="novel.list" name=list order=postdate sort=desc num=10}
+                    {section loop=$list item=$loop}
+                    <li>
+                        <span class="color3">[<a title="{$loop.category.name}" href="{link=novel.category.list categoryid=$loop.category.id key=$loop.category.key}">{$loop.category.name}</a>]</span>
+                        <a class="color4 pt-text" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                    </li>
+                    {/section}
+                </ul>
+            </div>
+            <!-- 周榜、月榜 -->
+            <div class="pt-sexselect">
+                {block method="rank.info" name=rankinfo key=weekvisit}
+                <div class="pt-sexselect-title border-b"><span class="fl pt-sexselect-title-icon"></span>{$rankinfo.name}</div>
+                <ul class="pt-sexselect-list">
+                    {block method="novel.list" name=list order=$rankinfo.key num=10}
+                    {section loop=$list item=$loop}
+                    <li>
+                        <span class="{=$i.index<3?'bg-red':'bg-ccc'} pt-sexselect-square">{$i.order}</span>
+                        <a class="color5" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                        <a title="{$loop.author.name}" class="color3 fr" href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">{$loop.author.name}</a>
+                    </li>
+                    {/section}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+</div>
+<!-- 底部版权-->
+{include file="/system/footer"}
+<!-- js -->
+<script>
+var __RATING_COMMENT='{link=novel.comment.rating}',__ADD_COMMENT='{link=comment.add}',__REPLY_COMMENT='{link=comment.reply}',__TYPE='novel',__TYPE_ID='{$novel.id}';
+</script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/js/comment.js"></script>
+</body>
+</html>

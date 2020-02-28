@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/global.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/style.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/js/jquery-3.3.1.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+    {if ($kx.config.ampurl)}<link rel="amphtml" href="{$kx.config.ampurl}__SELF__">{/if}
+    {if ($kx.config.mipurl)}<link rel="miphtml" href="{$kx.config.mipurl}__SELF__">{/if}
+    <meta property="og:type" content="novel"/>
+    <meta property="og:title" content="{$novel.name}"/>
+    <meta property="og:description" content="{$novel.intro|showIntroLine}"/>
+    <meta property="og:image" content="{$novel.cover}"/>
+    <meta property="og:novel:category" content="{$category.name}"/>
+    <meta property="og:novel:author" content="{$author.name}"/>
+    <meta property="og:novel:book_name" content="{$novel.name}"/>
+    <meta property="og:novel:read_url" content="{$kx.config.pcurl}{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}"/>
+    <meta property="og:url" content="{$kx.config.pcurl}{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}"/>
+    <meta property="og:novel:author_link" content="{$kx.config.pcurl}{link=author.space.index authorid=$author.id pinyin=$author.pinyin name=$author.name}"/>
+    <meta property="og:novel:status" content="{if $novel.is_over}Completed{else}Active{/if}"/>
+    <meta property="og:novel:update_time" content="{$last.time|date='Y-m-d H:i:s'}"/>
+    <meta property="og:novel:latest_chapter_name" content="{$last.name}"/>
+    <meta property="og:novel:latest_chapter_url" content="{$kx.config.pcurl}{link=novel.chapter.read novelid=$novel.id pinyin=$novel.pinyin chapterid=$last.id}"/>
+</head>
+<body>
+<!-- 导航栏 -->
+{include file="/system/header"}
+<!-- 内容 -->
+<div class="pt-content">
+    <!-- 面包屑 -->
+    <div class="pt-crumb">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/crumb_icon.png" class="pt-crumb-icon">
+        <span class="color5">
+            <a title="{$kx.config.sitename}" href="{$kx.config.siteurl}">{$kx.config.sitename}</a> >
+            <a title="{$category.name}" href="{link=novel.category.list categoryid=$category.id key=$category.key}" class="color5">{$category.name}</a> >
+            <a title="{$novel.name}" href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}" class="color5">{$novel.name}</a>
+        </span>
+    </div>
+    <!-- 书籍详情 -->
+    <div class="pt-bookdetail">
+        <a title="{$novel.name}" href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}"><img src="{$novel.cover}" class="fl pt-bookdetail-img" title="{$novel.name}" alt="{$novel.name}"></a>
+        <div class="fl pt-bookdetail-info">
+            <div style="line-height: 40px;">
+                <h1 class="size24  mr20 novelname"><a href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}" class="color2 bold" title="{$novel.name}">{$novel.name}</a></h1>
+                <span class="mr30">Author: <a title="{$author.name}" href="{link=author.space.index authorid=$author.id pinyin=$author.pinyin name=$author.name}"><span class="color5">{$author.name}</span></a></span>
+                <span class="">Category: <a title="{$category.name}" href="{link=novel.category.list categoryid=$category.id key=$category.key}" class="color5"><span class="color5">{$category.name}</span></a></span>
+                <span class="fr color7">Score <span class="size26 color2 num-avg-star" data-star-score="{$data.star_score}" data-star-num="{$data.star_num}">{$data.star}</span></span>
+            </div>
+            <div style="max-height: 72px;overflow: hidden;position:relative" class="tags">
+                <div>
+                    {loop=$tag}
+                    <a title="{$loop.name}" class="pt-bookdetail-label mt10">{$loop.name}</a>
+                    {/loop}
+                </div>
+            </div>
+            <div class="compulsory-row-three pt-bookdetail-intro">
+                {$novel.intro|showIntro}
+            </div>
+            <div>
+                {if $last.id}
+                <a title="{$last.name}" href="{link=novel.chapter.read novelid=$novel.id pinyin=$novel.pinyin chapterid=$last.id}"><span class="color2 mr20">{$last.name}</span></a>
+                {else}
+                <span class="color2 mr20">{$last.name}</span>
+                {/if}
+                <span class="size12 color0">{$last.time|date="Y-m-d H:i:s"}</span>
+            </div>
+            <div class="pt-bookdetail-btn">
+                {if $last.id}
+                <a href="{link=novel.chapter.read novelid=$novel.id pinyin=$novel.pinyin chapterid=1}" class="pt-bookdetail-select">Read</a>
+                {else}
+                <a href="javascript:void(0);" class="">Read</a>
+                {/if}
+                <div class="inline-block">
+                    <a href="javascript:void(0);" id="btn-mark">
+                        {$ismark|default='AddMark','DelMark'}
+                    </a>
+                    <a href="javascript:void(0);" id="btn-add-booklist" title="AddList" style="margin-left: -5px;">&nbsp;</a>
+                </div>
+                <a href="javascript:void(0);" id="btn-vote">Vote</a>
+                <a class="fr" style="border: none;margin-right: 0;padding-right: 0" title="{$novel.name}TXTDownLoad" href="{link=novel.novel.down novelid=$novel.id pinyin=$novel.pinyin}">
+                    <img style="vertical-align: middle" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/book.png" alt="TXTDown">
+                    <span>TXTDown</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- 右侧次数 -->
+    <div class="pt-bookdetail-num">
+        <div class="mb20 lh100">
+            <span class="color5 mr10">Click:</span>
+            <span class="color7">{$data.allvisit}</span>
+        </div>
+        <div class="mb20 lh100">
+            <span class="color5 mr10">Mark:</span>
+            <span class="color7"><span class="num-mark">{$data.mark}</span> 人</span>
+        </div>
+        <div class="mb20 lh100">
+            <span class="color5 mr10">Vote:</span>
+            <span class="color7"><span class="num-vote">{$data.vote}</span> 人</span>
+        </div>
+        <div class="mb20 lh100">
+            <span class="color5 mr10">Words:</span>
+            <span class="color7">{$data.words}万</span>
+        </div>
+        <div class="mb20 lh100">
+            <span class="color5 mr10">Score:</span>
+            <span class="pt-photo">
+                <span title="star1">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                </span>
+                <span title="star2">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                </span>
+                <span title="star3">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                </span>
+                <span title="star4">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                </span>
+                <span title="star5">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                </span>
+            </span>
+        </div>
+        <div class="mb20 lh100">
+            <span class="color5 mr10">StarNum:</span>
+            <span class="color7"><span class="num-star-people">{$data.star_num}</span></span>
+        </div>
+    </div>
+    <!-- 章节 -->
+    <div class="clearfix" style="width:100%">
+        <div class="fl" style="width:950px">
+            {block method=novel.stat novelid=$novel.id num=7 name=$novelstat}
+            <div class="bg-white mt10 pt-interactive">
+                <p class="pl20 pt20">
+                    <img style="vertical-align: middle;margin-top: -6px;" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/interactive1.png" alt="Interaction">
+                </p>
+                <div>
+                    <div style="width: 265px;border-right: 1px solid #E5E5E5;">
+                        <div class="color2 mt15 size20 bold"><img style="vertical-align: middle;margin-top: -3px;" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/ticket.png"> {$kx.config.user.ticket_caption}</div>
+                        <div class="mt35">Month</div>
+                        <div class="size32 bold color32">{$novelstat.ticket.month_num}</div>
+                        <div class="mt30 bold">Ranking <span class="color2">{$novelstat.ticket.month_rank}</span></div>
+                        <button class="mt20 bold btn-interactive-vote">Vote</button>
+                    </div>
+                    <div style="width: 265px;border-right: 1px solid #E5E5E5;">
+                        <div class="color2 mt15 size20 bold"><img style="vertical-align: middle;margin-top: -3px;" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/reward.png"> Reward</div>
+                        <div class="mt35">Month</div>
+                        <div class="size32 bold color32">{$novelstat.reward.month_people}</div>
+                        <div class="mt30 bold">Reward <span class="color2">{$novelstat.reward.total_people}</span></div>
+                        <button class="mt20 bold btn-interactive-reward">Reward</button>
+                    </div>
+                    <div style="width: 365px;">
+                        <img class="mt10" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/interactive.png" alt="Interactive">
+                        {if empty($novelstat.dynamic)}
+                        <div class="mt50">Null</div>
+                        {else}
+                        <ul class="mt10" style="width: 220px;margin: auto;">
+                            {loop=$novelstat.dynamic}
+                            {if $loop.type == 'ticket'}
+                            <li>
+                                <span class="color32">{$loop.username}</span> 投了 <span class="color32">{$loop.num}张{$kx.config.user.ticket_caption}</span>
+                                <img class="fr" style="margin-top: 3px;width: 16px;" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/ticket.png">
+                            </li>
+                            {elseif $loop.type == 'reward'}
+                            <li>
+                                <span class="color2">{$loop.username}</span> Reward <span class="color2">{$loop.num}{$kx.config.user.money_caption}</span>
+                                <img class="fr" style="margin-top: 3px;width: 16px;" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/reward.png">
+                            </li>
+                            {/if}
+                            {/loop}
+                        </ul>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+            {block method=chapter.list novelid=$novel.id name=$allchapterlist sort=asc}
+            {if !$source.id}
+            <div class="pt-chapter mt10" style="display: none;">
+                <div class="title">
+                    <input type="checkbox" id="select_all_chapters"><label class="color32 size16 bold ml25" for="select_all_chapters">选择全部章节</label>
+                    <span class="bold">已选 <span class="color2 selected_num">0</span> 章</span>
+                    {if $userinfo.vip_expire_time < time()}
+                    <a class="fr color2 size14 ptb5" href="{link=user.pay.vip}">享更多优惠</a>
+                    <a class="fr color1 size14 bg-red plr10 ptb5 mr10" href="{link=user.pay.vip}">升级超级VIP</a>
+                    {/if}
+                    <span class="fr size14 color32 mr35" style="margin-top: -2px;">
+                        {block method=novel.charge novelid=$novel.id name=$charge}
+                        {~$charge = $userinfo.vip_expire_time < time()?$charge.words_money:$charge.words_vip_money}
+                        <span class="color2 size20 bold mr5">{$charge}</span>
+                        {$kx.config.user.money_caption}/k
+                    </span>
+                    <span class="fr color14 ptb5 mr10">{if $userinfo.vip_expire_time < time()}User{else}VIP{/if}</span>
+                </div>
+                <ul class="pt-chapter-subscribe mt20"">
+                    <li class="color62">
+                        <span><span class="pl50">Chapter</span></span>
+                        <span>Words</span>
+                        <span>价格（{$kx.config.user.money_caption}）</span>
+                    </li>
+                    {loop=$allchapterlist}
+                    {if $loop.type == App\Model\Novel\Chapter::TYPE_TOLL}
+                    {block method=chapter.calculatePriceByPrice wordsnum=$loop.words price=$charge name=$price}
+                    <li class="item">
+                        <span class="color32">
+                            {if $novel.type == App\Model\Novel\Novel::TYPE_VIP_FREE && $userinfo.vip_expire_time > time()}
+                                {~$issubscribe = true;}
+                            {else}
+                                {block method="chapter.issubscribe" userid=$userinfo.id novelid=$novel.id chapterid=$loop.chapterid name=$issubscribe}
+                            {/if}
+                            <input type="checkbox" value="{$loop.chapterid}" data-price="{=$issubscribe?0:$price}" id="chapter_{$loop.chapterid}" {=$issubscribe?'':'checked="checked"'}>
+                            <label class="pl30" for="chapter_{$loop.chapterid}">{$loop.name}</label>
+                        </span>
+                        <span class="color92">{$loop.words}</span>
+                        <span class="color2">{=$issubscribe?0:$price}</span>
+                    </li>
+                    {/if}
+                    {/loop}
+                </ul>
+                <div class="pt-chapter-subscribe-order">
+                    <div>
+                        <span class="inline-block mt30">已选 <span class="selected_num color2">0</span> 章</span>
+                        <div class="switch"><div></div></div>
+                        <span class="size14">自动订阅新章节</span>
+                        <button class="btn-subscribe">确认提交</button>
+                        <span class="fr size18 color32 mt30 mr20">
+                            余额 <span class="size20 color2 total">{$userinfo.assets.balance}</span> {$kx.config.user.money_caption}
+                            ●
+                            共计 <span class="selected_money size20 color2">0</span> {$kx.config.user.money_caption}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            {/if}
+            <div class="pt-chapter mt10">
+                <div class="size18 color5 pt-chapter-title">
+                    <a title="{$novel.name}" href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}" class="pt-chapter-select">章节目录</a>
+                </div>
+                <div class="pt-chapter-content">
+                    <div class="w100 pt-chapter-cont">
+                        <div class="size18 color32 bold pt-chapter-cont-title">LastChapter</div>
+                        <div class="pt-chapter-cont-detail">
+                            {block method=chapter.list novelid=$novel.id num=9 name=$list sort=desc}
+                            {loop}
+                            <a title="{$loop.name}" href="{link=novel.chapter.read novelid=$novel.id pinyin=$novel.pinyin chapterid=$loop.chapterid}">
+                                <span>{$loop.name}</span>
+                                {if $novel.type == App\Model\Novel\Novel::TYPE_TOLL || $novel.type == App\Model\Novel\Novel::TYPE_VIP_FREE && $userinfo.vip_expire_time < time()}
+                                    {if $loop.type == App\Model\Novel\Chapter::TYPE_TOLL}
+                                        {block method="chapter.issubscribe" userid=$userinfo.id novelid=$novel.id chapterid=$loop.chapterid name=$issubscribe}
+                                        {if !$issubscribe}
+                                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/lock.png" alt="收费章节">
+                                        {/if}
+                                    {/if}
+                                {/if}
+                            </a>
+                            {/loop}
+                        </div>
+                    </div>
+                    <div class="w100 pt-chapter-cont">
+                        <div class="size18 color32 bold pt-chapter-cont-title">Chapter</div>
+                        <div class="pt-chapter-cont-detail full">
+                            {loop=$allchapterlist}
+                            <a title="{$loop.name}" href="{link=novel.chapter.read novelid=$novel.id pinyin=$novel.pinyin chapterid=$loop.chapterid}" class="compulsory-row-one none">
+                                <span>{$loop.name}</span>
+                                {if $novel.type == App\Model\Novel\Novel::TYPE_VIP_FREE && $userinfo.vip_expire_time > time()}
+                                    {if $loop.type == App\Model\Novel\Chapter::TYPE_TOLL}
+                                        <img class="toll">
+                                    {/if}
+                                {elseif $novel.type != App\Model\Novel\Novel::TYPE_DEFAULT}
+                                    {if $loop.type == App\Model\Novel\Chapter::TYPE_TOLL}
+                                        {block method="chapter.issubscribe" userid=$userinfo.id novelid=$novel.id chapterid=$loop.chapterid name=$issubscribe}
+                                        {if $issubscribe}
+                                        <img class="toll">
+                                        {else}
+                                        <img class="toll" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/lock.png" alt="收费章节">
+                                        {/if}
+                                    {/if}
+                                {/if}
+                            </a>
+                            {/loop}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="pt-chapter">
+                <div class="size18 color5 pt-chapter-title">
+                    <a title="{$novel.name}Comment" href="{link=novel.comment.list novelid=$novel.id pinyin=$novel.pinyin}" class="pt-chapter-select">Comment</a>
+                </div>
+                <div>
+                    {block method="comment.list" name=commentlist type='novel' userid=$userinfo.id typeid=$novel.id}
+                    <div class="clear">
+                        <div class="size16 pt-chapter-cont-title"><a href="{link=novel.comment.list novelid=$novel.id pinyin=$novel.pinyin}" class="color2 ">Comment({$data.comment})</a></div>
+                        <ul class="commentlist clearfix">
+                            {loop=commentlist}
+                            <li data-comment-id="{$loop.id}">
+                                <div class="fl">
+                                    <div class="avatar"><img src="{$loop.user.avatar}" alt="{$loop.user.name}"></div>
+                                </div>
+                                <div class="fr">
+                                    <div class="comment-title">
+                                        <div class="comment-name"><b>{$loop.user.name}</b> Post Comment</div>
+                                        <div class="comment-time">{$loop.datetime|date="Y-m-d H:i:s"}</div>
+                                    </div>
+                                    <div class="comment-content">
+                                        {$loop.content}
+                                    </div>
+                                    <div class="comment-btn {$loop.rating|boolval|default='','disable'}">
+                                        <div class="comment-btn-up mr30 {=$loop.rating=='good'?'active':''}">
+                                            <span class="comment-btn-up-btn"></span>
+                                            <span class="number">{$loop.good_num}</span>
+                                        </div>
+                                        <div class="comment-btn-down {=$loop.rating=='bad'?'active':''}">
+                                            <span class="comment-btn-down-btn"></span>
+                                            <span class="number">{$loop.bad_num}</span>
+                                        </div>
+                                        <a href="{link=novel.comment.post novelid=$novel.id pinyin=$novel.pinyin commentid=$loop.id}">
+                                            <span class="comment-btn-reply color2">{$loop.post_num} Reply</span>
+                                        </a>
+                                    </div>
+                                </div>
+                            </li>
+                            {/loop}
+                        </ul>
+                    </div>
+                    <form onsubmit="return false;" class="addcomment">
+                        <textarea></textarea>
+                        <button>Post</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="fr" style="width:240px;">
+                <!-- 猜你喜欢 -->
+            <div class="fr pt-new-recomment mt10">
+                <div class="pt-new-recomment-title">Guess Like</div>
+                <ul class="pt-new-recomment-list">
+                    {block method="novel.list" name=list order=allvisit category=$category.id sort=desc num=15}
+                    {section loop=$list item=$loop}
+                    <li>
+                        <a class="color4 pt-text" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                    </li>
+                    {/section}
+                </ul>
+            </div>
+            <!-- 周榜、月榜 -->
+            <div class="pt-sexselect mt10">
+                {block method="rank.info" name=rankinfo key=weekvisit}
+                <div class="pt-sexselect-title border-b"><span class="fl pt-sexselect-title-icon"></span>{$rankinfo.name}
+                </div>
+                <ul class="pt-sexselect-list">
+                    {block method="novel.list" name=list order=$rankinfo.key num=20}
+                    {section loop=$list item=$loop}
+                    <li>
+                        <span class="{=$i.index<3?'bg-red':'bg-ccc'} pt-sexselect-square">{$i.order}</span>
+                        <a class="color5" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                        <a title="{$loop.author.name}" class="color3 fr" href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">{$loop.author.name}</a>
+                    </li>
+                    {/section}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div style="display: none;" id="tpl_booklist_add_novel">
+    <form method="post" class="plr40" action="{link=user.booklist.addnovel}">
+        <h1 class="color62 size18 mt40 text-center">添加书评</h1>
+        <input type="hidden" name="booklistid" value="0">
+        <input type="hidden" name="novelid" value="{$novel.id}">
+        <div class="mtb15">
+            <label class="mr5" style="width: 25%;">书籍名称</label>
+            <input type="text" style="width: 75%;padding:6px;background-color:#f5f5f5;border: 1px solid #e9e9e9;" value="{$novel.name}" disabled>
+        </div>
+        <div class="mtb15">
+            <input type="hidden" name="star" value="5">
+            <label class="mr5" style="width: 25%;">推荐指数</label>
+            <span class="pt-photo" data-star="5" style="width: 75%;">
+                <span title="Star1">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                </span>
+                <span title="Star2">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                </span>
+                <span title="Star3">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                </span>
+                <span title="Star4">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                </span>
+                <span title="Star5">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                </span>
+            </span>
+        </div>
+        <div class="mtb15" style="position: relative;">
+            <label class="mr5" style="width: 25%;position: relative;top:-60px">书籍评论</label>
+            <textarea rows="3" name="comment" style="width: 75%;padding:6px;background-color:#f5f5f5;border: 1px solid #e9e9e9;"></textarea>
+        </div>
+        <div class="text-center">
+            <button class="bg-red color1 plr20 ptb10 ">确认提交</button>
+        </div>
+    </form>
+</div>
+<div style="display: none;" class="pt-interactive-model">
+    <div class="label" style="background-color: #F5F5F5;">
+        <ul>
+            <li data-type="vote" class="fl color4 size18 bold text-center">投票</li>
+            <li data-type="reward" class="fl color4 size18 bold text-center">打赏</li>
+        </ul>
+        <div class="clear"></div>
+    </div>
+    <div class="container">
+        <ul>
+            <li class="text-center login {=$islogin?'pt-active':'pt-active'}">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/user.png" alt="请先登录" style="margin-top: 60px;">
+                <h1 class="mt35 size18">需要您登录后才可以进行操作</h1>
+                <a class="m10 color2" href="{link=user.auth.login}">前往登录</a>
+            </li>
+            <li class="text-center vote">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/ticket1.png" alt="投票" style="margin-top: 40px;">
+                <h1 class="mt35 size18">您总计有 <span class="color2 total">{$userinfo.assets.surplus_ticket}</span> 张月票，请选择你要投的票数。</h1>
+                <div class="ticket_select mt35">
+                    <button class="bold minus">-</button>
+                    <span class="size18 plr15 color2 bold">1</span>
+                    <button class="bold plus">+</button>
+                </div>
+                <button class="mt20 size14 color1 bold bg-red plr20 ptb10 btn-submit">立即提交</button>
+            </li>
+            <li class="text-center reward">
+                <div class="moneylist" style="margin-top: 40px;">
+                    {loop=$kx.config.reward.list}
+                    <span data-money="{$loop}">{$loop}{$kx.config.user.money_caption}</span>
+                    {/loop}
+                </div>
+                <div class="clear"></div>
+                <h1 class="mt35 size14">您的账户余额为 <span class="color2 total">{$userinfo.assets.balance}</span> {$kx.config.user.money_caption}，本次打赏 <span class="color2 money">0</span> {$kx.config.user.money_caption}。</h1>
+                <button class="mt20 size14 color1 bold bg-red plr20 ptb10 btn-submit">立即提交</button>
+            </li>
+        </ul>
+    </div>
+</div>
+<div style="display: none;" class="pt-insufficient-balance-model">
+    <div class="title pl20 ptb10" style="background-color:#f4f5f6;">订阅</div>
+    <div class="text-center mt50 pt25">
+        <h1 class="size18 color32 mb10">本次消费将消费<span class="total color2">0</span>个{$kx.config.user.money_caption}</h1>
+        <p>当前余额{=$userinfo.assets.balance?:0}{$kx.config.user.money_caption}，还需支付<span class="missing color2">0</span>{$kx.config.user.money_caption}</p>
+        <a href="{link=user.pay.recharge}" class="inline-block mt20 size14 color1 bold bg-red plr20 ptb10 mt40">前往充值</a>
+    </div>
+</div>
+<!-- 底部版权-->
+{include file="/system/footer"}
+<!-- js -->
+<script>
+    var __IS_LOGIN=parseInt('{$islogin}'),__IS_VIP=parseInt('{=$userinfo.vip_expire_time < time()?0:1}'),__IS_FREE_FOR_VIP=parseInt('{=$novel.type == App\Model\Novel\Novel::TYPE_VIP_FREE?1:0}'),__ADD_STAR='{link=user.star.add}',__NOVEL_ID='{$novel.id}',__NOVEL_NAME='{$novel.name}',__ADD_MARK='{link=user.mark.add}',__DEL_MARK='{link=user.mark.del}',__ADD_VOTE='{link=user.vote.add}',__RATING_COMMENT='{link=novel.comment.rating}',__ADD_COMMENT='{link=novel.comment.add}',__USER_BOOKLIST='{link=user.booklist.index responsetype=json}',__USER_ADD_BOOKLIST='{link=user.booklist.detail}',__ADD_REWARD='{link=novel.novel.reward}',__ADD_VOTE_TICKET='{link=novel.novel.ticket}',__SUBSCRIBE='{link=novel.novel.subscribe}',__RECHARGE_URL='{link=user.pay.recharge}';
+</script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/js/novel.js"></script>
+</body>
+</html>

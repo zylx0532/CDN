@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>我的票夹 - 用户中心 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/style.css"/>
+</head>
+<body>
+    <!-- 头部 -->
+    {include file="/system/header"}
+    <!-- 内容 -->
+    <div class="pt-content">
+        <!-- 面包屑 -->
+        <div class="pt-crumb">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/crumb_icon.png" class="pt-crumb-icon">
+            <span class="color5">
+                <a href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > <a href="{link=user.index.index}" class="color5">用户中心</a> > <a href="{link=user.vote.index}">我的推荐</a>
+            </span>
+        </div>
+        <style>
+            .pt-bar .pt-bar-item{
+                float: left;
+                width:131px;
+                height:50px;
+                line-height: 50px;
+                text-align: center;
+                background-color: #E5E5E5;
+                border-top: 4px solid #E5E5E5;
+                color: #929297;
+            }
+            .pt-bar .pt-bar-item.pt-active,
+            .pt-bar .pt-bar-item:hover{
+                background: #fff;
+                border-top: 4px solid #f55;
+                color: #323237;
+            }
+        </style>
+        <!-- 一楼 -->
+        <div class="pt-floor1">
+            {include file="/system/userleft"}
+            <div class="ml10 fl" style="width: 950px;">
+                <ul class="pt-bar">
+                    <a href="{link=user.assets.index}"><li class="pt-bar-item pt-active">资产概览</li></a>
+                    <a href="{link=user.ticket.index}"><li class="pt-bar-item">我的票夹</li></a>
+                    <a href="{link=user.pay.recharge}" class="bg-red color1 fr ptb5 plr20 mt10 mr10">
+                        <img style="vertical-align: middle" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/rmb.png" alt="充值">
+                        <span>充值</span>
+                    </a>
+                </ul>
+                <div class="clear"></div>
+                <div class="bg-white plr20 ptb20">
+                    <div class="size18 color32 bold">当前账户可用余额({$kx.config.user.money_caption})</div>
+                    <div class="color2 bold" style="font-size: 35px;">{$stat.surplus}</div>
+                    <p>累计获得 {$stat.total} {$kx.config.user.money_caption}，累计消费 {$stat.used} {$kx.config.user.money_caption}</p>
+                </div>
+                <div class="bg-white plr20 ptb20 mt20 pt-user-table" style="min-height: 415px;">
+                    <h1 class="color32 size18 bold mb20">历史记录</h1>
+                    {block method="pagination" name="paginate" page=$page limit=$pagesize count=$count maxpage=50 section=3}
+                    {block method="user.moneyList" name=moneylist userid=$userinfo.id page=$page}
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>时间</th>
+                            <th>数量</th>
+                            <th>类别</th>
+                            <th>详情</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {if empty($moneylist)}
+                        <tr>
+                            <td colspan="5">您似乎来到了没有数据存在的荒原~~~</td>
+                        </tr>
+                        {else}
+                        {section loop=$moneylist item=$loop}
+                        <tr>
+                            <td>{$loop.create_time|date="Y-m-d H:i:s"}</td>
+                            <td><span class="bold" style="color: #{$loop.type|default="","F55","F55","14B723"};">{$loop.type|default="","+","+","-"}{$loop.num}</span> {$kx.config.user.money_caption}</td>
+                            <td>
+                                {if $loop.ext.type == 'subscribe'}
+                                {block method=novel.info id=$loop.ext.novel_id name=$novelinfo}
+                                订阅《{$novelinfo.novel.name}》共{=count($loop.chapters)}章
+                                {else if $loop.ext.type == 'reward'}
+                                {block method=novel.info id=$loop.ext.novel_id name=$novelinfo}
+                                打赏《{$novelinfo.novel.name}》
+                                {else}
+                                {$loop.type|default="未知","充值","赠送","消费"}
+                                {/if}
+                            </td>
+                            <td>
+                                {if $loop.type == \App\Model\User\MoneyLog::TYPE_REWARD}
+                                    {if $loop.ext.order_module == \App\Model\Order\Order::MODULE_RECHARGE}
+                                        <a class="color2 showDetail" data-detail="邀请用户({$loop.ext.user_name})充值">查看</a>
+                                    {elseif $loop.ext.order_module == \App\Model\Order\Order::MODULE_VIP}
+                                        <a class="color2 showDetail" data-detail="邀请用户({$loop.ext.user_name})开通会员">查看</a>
+                                    {/if}
+                                {elseif $loop.ext.type == 'subscribe'}
+                                <a class="color2 showDetail" data-detail="{=join("\n",array_column($loop.chapters,'name'))}">查看</a>
+                                {/if}
+                            </td>
+                        </tr>
+                        {/section}
+                        {/if}
+                        </tbody>
+                    </table>
+                    <!-- 分页 -->
+                    {if !empty($moneylist) && $paginate.total>1}
+                    <div class="pt-pages">
+                        <div class="pt30 color5">
+                            {if $paginate.prev}
+                            <a href="{link=user.assets.index page=$paginate.prev}"><span><</span></a>
+                            {else}
+                            <span class="disable"><</span>
+                            {/if}
+                            {loop=paginate.items}
+                            <a href="{link=user.assets.index page=$loop.num}">
+                                <span class="{$loop.status|default='','pt-pages-select'}">{$loop.num}</span>
+                            </a>
+                            {/loop}
+                            {if $paginate.next}
+                            <a href="{link=user.assets.index page=$paginate.next}"><span>></span></a>
+                            {else}
+                            <span class="disable">></span>
+                            {/if}
+                        </div>
+                    </div>
+                    {/if}
+                </div>
+            </div>
+        </div>
+    </div>
+{include file="/system/footer"}
+<script>
+    $('.showDetail').click(function () {
+        var chapters = $(this).data('detail').split("\n");
+        layer.tips(chapters.join('<br>'), this, {
+            tips: [4, '#000']
+        });
+    });
+</script>
+</body>
+</html>

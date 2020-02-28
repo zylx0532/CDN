@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>我的{$kx.config.user.ticket_caption} - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/css/global.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/flexible.min.js"></script>
+</head>
+<body>
+<div class="w100">
+    <div class="w100 bg-red flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/return.png" class="pt-return">
+        <div class="size18 color1">我的{$kx.config.user.ticket_caption}</div>
+        <div></div>
+    </div>
+    <div class="bg-red color1 pt10 pl20">
+        <p>当前可用{$kx.config.user.ticket_caption}（张）</p>
+        <span class="bold" style="font-size: 40px;">{$userinfo.assets.surplus_ticket}</span>
+    </div>
+    <style>
+        .ticket_list {
+            padding: 0;
+        }
+
+        .ticket_list .label {
+            text-align: center;
+            border-bottom: 1px solid #E9E9E9;
+        }
+
+        .ticket_list .label li {
+            display: inline-block;
+            height: 40px;
+            line-height: 40px;
+            font-size: 16px;
+            margin: 5px 20px 0;
+        }
+
+        .ticket_list .label li.active {
+            border-bottom: 4px solid #f55;
+        }
+        .ticket_list .container > li {
+            display: none;
+            min-height: 480px;
+        }
+        .ticket_list .container > li.active{
+            display: block;
+        }
+        .ticket_list .container ul li{
+            border-bottom: 1px solid #E9E9E9;
+            line-height: 40px;
+            height: 40px;
+            padding: 0 20px;
+        }
+        .ticket_list .container ul li span:first-child{
+            width: 100px;
+        }
+    </style>
+    <div class="bg-white mb10 pt-list ticket_list">
+        <ul class="label">
+            <li data-type="obtain" class="active">获取记录</li>
+            <li data-type="use">使用记录</li>
+        </ul>
+        {block method="user.ticketList" name=tickets userid=$userinfo.id num=50}
+        <ul class="container">
+            <li class="obtain active">
+                <ul>
+                    {loop=$tickets}
+                    <li>
+                        <span class="inline-block">{$loop.create_time|date='Y-m-d'}</span>
+                        <span class="inline-block">{=is_numeric($loop.ext)?$loop.ext.'消费返还':$loop.ext}</span>
+                        <span class="inline-block fr color32">+1张</span>
+                    </li>
+                    {/loop}
+                </ul>
+            </li>
+            <li class="use">
+                <ul>
+                    {loop=$tickets}
+                    {~if(!$loop.novel_id)continue;}
+                    <li>
+                        <span class="inline-block">{$loop.used_time|date='Y-m-d'}</span>
+                        <span class="inline-block">{$loop.novel.name}</span>
+                        <span class="inline-block fr color32">-1张</span>
+                    </li>
+                    {/loop}
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- 底部版权 -->
+{include file="/system/footer"}
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/layer/mobile/layer.js"></script>
+<script>
+    $('.ticket_list .label li').click(function () {
+        $(this).addClass('active').siblings().removeClass('active');
+        $('.ticket_list .container .' + $(this).data('type')).addClass('active').siblings().removeClass('active');
+    });
+</script>
+</body>
+</html>

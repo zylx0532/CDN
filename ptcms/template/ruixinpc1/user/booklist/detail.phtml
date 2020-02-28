@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>BookList - UserCP - {$kx.config.sitename}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/global.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/style.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/js/select2/css/select2.min.css"/>
+    <style>
+        .pt-booklist-novel-list .pt-booklist-info{
+            width:780px;
+        }
+
+        .pt-booklist-create .input {
+            margin: 10px;
+            min-height: 35px;
+            line-height: 35px;
+        }
+        .pt-booklist-create .input > label{
+            width: 130px;
+            height: 35px;
+            text-align: right;
+            float: left;
+        }
+        .pt-booklist-create .input > div{
+            width: 600px;
+            float: left;
+            margin-left: 20px;
+        }
+        .pt-booklist-create .input .field-textarea,
+        .pt-booklist-create .input .field-input{
+            border:1px solid #C9C9C9;
+            width: 580px;
+            padding: 10px;
+        }
+        .pt-booklist-create .input .field-select{
+            width: 600px;
+        }
+        .pt-booklist-create .input .field-textarea{
+            height: auto;
+            line-height: normal;
+        }
+        .select2-selection--multiple{
+            line-height: normal;
+        }
+        .select2-selection{
+            border-radius:0 !important;
+            border:1px solid #C9C9C9 !important;
+        }
+        .select2-results__options li{
+            display: inline-block;
+        }
+        .select2-container--default .select2-results__option--highlighted[aria-selected],
+        .select2-container--default .select2-results__option[aria-selected=true]{
+            background-color: #f55;
+            color:#fff
+        }
+
+        .pt-booklist-create .input.addnovel{
+            position: relative;
+        }
+        .pt-booklist-create .input.addnovel input{
+            width: 500px;
+        }
+        .pt-booklist-create .input.addnovel button{
+            width: 80px;
+            position: absolute;
+            right: 178px;
+            height: 43px;
+            border: 1px solid #C9C9C9;
+            background-color: #F5F5F5;
+        }
+    </style>
+</head>
+<body>
+	<!-- 头部 -->
+    {include file="/system/header"}
+
+	<!-- 内容 -->
+	<div class="pt-content">
+		<!-- 面包屑 -->
+		<div class="pt-crumb">
+			<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/crumb_icon.png" class="pt-crumb-icon">
+			<span class="color5">
+                <a href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > <a href="{link=user.index.index}" class="color5">UserCP</a> > <a href="{link=user.booklist.index}">BookShelf</a>
+            </span>
+		</div>
+
+		<!-- 一楼 -->
+		<div class="pt-floor1">
+            {include file="/system/userleft"}
+			<div class="relative pt-rank">
+                {block method=booklist.info booklistid=$kx.get.id name=info}
+                <div class="pt-booklist-head">
+					<span class="size16 color3 pl10" style="border-left:5px solid #f55;">{=empty($info)?'Create BookList':'Modify BookList'}</span>
+				</div>
+                <form method="post">
+                    <div class="pt-booklist-create">
+                        {if !empty($info)}
+                        <input type="hidden" name="id" value="{$info.id}">
+                        {/if}
+                        <div class="mb20 input clearfix">
+                            <label for="title">Title</label>
+                            <div>
+                                <input class="field-input" type="text" name="title" value="{$info.title}" placeholder="Please enter the BookList name">
+                            </div>
+                        </div>
+                        <div class="mb20 input clearfix">
+                            <label for="tags">Tags</label>
+                            <div>
+                                <select class="field-select select-tags none" name="tags[]" multiple>
+                                    {~$tags=array_column($info.tags,'id')}
+                                    {block method="tag" name=list}
+                                    {loop}
+                                    <option value="{$loop.id}" {=in_array($loop.id,$tags)?'selected':''}>{$loop.name}</option>
+                                    {/loop}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb20 input clearfix">
+                            <label for="intro">BookList Info</label>
+                            <div>
+                            <textarea class="field-textarea" name="intro" id="intro" rows="5" placeholder="Please enter the BookList Info">{$info.intro
+                                }</textarea>
+                            </div>
+                        </div>
+                        <div class="mb20 input clearfix addnovel">
+                            <label>AddNovel</label>
+                            <div>
+                                <input type="text" class="field-input" placeholder="Please enter the Novel name"><button type="button">Search</button>
+                            </div>
+                        </div>
+                        <div class="mb20 input clearfix">
+                            <label></label>
+                            <div>
+                                <button type="submit" class="plr35 ptb10 bg-red color1">Submit</button>
+                                <a href="{link=index}" class="plr35 ptb10 border-c9 bg-white color2 ml25">Cancel</a>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="pt-booklist-novel-list">
+                        {loop=$info.novels}
+                        <li>
+                            <img class="fl pt-booklist-cover" src="{$loop.novel.cover}" alt="">
+                            <div class="fl pt-booklist-info">
+                                <input type="hidden" name="novels[id][]" value="{$loop.novel.id}">
+                                <span class="mr60 size24 color3">{$loop.novel.name}</span>
+                                <div class="star">
+                                    <input type="hidden" name="novels[star][]" value="{$loop.star}">
+                                    <span class="color5 mr10 size16">推荐指数:</span>
+                                    <span class="pt-photo" data-star="{$loop.star}">
+                                        <span title="不知所云">
+                                            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                                            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                                        </span>
+                                        <span title="随便看看">
+                                            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                                            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                                        </span>
+                                        <span title="值得一读">
+                                            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                                            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                                        </span>
+                                        <span title="不容错过">
+                                            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                                            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                                        </span>
+                                        <span title="经典必读">
+                                            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                                            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                                        </span>
+                                    </span>
+                                </div>
+                                <textarea rows="2" placeholder="请填写书评" name="novels[comment][]">{$loop.comment}</textarea>
+                            </div>
+                            <a class="remove">Remove</a>
+                        </li>
+                        {/loop}
+                    </ul>
+                </form>
+			</div>
+		</div>
+	</div>
+    <!--搜索书籍-->
+    <div style="display: none;" id="tpl_novel_search">
+        <div>
+            <div class="mlr35 mtb35">
+                <h1 class="pl10" style="border-left: 5px solid #FF5555">Result</h1>
+                <table class="size14 mt40 w100" style="padding: 0">
+                    <thead class="color92 bg" style="line-height: 35px;background-color: #F5F5F5;">
+                    <tr class="border-e9">
+                        <th style="width: 35%;padding: 0">Title</th>
+                        <th style="width: 35%;padding: 0">Author</th>
+                        <th style="width: 10%;padding: 0">Category</th>
+                        <th style="width: 10%;padding: 0">Click</th>
+                        <th style="width: 10%;padding: 0">Operation</th>
+                    </tr>
+                    </thead>
+                    <tbody class="color62" style="line-height: 45px;text-align: center;">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!--书籍模板-->
+    <div style="display: none" id="tpl_novel">
+        <li>
+            <img class="fl pt-booklist-cover" src="" alt="">
+            <div class="fl pt-booklist-info">
+                <input class="id" type="hidden" name="novels[id][]">
+                <span class="mr60 size24 color3 name"></span>
+                <div class="star">
+                    <input class="star" type="hidden" name="novels[star][]" value="0">
+                    <span class="color5 mr10 size16">推荐指数:</span>
+                    <span class="pt-photo" data-star="0">
+                                    <span title="不知所云">
+                                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                                    </span>
+                                    <span title="随便看看">
+                                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                                    </span>
+                                    <span title="值得一读">
+                                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                                    </span>
+                                    <span title="不容错过">
+                                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                                    </span>
+                                    <span title="经典必读">
+                                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star1.png" class="high">
+                                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/star.png" class="nohigh">
+                                    </span>
+                                </span>
+                </div>
+                <textarea class="comment" rows="3" placeholder="请填写书评" name="novels[comment][]"></textarea>
+            </div>
+            <a class="remove">移除</a>
+        </li>
+    </div>
+
+	<!-- 底部版权-->
+    {include file="/system/footer"}
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/js/jquery-3.3.1.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/js/select2/js/select2.min.js"></script>
+    <script src="https://cdn.bootcss.com/select2/4.0.6-rc.1/js/i18n/zh-CN.js"></script>
+    <!-- js-->
+    <script>
+        var loading = null;
+        $('.select-tags').select2({
+            placeholder: 'Please select label Category',
+            maximumSelectionLength:3,
+            language: "zh-CN",
+        });
+        $('.addnovel').on('click', 'button', function (e) {
+            $.ajax('{link=novel.search.result}', {
+                type: 'post',
+                dataType: 'json',
+                data: {'searchkey': $('.addnovel input').val()},
+                beforeSend: function () {
+                    if (loading == null) {
+                        loading = layer.load(1, {shade: [0.1, '#000']});
+                    }
+                },
+                complete: function () {
+                    if (loading != null) {
+                        layer.close(loading);
+                        loading = null;
+                    }
+                },
+                success: function (res) {
+                    layer.open({
+                        type: 1,
+                        skin: 'layui-layer-rim',
+                        area: '720px',
+                        btn: false,
+                        title: false,
+                        content: '',
+                        success: function (layero, index) {
+                            var html = $(tpl_novel_search.innerHTML);
+                            tbody = html.find('tbody');
+                            $.each(res.data, function (k, v) {
+                                tbody.append('<tr data-id="' + v.id + '" data-name="' + v.name + '" data-cover="' + v.cover + '">' +
+                                    '<td>' + v.name + '</td>' +
+                                    '<td>' + v.author + '</td>' +
+                                    '<td>' + v.category + '</td>' +
+                                    '<td>' + v.allvisit + '</td>' +
+                                    '<td><a style="color: #FF5555;">添加</a></td>' +
+                                    '</tr>'
+                                );
+                            });
+                            layero.find('.layui-layer-content').append(html.html());
+                            layero.resize();
+                            layero.find('.layui-layer-content tbody').on('click', 'a', function () {
+                                var tr = $(this).parents('tr');
+                                if ($('.pt-booklist-novel-list input[name="novels[id][]"][value=' + tr.data('id') + ']').length) {
+                                    return layer.msg('本书已存在',function(){});
+                                }
+                                var html = $(tpl_novel.innerHTML);
+                                html.find('.id').val(tr.data('id'));
+                                html.find('.name').text(tr.data('name'));
+                                html.find('.pt-booklist-cover').attr('src', tr.data('cover'));
+                                html.prependTo('.pt-booklist-novel-list');
+                            })
+                        }
+                    })
+                },
+                error: function () {
+                    layer.alert('加载失败，请重试！', {icon: 2,});
+                }
+            });
+        }).on('keyup','input',function(e){
+            if (e.keyCode === 13){
+                $('.addnovel button').click();
+            }
+        });
+
+        $('.pt-booklist-novel-list').on('mouseleave','.pt-photo',function(){
+            $(this).find('.high').css('z-index', 0);
+            var count =  parseInt($(this).data('star'));
+            if (count === 5) {
+                $(this).children('span').children('.high').css('z-index', 1);
+            } else {
+                $(this).find('span').eq(count).prevAll().find('.high').css('z-index', 1);
+            }
+        }).on('mouseenter','.pt-photo span',function(){
+            $(this).prevAll().find('.high').css('z-index', 1);
+            $(this).find('.high').css('z-index', 1);
+            $(this).nextAll().find('.high').css('z-index', 0);
+        }).on('click','.pt-photo span',function(){
+            var index = $(this).index() + 1;
+            $(this).parents('.pt-photo')
+                .data('star',index)
+                .siblings('input[name="novels[star][]"]')
+                .val(index);
+        }).on('click','.remove',function(){
+            $(this).parents('li').remove();
+        }).on('keyup','textarea.comment',function () {
+            var str = $(this).val();
+            var len = str.length;
+            var reLen = 0;
+            for (var i = 0; i < len; i++) {
+                if (str.charCodeAt(i) < 33) {
+                    continue;
+                }
+                if (str.charCodeAt(i) >= 0 || str.charCodeAt(i) <= 128) {
+                    reLen += 1;
+                } else {
+                    reLen += 2;
+                }
+            }
+            if(reLen > 200){
+                $(this).addClass('color2').addClass('border-red');
+            }else{
+                $(this).removeClass('color2').removeClass('border-red');
+            }
+        });
+        $('.pt-photo').mouseleave();
+        $('.pt-rank form').submit(function(){
+            if (!($(this).find('input[name=title]').val())) {
+                layer.msg('标题不能为空', function () {
+                });
+                return false;
+            }
+            if ($(this).find('select[name="tags[]"]').val().length > 3) {
+                layer.msg('标签不能多于3个', function () {
+                });
+                return false;
+            }
+            if (!$(this).find('textarea[name=intro]').val()) {
+                layer.msg('简介不能为空', function () {
+                });
+                return false;
+            }
+            if ($(this).find('input[name="novels[id][]"]').length < 3) {
+                layer.msg('书籍不能少于三本', function () {
+                });
+                return false;
+            }
+            for (var i = 0; i < $(this).find('input[name="novels[id][]"]').length; i++) {
+                if (!$(this).find('textarea[name="novels[comment][]"]:eq(' + i + ')').val()) {
+                    layer.msg('书评不能为空', function () {
+                    });
+                    return false;
+                }
+                star = parseInt($(this).find('input[name="novels[star][]"]:eq(' + i + ')').val());
+                if (!star || star < 1 || star > 5) {
+                    layer.msg('评分必须介于1 - 5之间', function () {
+                    });
+                    return false;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

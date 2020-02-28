@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/style.css"/>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico"/>
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__"/>
+</head>
+<body>
+
+<!-- 导航栏 -->
+{include file="/system/header"}
+<!-- 内容 -->
+<div class="pt-content">
+    <div class="pt-crumb">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/crumb_icon.png" class="pt-crumb-icon">
+        <span class="color5">
+            <a title="{$kx.config.sitename}" href="{$kx.config.siteurl}">{$kx.config.sitename}</a> >
+            <a title="{$category.name}" href="{link=novel.category.list categoryid=$category.id key=$category.key}"
+               class="color5">{$category.name}</a> >
+            <a title="{$novel.name}" href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}"
+               class="color5">{$novel.name}</a> >
+            <a title="{$chapter.name}"
+               href="{link=novel.chapter.read novelid=$novel.id pinyin=$novel.pinyin chapterid=$chapter.id}"
+               class="color7">{$chapter.name}</a>
+        </span>
+    </div>
+
+    <!-- 阅读内容 -->
+    <div class="pt-read-cont">
+        <div class="pt-read-title">
+            <h1 class="lh100 size26 mb20"><a title="{$chapter.name}"
+                                             href="{link=novel.chapter.read novelid=$novel.id pinyin=$novel.pinyin chapterid=$chapter.id}"
+                                             class="color7">{$novel.name} {$chapter.name}</a></h1>
+            <div class="lh100 color4">
+                <span class="mr20">作者：<a title=""
+                                         href="{link=author.space.index authorid=$author.id pinyin=$author.pinyin name=$author.name}">{$author.name}</a></span>
+                <span class="mr20">分类：<a title="{$category.name}"
+                                         href="{link=novel.category.list categoryid=$category.id key=$category.key}"
+                                         class="color5">{$category.name}</a></span>
+                <span class="mr20">更新时间：{$chapter.time|date="Y-m-d H:i:s"}</span>
+                <span class="mr20">来源：<a title="{$site.name}" href="{$chapter.source}"
+                                         rel="nofollow">{$site.name}</a></span>
+            </div>
+        </div>
+        <div class="size16 color5 pt-read-text">
+            {$chapter.content|showchapter}
+        </div>
+        {if $chapter.type == \App\Model\Novel\Chapter::TYPE_TOLL && ($novel.type == \App\Model\Novel\Novel::TYPE_TOLL || $novel.type == \App\Model\Novel\Novel::TYPE_VIP_FREE && !\App\Model\User\User::I()->isVip($userId))}
+            {block method="chapter.issubscribe" userid=$userinfo.id novelid=$novel.id chapterid=$chapter.id name=$issubscribe}
+            {if !$issubscribe}
+            <div class="pt-read-toll" data-balance="{$userinfo.assets.balance}">
+                <h1 class="size24 color32 mt40">本章为付费章节，需要订阅后才能阅读</h1>
+                {block method=chapter.calculatePrice name=$price novelid=$novel.id userid=$userinfo.id}
+                <a class="inline-block mt50 mlr10" data-price="{$price}"
+                   href="{link=novel.novel.subscribe novelid=$novel.id chapters=$chapter.id all=1}">
+                    <span class="block size20 bold mt15">全部订阅</span>{$price}{$kx.config.user.money_caption}
+                </a>
+                {block method=novel.charge novelid=$novel.id name=$charge}
+                {~$charge = $userinfo.vip_expire_time < time()?$charge.words_money:$charge.words_vip_money}
+                {block method=chapter.calculatePriceByPrice wordsnum=$chapter.words price=$charge name=$price}
+                <a class="inline-block mt50 mlr10" data-price="{$price}"
+                   href="{link=novel.novel.subscribe novelid=$novel.id chapters=$chapter.id}">
+                    <span class="block size20 bold mt15">订阅本章</span>{$price}{$kx.config.user.money_caption}
+                </a>
+                <div class="mt50">
+                    <input type="checkbox" id="auto_subscribe" checked="checked">
+                    <label for="auto_subscribe">不再显示订阅提醒,自动订阅下一章</label>
+                </div>
+            </div>
+            {/if}
+        {/if}
+    </div>
+    <!-- 左侧 -->
+    <div class="pt-left">
+        <div class="pt-catalogue">
+            <div class="cursor pt-catalogue-btn">
+                <span class="pt-read-set-btn"></span>
+                <div class="pt-catalogue-text">目录</div>
+            </div>
+            <!-- 弹出 -->
+            <div class="pd20 pt-catalogue-pop pt-set-modal dir-content">
+
+            </div>
+        </div>
+        <div class="pt-set">
+            <div class="cursor pt-set-btn">
+                <span class="pt-read-set-btn"></span>
+                <div>设置</div>
+            </div>
+
+            <!-- 设置弹出 -->
+            <div class="pd20 pt-set-pop pt-set-modal">
+                <div class="pt-set-title">
+                    <span class="fl">设置</span>
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/read_close.png"
+                         class="fr img-15 pt-set-close cursor">
+                </div>
+                <div class="pt-set-list">
+                    <div class="mt20 mb25 pt-setcolor">
+                        <span class="fl mr40 size14 color62">阅读主题</span>
+                        <div class="fl pt-setcolor-list">
+                            <span class="mr20 pt-setcolor-01 pt-setcolor-select"></span>
+                            <span class="mr20 pt-setcolor-02"></span>
+                            <span class="mr20 pt-setcolor-03"></span>
+                            <span class="mr20 pt-setcolor-04"></span>
+                            <span class="mr20 pt-setcolor-05"></span>
+                            <span class="pt-setcolor-06"></span>
+                        </div>
+                    </div>
+                    <div class="mt20 mb25 size14 color62 pt-setfont">
+                        <span class="fl mr40">字体风格</span>
+                        <div class="fl pt-setfont-list">
+                            <span class="mr20 pt-setfont-01 pt-setfont-select">雅黑</span>
+                            <span class="mr20 pt-setfont-02">宋体</span>
+                            <span class="mr20 pt-setfont-03">楷书</span>
+                            <span class="mr20 pt-setfont-04">卡通</span>
+                        </div>
+                    </div>
+                    <div class="mt20 mb25 size14 color62 pt-setsize">
+                        <span class="fl mr40">字体风格</span>
+                        <div class="fl pt-setsize-list">
+                            <span class="mr20 pt-setsize-01">小</span>
+                            <span class="mr20 pt-setsize-02 pt-setsize-select">适中</span>
+                            <span class="mr20 pt-setsize-03">偏大</span>
+                            <span class="mr20 pt-setsize-04">超大</span>
+                        </div>
+                    </div>
+                    <div class="pt-setsave">
+                        <div class="mr20 cursor pt-setsave-btn">保存设置</div>
+                        <div class="cursor pt-setsave-regain">恢复默认</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="pt-phone">
+            <div class="cursor pt-phone-btn">
+                <span class="pt-read-set-btn"></span>
+                <div>手机</div>
+            </div>
+            <!-- 手机弹出 -->
+            <div class="pd20 pt-phone-pop pt-set-modal">
+                <div class="pt-phone-title">
+                    <span class="fl">手机阅读</span>
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/read_close.png"
+                         class="fr img-15 pt-phone-close cursor">
+                </div>
+                <div class="pt-phone-list">
+                    <div class="pt-code"></div>
+                    <div>扫码获取链接，使用浏览器打开</div>
+                    <div>书架同步，随时随地，手机阅读</div>
+                </div>
+            </div>
+        </div>
+        {block method="mark.check" name=$ismark userid=$userinfo.id novelid=$novel.id chapterid=$chapter.id}
+        <div class="pt-collect">
+            <div class="cursor pt-collect-btn btn-mark {$ismark|default="
+            ","active"}">
+            <span class="pt-read-set-btn"></span>
+            <div class="pt-collect-text">{$ismark|default="收藏","已收藏"}</div>
+        </div>
+    </div>
+    <div class="pt-bookinfo cursor">
+        <a title="{$novel.name}" href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}">
+            <div class="cursor pt-bookinfo-btn">
+                <span class="pt-read-set-btn"></span>
+                <div>书页</div>
+            </div>
+        </a>
+    </div>
+    <div class="pt-switch cursor">
+        <div class="cursor pt-switch-btn">
+            <span class="pt-read-set-btn"></span>
+            <div>换源</div>
+        </div>
+        <!-- 换源弹出 -->
+        <div class="pd20 pt-switch-pop pt-set-modal source-content"></div>
+    </div>
+    <div class="pt-tts cursor">
+        <div class="cursor pt-tts-btn">
+            <span class="pt-read-set-btn"></span>
+            <div>听书</div>
+        </div>
+        <!-- 手机弹出 -->
+        <div class="pd20 pt-tts-pop pt-set-modal">
+            <div class="pt-set-title">
+                <span class="fl">听书</span>
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/read_close.png"
+                     class="fr img-15 pt-set-close cursor">
+            </div>
+            <div class="pt-set-list">
+                <div class="mt20 mb25 size14 color62 pt-setfont">
+                    <span class="fl mr40">发声</span>
+                    <div class="fl pt-pre-list">
+                        <span class="mr20 pt-tts-set-btn" data-value="1">男声</span>
+                        <span class="mr20 pt-tts-set-btn pt-tts-set-btn-select" data-value="0">女生</span>
+                        <span class="mr20 pt-tts-set-btn" data-value="3">逍遥</span>
+                        <span class="mr20 pt-tts-set-btn" data-value="4">软萌</span>
+                    </div>
+                </div>
+                <div class="mt20 mb25 size14 color62 pt-setsize">
+                    <span class="fl mr40">语速</span>
+                    <div class="fl pt-spd-list">
+                        <span class="mr20 pt-tts-set-btn" data-value="0.7">慢</span>
+                        <span class="mr20 pt-tts-set-btn pt-tts-set-btn-select" data-value="1">适中</span>
+                        <span class="mr20 pt-tts-set-btn" data-value="1.5">快</span>
+                        <span class="mr20 pt-tts-set-btn" data-value="2">超快</span>
+                    </div>
+                </div>
+                <div class="mt20 mb25 size14 color62 pt-setsize">
+                    <span class="fl mr40">音量</span>
+                    <div class="fl pt-vol-list">
+                        <span class="mr20 pt-tts-set-btn" data-value="0.5">小</span>
+                        <span class="mr20 pt-tts-set-btn" data-value="0.7">适中</span>
+                        <span class="mr20 pt-tts-set-btn pt-tts-set-btn-select" data-value="1">大</span>
+                    </div>
+                </div>
+                <div class="mr20 cursor play">开始播放</div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- 右侧 -->
+<div class="pt-right">
+    <div class="cursor pt-comment">
+        <a title="{$novel.name}讨论区" href="{link=novel.comment.list novelid=$novel.id pinyin=$novel.pinyin}">
+            <div class="pt-comment-btn">
+                <span class="pt-read-set-btn"></span>
+                <div>评论</div>
+            </div>
+        </a>
+    </div>
+    <div class="cursor pt-recomment">
+        <div class="pt-recomment-btn">
+            <span class="pt-read-set-btn"></span>
+            <div>推荐</div>
+        </div>
+    </div>
+    <div class="cursor pt-feedback">
+        <div class="pt-feedback-btn">
+            <span class="pt-read-set-btn"></span>
+            <div>反馈</div>
+        </div>
+    </div>
+    <div class="cursor pt-return">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/read_return.png" class="mt20 pt-return-icon cursor">
+    </div>
+</div>
+<!-- 章节报错 -->
+<div class="pt-error pt-set-modal">
+    <div class="size26 color32 pt-error-title">
+        <span>章节报错</span>
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/read_close.png" class="img-15 pt-error-close cursor">
+    </div>
+    <div class="pt-error-chapter">
+        <span class="mr20 size16 color32 inline-block">当前章节</span>
+        <input class="color62 pt-error-chapter-cont" id="feedback_title" placeholder="{$chapter.name}" disabled></input>
+    </div>
+    <div class="relative pt-error-cont">
+        <span class="fl mr20 size16 color32 inline-block">报错内容</span>
+        <textarea id="feedback_content" placeholder="请描述您所遇到的问题"
+                  class="color62 pt10 pl20 color9 pt-error-text"></textarea>
+    </div>
+    <div class="pt-submit" id="feedback_submit">提交</div>
+</div>
+
+<!-- 底部按钮 -->
+<div class="pt-read-btn">
+    <a class="btn-mark {$ismark|default="","active"}"
+    data-is-mark="{$ismark}"><span>{$ismark|default="加入收藏","已收藏"}</span></a>
+    <a class="pt-prechapter" href="{$prevurl}">< {$prevpage|default="上一章","上一页"}</a>
+    <a href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}">章节列表</a>
+    <a class="pt-nextchapter" href="{$nexturl}">{$nextpage|default="下一章","下一页"} ></a>
+    <a class="pt-feedback-btn" href="javascript:void(0)">错误举报</a>
+</div>
+</div>
+
+<div class="pt-read-set-bg"></div>
+<script id="dirTpl" type="text/html">
+    <div class="pt-catalogue-title">
+        <span class="fl">{$novel.name}目录</span>
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/read_close.png"
+             class="fr img-15 pt-catalogue-close cursor">
+    </div>
+    <div class="ptb10 pt-catalogue-list">
+        {{# $.each(d,function(k,v){ }}{{# var cc=(v.id== '{$chapter.id}') ?'color2':'color62' }}
+        <div class="ptb5 size16 pt-catalogue-item" data-chapter-id="{{ v.id }}">
+            <a href="{{ v.url }}">
+                <div class="fl {{ cc }}">{{ v.name }}</div>
+            </a>
+            {{# if(!v.subscribe){ }}
+            <img class="fr" style="margin-top: 4px;margin-right: 30px" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/lock.png" alt="">
+            {{#}}}
+        </div>
+        {{# }) }}
+    </div>
+</script>
+<script id="sourceTpl" type="text/html">
+    <div class="pt-switch-title">
+        <span class="fl mr30">换源</span>
+        <span class="fl color92">共 {{ d.length }} 条小说来源</span>
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/read_close.png" class="fr img-15 pt-switch-close cursor">
+    </div>
+    <div class="pt-switch-list">
+        {{# $.each(d,function(k,v){ }}{{# var cc=(v.site.id== '{$site.id}') ?'color2':'color62' }}
+        <div class="size16 ptb20 pt-switch-item">
+            <a href="{{ v.url }}">
+                <span class="pt-switch-item-01 {{ cc }}">{{ v.site.name }}</span>
+                <span class="compulsory-row-one pt-switch-item-03 {{ cc }}">{{ v.name }}</span>
+            </a>
+        </div>
+        {{# }) }}
+    </div>
+</script>
+<!-- 底部版权-->
+{include file="/system/footer"}
+<script type="text/javascript">
+    var __ADD_STAR = '{link=user.star.add}'
+        , __NOVEL_NAME = '{$novel.name}'
+        , __ADD_MARK = '{link=user.mark.add}'
+        , __DEL_MARK = '{link=user.mark.del}'
+        , __ADD_VOTE = '{link=user.vote.add}'
+        , __RATING_COMMENT = '{link=novel.comment.rating}'
+        , __ADD_COMMENT = '{link=novel.comment.add}'
+        , __ADD_FEEDBACK = '{link=novel.novel.feedback}'
+        , __SHOW_TYPE = '{$show_type}'
+
+        , __NOVEL_ID = '{$novel.id}'
+        , __CHAPTER_ID = '{$chapter.id}'
+        , __SITE_ID_QUERY = '{$siteid}'
+
+        , __API_CHAPTER_SAME = '{link=api.novel.chapter.same responsetype=json}'
+        , __API_NOVEL_DIR = '{link=api.novel.novel.dir responsetype=json}'
+        , __API_CHAPTER_TRANSCODE = '{link=api.novel.chapter.transcode novelid=$novel.id chapterid=$chapter.id}'
+
+        , __PREVPAGE = '{$prevurl}'
+        , __NEXTPAGE = '{$nexturl}'
+        , __DIR = '{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}'
+
+        , __MOBILE_URL = '{$kx.config.mobileurl}__SELF__'
+        , __CHAPTER_PAGE = '{$current_page}';
+</script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/laytpl.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/read.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/jquery.qrcode.min.js"></script>
+<script>
+    $('.pt-read-toll a').click(function () {
+        if (parseInt($(this).data('price')) > parseInt($(this).parent().data('balance'))) {
+            layer.msg('余额不足，请先充值后再试。', {
+                time: 0,
+                btn: ['去充值', '取消'],
+                yes: function (index) {
+                    window.location.href = '{link=user.pay.recharge}';
+                }
+            });
+            return false;
+        }
+        $(this).attr('href', $(this).attr('href') + ($('#auto_subscribe').prop('checked') ? '&autosubscribe=1' : ''));
+    });
+</script>
+</body>
+</html>

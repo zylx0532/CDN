@@ -1,0 +1,51 @@
+<title>修改专题</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营管理</cite></a>
+        <a><cite>专题管理</cite></a>
+        <a><cite>专题列表</cite></a>
+        <a><cite>修改专题</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">修改专题</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="hidden" name="id">
+                                    <button class="layui-btn" type="button" lay-submit lay-filter="submit">确认</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            submit: '/manage/content/special/special/edit.json'
+        },
+        fields: [
+            {name: '专题名称', key: 'title', type: 'text',},
+            {name: '排序位置', key: 'position', type: 'num', value: 50},
+            {name: '封面', key: 'cover', type: 'img', url: '/manage/upload/image.json?multi=0', intro: "为保证页面显示效果，请上传尺寸为560*200像素的图片"},
+            {name: '阅读量', key: 'num_allvisit', type: 'text', value: 0},
+            {name: '专题概述', key: 'intro', type: 'textarea'},
+            {name: '状态', key: 'status', type: 'switch', extra: '正常|隐藏'},
+        ],
+    };
+    layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+</script>

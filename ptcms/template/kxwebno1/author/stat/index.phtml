@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据统计 - 原创专区 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/author/css/style.css"/>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico"/>
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__"/>
+    <style>
+
+    </style>
+</head>
+<body>
+{include file="/author/system/header"}
+<div class="body">
+    {include file="/author/system/left"}
+    <div class="right bg-white h100">
+        <div class="mlr20 mt30">
+            <span class="color0 size16">选择作品</span>
+            <select class="ml10 novel ptb5 pl10 pr40 border-c-e9  vertical-middle">
+                {loop=novels}
+                <option value="{$loop.id}">{$loop.name}</option>
+                {/loop}
+            </select>
+            <button class="ml10 plr30 ptb5 bg-red color1 view">查看</button>
+        </div>
+        <ul class="stat border stat_total mlr20 mt30" >
+            <li class="inline-block border-r" style="width: 25%;">
+                <span class="ml30 color0 block mt20 size16 bold">总点击</span>
+                <p class="ml30 color2 size24 mt10 mb20"><span class="num">0</span> <span class="color92 size14">次</span></p>
+            </li>
+            <li class="inline-block border-r" style="width: 25%;">
+                <span class="ml30 color0 block mt20 size16 bold">总收藏</span>
+                <p class="ml30 color2 size24 mt10 mb20"><span class="num">0</span> <span class="color92 size14">人</span></p>
+            </li>
+            <li class="inline-block border-r" style="width: 24%;">
+                <span class="ml30 color0 block mt20 size16 bold">总推荐</span>
+                <p class="ml30 color2 size24 mt10 mb20"><span class="num">0</span> <span class="color92 size14">票</span></p>
+            </li>
+            <li class="inline-block" style="width: 24%;">
+                <span class="ml30 color0 block mt20 size16 bold">总订阅</span>
+                <p class="ml30 color2 size24 mt10 mb20"><span class="num">0</span> <span class="color92 size14">次</span></p>
+            </li>
+        </ul>
+        <style>
+            table.stat th,
+            table.stat td{
+                text-align: center;
+                line-height: 66px;
+                border: 1px solid #E9E9E9;
+            }
+            table.stat th{
+                color: #323237;
+                background-color: #f5f5f5;
+                font-weight: 700;
+            }
+            table.stat td{
+                color: #626267;
+            }
+        </style>
+        <table class="mlr20 mt30 stat" style="width: 950px;">
+            <thead>
+            <tr>
+                <th>时间</th>
+                <th>点击</th>
+                <th>收藏</th>
+                <th>推荐</th>
+                <th>订阅</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="stat_day">
+                <td>今日</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr class="stat_week">
+                <td>本周</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            <tr class="stat_month">
+                <td>本月</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+                <td>0</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{include file="/author/system/footer"}
+{php}
+    $novelsJson = json_encode(
+        array_combine(
+            array_column($novels, 'id'),
+            array_map(function($novel){
+                return array_filter($novel, function ($key) {
+                    return in_array($key, [
+                        'id',
+                        'num_words',
+                        'num_allvisit',
+                        'num_monthvisit',
+                        'num_weekvisit',
+                        'num_dayvisit',
+                        'num_vote',
+                        'num_monthvote',
+                        'num_weekvote',
+                        'num_dayvote',
+                        'num_mark',
+                        'num_monthmark',
+                        'num_weekmark',
+                        'num_daymark',
+                        ]);
+                    }, ARRAY_FILTER_USE_KEY);
+            },$novels)
+        )
+    );
+{/php}
+<script>
+
+    var novels = {$novelsJson},
+        total = $('ul.stat_total'),
+        day = $('tr.stat_day'),
+        week = $('tr.stat_week'),
+        month = $('tr.stat_month');
+    $('button.view').click(function () {
+        var novel = novels[$('select.novel').val()];
+        total.find('li:eq(0) .num').html(novel.num_allvisit);
+        total.find('li:eq(1) .num').html(novel.num_mark);
+        total.find('li:eq(2) .num').html(novel.num_vote);
+        day.find('td:eq(1)').html(novel.num_dayvisit);
+        day.find('td:eq(2)').html(novel.num_daymark);
+        day.find('td:eq(3)').html(novel.num_dayvote);
+        week.find('td:eq(1)').html(novel.num_weekvisit);
+        week.find('td:eq(2)').html(novel.num_weekmark);
+        week.find('td:eq(3)').html(novel.num_weekvote);
+        month.find('td:eq(1)').html(novel.num_monthvisit);
+        month.find('td:eq(2)').html(novel.num_monthmark);
+        month.find('td:eq(3)').html(novel.num_monthvote);
+    }).click();
+</script>
+</body>
+</html>

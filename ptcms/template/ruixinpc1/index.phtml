@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/global.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/style.css"/>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="cnnovel.net">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+<script data-ad-client="ca-pub-4678019962533509" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+</head>
+<body>
+<!-- 头部 -->
+{include file="system/header"}
+<!-- 内容 -->
+<div class="pt-content mt10">
+    <!-- 一楼 -->
+    <div class="pt-floor1 clearfix">
+        <!-- 分类 -->
+        <div class="fl pt-index-category mt10">
+            <div class="pt-index-category-title">Category</div>
+            <ul class="w100 pt-index-category-list">
+                {block method="category.list" name=list withall=0 pid=1}
+                {loop=$list}
+                <li>
+                    <a title="{$loop.name}" href="{link=novel.category.list categoryid=$loop.id key=$loop.key}">
+                        <span class="color5 f_bold">{$loop.name}</span>
+                        <span class="size12 color9">{$loop.num}</span>
+                    </a>
+                </li>
+                {/loop}
+            </ul>
+        </div>
+        <!-- 轮播 -->
+        <div class="fl middle mt10">
+            <div class="fl pt-slider">
+                <ul class="pt-slider-main">
+                    {block method="banner" name=list key='pc_index'}
+                    {loop=$list}
+                    <li class="pt-slider-panel">
+                        <a href="{$loop.url}" title="{$loop.intro}">
+                            <img src="{$loop.img}" title="{$loop.intro}" class="pt-slider-thumb" alt="{$loop.intro}">
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+                <ul class="pt-slider-nav">
+                    {loop=$list}
+                    <li class="pt-slider-item"></li>
+                    {/loop}
+                </ul>
+            </div>
+            <div class="fl pt-news-list">
+                <div class="title">News <a href="{link=news.list}" class="fr size12 mr10 color9">More +</a></div>
+                <ul class="list clearfix">
+                    {block method="news.list" name=list num=6}
+                    {loop}
+                    <li>
+                        <a title="{$loop.category.name}" href="#" target="_blank"> <span class="color3">[{$loop.category.name}]</span></a>
+                        <a href="{link=news.detail newsid=$loop.id}" title="{$loop.title}" target="_blank"><span class="color4 pt-text">{$loop.title}</span></a>
+                    </li>
+                    {/loop}
+                </ul>
+            </div>
+        </div>
+        <!-- 新书推荐 -->
+        <div class="fr pt-new-recomment mt10" style="height:370px">
+            <div class="pt-new-recomment-title">NewRecommend</div>
+            <ul class="pt-new-recomment-list">
+                {block method="recommend" name=list recommendid=1 num=10}
+                {loop=$list}
+                <li>
+                    <a title="{$loop.data.category.name}" class="color3 f_bold" href="{link=novel.category.list categoryid=$loop.data.category.id key=$loop.data.category.key}">[{$loop.data.category.name}]</a>
+                    <a href="{link=novel.novel.index novelid=$loop.data.novel.id pinyin=$loop.data.novel.pinyin}" class="color4 pt-text" title="{$loop.data.novel.name}">{$loop.data.novel.name}</a>
+                </li>
+                {/loop}
+            </ul>
+        </div>
+    </div>
+    <!-- 二楼 -->
+    <div class="pt-floor2 mt20 clearfix">
+        <!-- 站长推荐 -->
+        <div class="pt-featured clearfix">
+            <div class="pt-featured-title">{$kx.config.sitename} Featured</div>
+            <ul class="pt-featured-list clearfix">
+                {block method="recommend" name=list recommendid=2 num=6}
+                {loop=$list}
+                <li>
+                    <a title="{$loop.data.novel.name}" href="{link=novel.novel.index novelid=$loop.data.novel.id pinyin=$loop.data.novel.pinyin}"><img src="{$loop.data.novel.cover}" alt="{$loop.data.novel.name}" title="{$loop.data.novel.name}"></a>
+                    <div class="pt-featured-list-cont">
+                        <div><a href="{link=novel.novel.index novelid=$loop.data.novel.id pinyin=$loop.data.novel.pinyin}" class="size16 color7 compulsory-row-one f_bold">{$loop.data.novel.name}</a></div>
+                        <div class="size14 color8" style="margin-top:8px"> <strong>Author：</strong><a title="{$loop.data.novel.name}" href="{link=author.space.index authorid=$loop.data.author.id pinyin=$loop.data.author.pinyin name=$loop.data.author.name}">{$loop.data.author.name}</a>
+                        </div>
+                        <div class="pt-featured-list-cont-intro compulsory-row-four size12 color9 mt10">{$loop.data.novel.intro|showIntroLine|truncate=50}</div>
+                        <div class="size12 color7"><a title="Click to enter the novel" href="{link=novel.novel.index novelid=$loop.data.novel.id pinyin=$loop.data.novel.pinyin}">Read >></a></div>
+                    </div>
+                </li>
+                {/loop}
+            </ul>
+        </div>
+        <!-- 点击榜 -->
+        <div class="pt-sexselect ">
+            <div class="size18 color4 w100  border-b" style="padding-bottom:8px;">
+                {block method="rank.info" name=rankinfo key=weekvisit}
+                <span class="pt-sexselect-man pt-sexselect-active cursor">{$rankinfo.name}</span>
+                {block method="rank.info" name=rankinfo key=monthvisit}
+                <span class="pt-sexselect-woman cursor">{$rankinfo.name}</span>
+            </div>
+            <ul class="pt-sexselect-list">
+                {block method="novel.list" name=list order=weekvisit num=12}
+                {section loop=$list item=$loop}
+                <li class="">
+                    <span class="{=$i.index<3?'bg-red':'bg-ccc'} pt-sexselect-square">{=$i.index + 1}</span>
+                    <a class="color5  f_bold" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                    <a title="{$loop.author.name}" class="color9 fr " href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">{$loop.author.name}</a>
+                </li>
+                {/section}
+            </ul>
+            <ul class="pt-sexselect-list none">
+                {block method="novel.list" name=list order=monthvisit num=12}
+                {section loop=$list item=$loop}
+                <li>
+                    <span class="{=$i.index<3?'bg-red':'bg-ccc'} pt-sexselect-square">{=$i.index + 1}</span>
+                    <a class="color5  f_bold" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                    <a title="{$loop.author.name}" class="color9 fr " href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">{$loop.author.name}</a>
+                </li>
+                {/section}
+            </ul>
+        </div>
+    </div>
+    <!-- 三楼 -->
+    <div class="pt-floor3 clearfix">
+        <!-- 分类 -->
+        <div class="pt-sort mt10">
+            {block method="category.list" name=list withall=0 pid=1 num=9}
+            {loop}
+            <div class="pt-sort-cont clearfix" style="width: 290px;min-height: 281px;">
+                <div class="pt-sort-cont-title">
+                    <span class="fl pt-sort-cont-title-icon"></span>
+                    <a title="{$loop.name}" href="{link=novel.category.list categoryid=$loop.id key=$loop.key}" class="size18 color3 f_bold">{$loop.name}</a>
+                </div>
+                {block method="novel.list" name=novellist num=5 category=$loop.id}
+                {section loop=$novellist item=$nlist}
+                {if $i.first}
+                <div class="pt-sort-top">
+                    <a href="{link=novel.novel.index novelid=$nlist.novel.id pinyin=$nlist.novel.pinyin}" title="{$nlist.novel.name}"><img src="{$nlist.novel.cover}" alt="{$loop.data.novel.name}"></a>
+                    <div class="pt-sort-top-r">
+                        <div class="size16 color7">
+                            <a href="{link=novel.novel.index novelid=$nlist.novel.id pinyin=$nlist.novel.pinyin}" title="{$nlist.novel.name}" class="size16 color7 fl compulsory-row-one">{$nlist.novel.name}</a>
+                        </div>
+                        <div class="compulsory-row-three size12 color4 pt-sort-r-intro">{$nlist.novel.intro|showIntroLine|truncate="50"}</div>
+
+                        <div class="size14 color4">
+                            <a title="{$nlist.author.name}" href="{link=author.space.index authorid=$nlist.author.id pinyin=$nlist.author.pinyin name=$nlist.author.name}" class="size14 color4 ">{$nlist.author.name}</a>Compile
+                        </div>
+                    </div>
+                </div>
+                {else}
+                <!-- 分类列表 -->
+                <div class="pt-sort-list clearfix">
+                    <a style="width:200px;" href="{link=novel.novel.index novelid=$nlist.novel.id pinyin=$nlist.novel.pinyin}" title="{$nlist.novel.name}" class="inline-block  fl compulsory-row-one color5">{$nlist.novel.name}</a>
+                    <a style="width:80px;" title="{$nlist.author.name}" href="{link=author.space.index authorid=$nlist.author.id pinyin=$nlist.author.pinyin name=$nlist.author.name}" class="inline-block compulsory-row-one fr color4">{$nlist.author.name}</a>
+                </div>
+                {/if}
+                {/section}
+            </div>
+            {/loop}
+        </div>
+        <!-- 推荐榜 -->
+        <div class="pt-sexselect mt10">
+            {block method="rank.info" name=rankinfo key=vote}
+            <div class="pt-sexselect-title border-b"><span class="fl pt-sexselect-title-icon"></span>{$rankinfo.name}</div>
+            <ul class="pt-sexselect-list">
+                {block method="novel.list" name=list order=$rankinfo.key num=15}
+                {section loop=$list item=$loop}
+                <li class="">
+                    <span class="{=$i.index<3?'bg-red':'bg-ccc'} pt-sexselect-square">{=$i.index + 1}</span>
+                    <a class="color5 f_bold" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                    <a title="{$loop.author.name}" class="color9 fr" href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">{$loop.author.name}</a>
+                </li>
+                {/section}
+            </ul>
+        </div>
+        <!-- 收藏榜 -->
+        <div class="pt-sexselect mt20">
+            {block method="rank.info" name=rankinfo key=mark}
+            <div class="pt-sexselect-title border-b"><span class="fl pt-sexselect-title-icon"></span>{$rankinfo.name}</div>
+            <ul class="pt-sexselect-list">
+                {block method="novel.list" name=list order=$rankinfo.key num=10}
+                {section loop=$list item=$loop}
+                <li class="">
+                    <span class="{=$i.index<3?'bg-red':'bg-ccc'} pt-sexselect-square">{=$i.index + 1}</span>
+                    <a class="color5 f_bold" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                    <a title="{$loop.author.name}" class="color9 fr" href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">{$loop.author.name}</a>
+                </li>
+                {/section}
+            </ul>
+        </div>
+    </div>
+    <!-- 四楼楼 -->
+    <div class="pt-floor4 clearfix">
+        <!-- 章节更新 -->
+        <div class="pt-update">
+            <div class="pt-update-title">{$kx.config.sitename} LastUpdate</div>
+            <ul class="pt-update-list">
+                {block method="novel.list" name=list order=lastupdate num=25 cachetime=180}
+                {loop}
+                <li class="clear {if $key%2}bg-f9{/if}">
+                    <a title="{$loop.category.name}" href="{link=novel.category.list categoryid=$loop.category.id key=$loop.category.key}" class="category"> [{$loop.category.name}] </a>
+                    <a title="{$loop.novel.name}" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" class="novelname size16 ">{$loop.novel.name}</a>
+                    <a title="{$loop.last.name}" href="{link=novel.chapter.read novelid=$loop.novel.id pinyin=$loop.novel.pinyin chapterid=$loop.last.id}" class="chaptername">{$loop.last.name}</a>
+                    <a title="{$loop.author.name}" href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}" class="color7 author">{$loop.author.name}</a>
+                    <span class="time">{$loop.last.time|date="m-d H:i"}</span>
+                </li>
+                {/loop}
+            </ul>
+        </div>
+        <!-- 新书榜 -->
+        <div class="pt-sexselect mt10">
+            {block method="rank.info" name=rankinfo key=postdate}
+            <div class="pt-sexselect-title border-b"><span class="fl pt-sexselect-title-icon"></span>{$rankinfo.name}</div>
+            <ul class="pt-sexselect-list">
+                {block method="novel.list" name=list order=$rankinfo.key num=15}
+                {section loop=$list item=$loop}
+                <li class="">
+                    <span class="{=$i.index<3?'bg-red':'bg-ccc'} pt-sexselect-square ">{=$i.index + 1}</span>
+                    <a class="color5 f_bold" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                    <a title="{$loop.author.name}" class="color9 fr" href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">{$loop.author.name}</a>
+                </li>
+                {/section}
+            </ul>
+        </div>
+        <!-- 下载榜 -->
+        <div class="pt-sexselect mt10">
+            {block method="rank.info" name=rankinfo key=down}
+            <div class="pt-sexselect-title border-b"><span class="fl pt-sexselect-title-icon"></span>{$rankinfo.name}</div>
+            <ul class="pt-sexselect-list">
+                {block method="novel.list" name=list order=$rankinfo.key num=15}
+                {section loop=$list item=$loop}
+                <li class="">
+                    <span class="{=$i.index<3?'bg-red':'bg-ccc'} pt-sexselect-square">{=$i.index + 1}</span>
+                    <a class="color5 f_bold" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                    <a title="{$loop.author.name}" class="color9 fr" href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">{$loop.author.name}</a>
+                </li>
+                {/section}
+            </ul>
+        </div>
+    </div>
+    <!-- 友情链接 -->
+    <div class="pt-blogroll">
+        <div class="pt-blogroll-title">
+            <span>Links</span>
+        </div>
+        <div class="pt-blogroll-list">
+            {block method="friendlink.list" name=list}
+            {loop=$list}
+            <a href="{$loop.url}" target="_blank" class="color4" {if !empty($loop.color)} style="color: {$loop.color};" {/if} title="{$loop.name}{$loop.intro}">
+            {$loop.is_bold|default='','<strong>'}{$loop.name}{$loop.is_bold|default='','</strong>'}
+            </a>
+            {/loop}
+        </div>
+    </div>
+</div>
+<!-- 底部版权-->
+{include file="/system/footer"}
+<!-- js-->
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/js/index.js"></script>
+</body>
+</html>

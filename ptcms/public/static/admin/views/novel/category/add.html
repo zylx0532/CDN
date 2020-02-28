@@ -1,0 +1,64 @@
+<title>分类管理</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>书籍管理</cite></a>
+        <a><cite>分类管理</cite></a>
+        <a><cite>添加</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">添加</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="hidden" name="id">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认添加</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var config;
+    layui.admin.req({
+        url: '/manage/data/response.json',
+        method: 'POST',
+        data: {category: 'select'},
+        success: function (res) {
+            config = {
+                api: {
+                    submit: '/manage/content/category/add.json'
+                },
+                fields: [
+                    {name: 'id', key: 'id', type: 'hide',},
+                    {name: '分类名称', key: 'name', type: 'text',},
+                    {name: '分类Key', key: 'key', type: 'text', intro: '只可以输入英文和数字'},
+                    {
+                        name: '上级分类',
+                        key: 'pid',
+                        type: 'select',
+                        extra: res.data.category.select,
+                        value: layui.router().search.pid
+                    },
+                    {name: '排序序号', key: 'position', type: 'num',value:50},
+                    {name: '显示状态', key: 'status', type: 'switch', extra: '显示|隐藏'},
+                ],
+            };
+            layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+        }
+    });
+</script>

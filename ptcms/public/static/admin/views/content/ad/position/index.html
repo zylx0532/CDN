@@ -1,0 +1,127 @@
+<title>广告位列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营设置</cite></a>
+        <a><cite>广告设置</cite></a>
+        <a><cite>广告位列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            batch: '/manage/content/ad/position/batch.json',
+            list: '/manage/content/ad/position/list.json',
+            del: '/manage/content/ad/position/del.json',
+            change: '/manage/content/ad/position/change.json',
+            rebuild: '/manage/content/ad/position/rebuild.json'
+        },
+        search: {},
+        topButton: {
+            add: {},
+            rebuild: {
+                text: '重建JS', action: function () {
+                    var checkData = layui.table.checkStatus('LAY-curd-table').data;
+                    if (checkData.length === 0) {
+                        return layui.layer.msg('请选择数据');
+                    }
+                    layer.confirm('请注意提交后操作就不能再恢复,您确定提交吗？', function (index) {
+                        var items = [];
+                        layui.each(checkData, function (k, v) {
+                            items.push(v.id);
+                        });
+                        layui.admin.req({
+                            url: config.api.rebuild,
+                            data: {
+                                items: items,
+                            },
+                            method: 'POST',
+                            success: function (res) {
+                                layui.table.reload('LAY-curd-table');
+                                layui.layer.msg('操作成功');
+                            }
+                        })
+                    });
+                }
+            },
+            enable: {field: 'status', value: '1'},
+            disable: {field: 'status', value: '0'},
+            del: {},
+        },
+        actionButton: {
+            ad: {
+                text: '广告管理',
+                action: function (obj) {
+                    location.hash = '/content/ad/position=' + obj.data.id + '/';
+                }
+            },
+            preview: {
+                text: '调用',
+                icon: 'layui-icon layui-icon-search',
+                action: function (obj) {
+                    layui.layer.open({
+                        type: 1,
+                        maxmin: true,
+                        skin: 'layui-layer-rim',
+                        area: '640px',
+                        btn: ['关闭'],
+                        title: obj.data.title + ' 预览',
+                        content: '<fieldset class="layui-elem-field"><legend>广告信息</legend><div class="layui-field-box">' +
+                            '<b>广告名称:</b>' + obj.data.title + '<br><br>' +
+                            '<b>广告描述:</b>' + obj.data.intro + '<br><br>' +
+                            '<b>广告尺寸:</b>' + '宽:' + obj.data.width + ',高:' + obj.data.height + '<br><br>' +
+                            '<b>模板语法:</b><input type="text" class="layui-input" value="{$kx.ad.' + obj.data.key + '}"><br>' +
+                            '<b>JS直接调用:</b><input type="text" class="layui-input" value="&lt;script type=&quot;text/javascript&quot; src=&quot;/'+obj.data.path+'/' + obj.data.key + '.js&quot;&gt;&lt;/script&gt;"><br>' +
+                            '</div></fieldset>',
+                    });
+                }
+            },
+            edit: {},
+            del: {},
+        },
+        table: {
+            page: true,
+            limit: 30,
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'ID', align: 'center', width: 60},
+                {field: 'title', title: '标题'},
+                {field: 'key', title: '标识'},
+                {field: 'width', title: '宽'},
+                {field: 'height', title: '高'},
+                {field: 'num', title: '广告数'},
+                {field: 'create_time', title: '发布时间', templet: '#table-timestamp', width: 160},
+                {field: 'update_time', title: '修改时间', templet: '#table-timestamp', width: 160},
+                {field: 'status', title: '状态', templet: '#table-switch', width: 100, data: {text: '正常|隐藏'}},
+                {title: '操作', width: 300, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

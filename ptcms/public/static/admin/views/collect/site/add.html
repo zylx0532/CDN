@@ -1,0 +1,58 @@
+<title>添加站点</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>站点管理</cite></a>
+        <a><cite>添加站点</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">添加站点</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="hidden" name="id">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认修改</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var config;
+    config = {
+        api: {
+            submit: '/manage/collect/site/add.json'
+        },
+        fields: [
+            {name: '站点名', key: 'name', type: 'text'},
+            {name: '站点关键词', key: 'key', type: 'text'},
+            {name: '站点地址', key: 'url', type: 'text'},
+            {name: '站点类型', key: 'type', type: 'radio', extra: "0:普通站点\n\r1:原创站点\n\r2:优质站点"},
+            {name: '站点权重', key: 'weight', type: 'num', value: 30, intro: "采集到的章节的权重，最大值100"},
+            {name: '样式', key: 'style', type: 'textarea'},
+            {name: '备注', key: 'desc', type: 'textarea'},
+            {name: '添加新书', key: 'new_add', type: 'switch', extra: '是|否'},
+            {name: '替换源站', key: 'new_replace', type: 'switch', extra: '是|否', intro: '第一次入库的时候是否替换源站为本站'},
+            {name: '最少章节', key: 'new_limit_chapternum', type: 'num', intro: '添加新书最少章节数'},
+            {name: '最少字数', key: 'new_limit_fontsize', type: 'num', intro: '添加新书最少章节数'},
+            {name: '添加条件', key: 'new_limit_exp', type: 'select', extra: '{"0":"或 [ OR ] 关系，最少章节与最少字数满足一个即可","1":"与 [ AND ] 关系，最少章节和最少字数必须都满足"}', intro: '添加新书条件'},
+            {name: '状态', key: 'status', type: 'switch', extra: '显示|隐藏'},
+        ],
+    };
+    layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+</script>

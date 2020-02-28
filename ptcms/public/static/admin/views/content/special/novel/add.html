@@ -1,0 +1,85 @@
+<title>添加小说</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营管理</cite></a>
+        <a><cite>专题管理</cite></a>
+        <a><cite>小说列表</cite></a>
+        <a><cite>添加小说</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">添加小说</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" type="button" lay-submit lay-filter="submit">确认</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="tpl-novel">
+    <div class="layui-form-item">
+        <label class="layui-form-label">小说名称</label>
+        <div class="layui-input-block">
+            <select name="novel_id" id="novel" lay-ignore></select>
+        </div>
+    </div>
+</script>
+<script>
+    var special_id = layui.router().search.special_id,
+        config = {
+            api: {
+                submit: '/manage/content/special/novel/add.json'
+            },
+            url: {
+                index: '/content/special/special_id=' + special_id + '/novel/'
+            },
+            done: function () {
+                layui.use(['form', 'select2'], function (exports) {
+                    layui.$('#novel').select2({
+                        width: '100%',
+                        ajax: {
+                            url: '/manage/content/recommendNovel/search.json',
+                            type: "POST",
+                            dataType: "json",
+                            delay: 1000,
+                            data: function (term) {
+                                return {
+                                    keyword: term.term,
+                                    access_token: layui.data('layuiAdmin').access_token
+                                };
+                            },
+                            processResults: function (data) {
+                                return {
+                                    results: data.data
+                                };
+                            }
+                        }
+                    });
+
+                });
+            },
+            fields: [
+                {name: 'special_id', key: 'special_id', type: 'hide', value: special_id},
+                {name: '小说名称', key: 'novel_id', templet: '#tpl-novel',},
+                {name: '小说评分', key: 'star', type: 'rate',},
+                {name: '小说评语', key: 'comment', type: 'textarea'},
+            ],
+        };
+    layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+</script>

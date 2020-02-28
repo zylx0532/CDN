@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>用户中心 - {$kx.config.sitename}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/style.css"/>
+</head>
+<body>
+
+	<!-- 头部 -->
+    {include file="/system/header"}
+	<!-- 内容 -->
+	<div class="pt-content">
+		<!-- 面包屑 -->
+		<div class="pt-crumb">
+			<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/crumb_icon.png" class="pt-crumb-icon">
+			<span class="color5">
+                <a href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > <a href="{link=user.index.index}" class="color5">用户中心</a>
+            </span>
+		</div>
+
+		<!-- 一楼 -->
+		<div class="pt-floor1">
+            {include file="/system/userleft"}
+			<div class="relative pt-rank pt-user text-center" style="padding: 0">
+                {block method=user.isvip userid=$userinfo.id name=$isvip}
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/vip1{=$isvip?'_active':''}.png" alt="{$userinfo.name}" class="mt50" style="width: 80px;height: 80px;">
+                {if $isvip}
+                <h1 class="size18 color32">尊敬的VIP会员您好</h1>
+                <p>您的VIP于{$userinfo.vip_expire_time|date='Y-m-d'}日到期，请您及时续费，以便给您带来不便</p>
+                {else}
+                <h1 class="size18 color32">尊敬的用户您好</h1>
+                <p>您还未开通超级VIP</p>
+                {/if}
+                <a href="{link=user.pay.vip}" class="inline-block plr25 ptb10 bg-red color1 mtb20">{=$isvip?'续费VIP':'立即开通VIP'}</a>
+                <div class="mt50 border-t pt35" style="height: 100px;text-align: left">
+                    <img class="ml40 mr20" style="vertical-align: middle" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/vip_privilege.png" alt="VIP特权">
+                    <span class="size16 color62 ml40 mr20">
+                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/vip_benefit_1.png" alt="首次充值立赠经验" style="vertical-align: middle;">
+                        首次充值立赠经验
+                    </span>
+                    <span class="size16 color62 ml40 mr20">
+                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/vip_benefit_2.png" alt="章节订阅更多折扣" style="vertical-align: middle;">
+                        章节订阅更多折扣
+                    </span>
+                    <span class="size16 color62 ml40">
+                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/vip_benefit_3.png" alt="海量书籍免费阅读" style="vertical-align: middle;">
+                        海量书籍免费阅读
+                    </span>
+                </div>
+			</div>
+            <div class="relative pt-user-table mt10">
+                <div style="line-height: 18px;margin-bottom:30px;">
+                    <span class="size18 color32 mr10 bold">VIP免费阅读</span>
+                </div>
+                <div>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th style="width: 150px;">书籍</th>
+                            <th style="width: 60px;">作者</th>
+                            <th style="width: 60px;">分类</th>
+                            <th style="width: 250px;">章节</th>
+                            <th style="width: 65px;">字数</th>
+                            <th style="width: 50px;">状态</th>
+                            <th style="width: 65px;">详情</th>
+                        </tr>
+                        </thead>
+                        <tbody class="color32">
+                        {block method="novel.list" name=novellist userid=$userinfo.id num=10 type=2}
+                        {if empty($novellist)}
+                        <tr class="empty">
+                            <td colspan="7">您似乎来到了没有数据存在的荒原~~~</td>
+                        </tr>
+                        {else}
+                        {section loop=$novellist item=$loop}
+                        <tr>
+                            <td>{$loop.novel.name}</td>
+                            <td>{$loop.author.name}</td>
+                            <td>{$loop.category.name}</td>
+                            <td>{$loop.last.name}</td>
+                            <td>{$loop.data.words}万</td>
+                            <td>{=$loop.is_over?'已完结':'连载中'}</td>
+                            <td><a class="color2" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}">立即阅读</a></td>
+                        </tr>
+                        {/section}
+                        {/if}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+	</div>
+	<!-- 底部版权-->
+    {include file="/system/footer"}
+	<!-- js-->
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/rankdetail.js"></script>
+</body>
+</html>

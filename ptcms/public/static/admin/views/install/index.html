@@ -1,0 +1,199 @@
+<script type="text/html" template>
+    <link rel="stylesheet" href="{{ layui.setter.base }}style/install.css?v={{ layui.admin.v }}-1" media="all">
+</script>
+
+<form class="layui-form layui-col-lg-offset3 layui-col-lg6" wid100 lay-filter="LAY-info-form">
+    <div class="layui-tab layui-tab-brief" lay-filter="install">
+        <div class="layadmin-install-box layadmin-install-header">
+            <h2>PT小说程序</h2>
+        </div>
+        <ul class="layui-tab-title layui-hide">
+            <li data-type="database" class="layui-this">数据库配置</li>
+            <li data-type="base">基本信息</li>
+        </ul>
+        <div class="layui-tab-content" style="height: 100px;">
+            <div class="layui-tab-item database layui-show">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数据库名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="db[name]" value="novel" class="layui-input">
+                        <div class="layui-form-mid layui-word-aux">将安装到哪个数据库？</div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="db[user]" value="root" class="layui-input">
+                        <div class="layui-form-mid layui-word-aux"> 您的数据库用户名。</div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="db[pwd]" value="root" class="layui-input">
+                        <div class="layui-form-mid layui-word-aux"> 您的数据库密码。</div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数据库主机</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="db[host]" value="localhost" class="layui-input">
+                        <div class="layui-form-mid layui-word-aux">如果localhost不能用，您通常可以从网站服务提供商处得到正确的信息。</div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数据库端口</label>
+                    <div class="layui-input-block">
+                        <input type="number" name="db[port]" value="3306" class="layui-input">
+                        <div class="layui-form-mid layui-word-aux">如果3306不能用，您通常可以从网站服务提供商处得到正确的信息。</div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-tab-item base">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">网站名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="config[sitename]" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">网站地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="config[siteurl]" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">PHP安装路径</label>
+                    <div class="layui-input-block">
+                        <select class="layui-input" lay-filter="php_path">
+                            <option value=""></option>
+                            <option value="/www/server/php/73/bin/php">宝塔7.3版本</option>
+                            <option value="/www/server/php/72/bin/php">宝塔7.2版本</option>
+                            <option value="/www/server/php/71/bin/php">宝塔7.1版本</option>
+                            <option value="/usr/local/php/bin/php">源码编译</option>
+                            <option value="/usr/bin/php">软链</option>
+                            <option value="customize">自定义</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item customize_php_path" style="display: none;">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-block">
+                        <input type="text" name="php_path" value="" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用户名</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="user[name]" value="admin" class="layui-input">
+                        <div class="layui-form-mid layui-word-aux">用户名只能含有字母、数字、空格、下划线、连字符、句号和“@”符号。</div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="user[password]" value="admin" class="layui-input">
+                        <div class="layui-form-mid layui-word-aux">重要： 您将需要此密码来登录前台，请将其保存在安全的位置。</div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">认证码</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="user[authcode]" value="admin" class="layui-input">
+                        <div class="layui-form-mid layui-word-aux">重要： 您将需要此认证码来登录后台，请将其保存在安全的位置。</div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">缓存扩展</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="cache[driver]" value="memcache" title="memcache">
+                        <input type="radio" name="cache[driver]" value="memcached" title="memcached" checked>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="layui-row">
+            <button lay-submit lay-filter="submit" class="layui-btn" style="float: right">下一步</button>
+        </div>
+    </div>
+</form>
+<script>
+    layui.use(['admin', 'form'], function () {
+        var $ = layui.$,
+            setter = layui.setter,
+            admin = layui.admin,
+            form = layui.form,
+            layer = layui.layer,
+            router = layui.router(),
+            element = layui.element;
+        layui.view.error = function (content, options) {
+            layer.closeAll();
+            return layer.open($.extend({
+                title: "温馨提示",
+                content: content,
+                maxWidth: 400,
+                icon: 2,
+                anim: 6,
+                id: 'LAY_adminError',
+                btn: ['我知道了']
+            }, options));
+        };
+        form.render();
+        $('input[name="config[siteurl]"]').val(location.protocol + '//' + location.host);
+
+        //提交
+        form.on('submit(submit)', function (obj) {
+            var type = $('.layui-tab-title .layui-this').data('type');
+            switch (type) {
+                case 'database':
+                    layer.load();
+                    admin.req({
+                        url: '/install.php?a=database',
+                        data: obj.field,
+                        method: 'POST',
+                        success: function (res) {
+                            $('.layui-tab-title .layui-this').removeClass('layui-this');
+                            $('.layui-tab-content .layui-show').removeClass('layui-show');
+                            $('.layui-tab-title li[data-type="base"]').addClass('layui-this');
+                            $('.layui-tab-content .base').addClass('layui-show');
+                            layer.closeAll();
+                        }
+                    });
+                    break;
+                case 'base':
+                    layer.load();
+                    admin.req({
+                        url: '/install.php',
+                        data: obj.field,
+                        method: 'POST',
+                        success: function (res) {
+                            layer.closeAll();
+                            layer.alert('已经安装妥当。如果想重新安装，请删除数据库中的旧数据表和安装锁文件(install.lock)。', {
+                                icon: 6,
+                                title: '安装成功',
+                                btn:['去后台'],
+                                yes: function (index) {
+                                    location.href = '/admin.php';
+
+                                }
+                            },);
+                        }
+                    });
+                    break;
+            }
+            return false;
+        });
+        $('#php_path').change(function(){
+            console.log(this);
+        });
+        form.on('select(php_path)', function(data){
+            if(data.value === 'customize'){
+                $('.customize_php_path').show().find('input[name=php_path]').val('');
+            }else{
+                $('.customize_php_path').show().find('input[name=php_path]').val(data.value);
+            }
+        });
+        $('.layui-tab-title').off();
+        $('.layui-tab-title li').off();
+    });
+</script>

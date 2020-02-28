@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/css/global.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/flexible.min.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+	<style>
+        .pt-search {
+            width: 100%;
+            padding: 0.20rem;
+            border-radius: 0.02rem;
+        }
+
+        .pt-search-box {
+            width: 80vw;
+            height: 0.30rem;
+            background-color: #f2f2f7;
+            padding-left: 0.13rem;
+        }
+
+        .pt-recall {
+            font-size: 0.1rem;
+        }
+
+        .history {
+            background-color: #fff;
+            margin: 10px;
+            padding: 10px;
+        }
+        .history h1{
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .history h1 span{
+            font-size: 12px;
+            float: right;
+        }
+        .history ul li{
+            display: inline-block;
+            background-color: #f0f0f0;
+            padding: 3px 10px;
+            border-radius: 4px;
+            margin: 5px;
+        }
+	</style>
+</head>
+<body>
+    <form action="{link=novel.search.result}" class="searchForm">
+        <div class="w100 bg-white flex-wrp flex-between flex-align-center pt-search">
+            <div class="flex-wrp flex-align-center pt-search-box" style="width: 80vw;">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/search.png" class="mr10 pt-search-icon" >
+                <input type="text" name="searchkey" class="size12 color4" style="width: 100%" placeholder="请输入您要搜索的关键书名">
+            </div>
+            <div class="pt-recall">取消</div>
+        </div>
+    </form>
+    <div class="history">
+        <h1>历史搜索 <span>清空</span></h1>
+        <ul></ul>
+    </div>
+
+    <!-- 底部版权 -->
+    {include file="/system/footer"}
+    <script>
+        var historyStr = window.localStorage.getItem('search_history');
+        historyList = typeof historyStr === 'string' ? historyStr.split('|||') : [];
+        $.each(historyList, function (k, v) {
+            if(v){
+                $('.history ul').append('<li><a href="{link=novel.search.result}?searchkey=' + encodeURI(v) + '">' + v + '</a></li>');
+            }
+        });
+        $('.searchForm img').click(function () {
+            $('.searchForm').submit();
+        });
+        $('.searchForm').submit(function () {
+            historyList.push($('.searchForm input[name=searchkey]').val());
+            var uniqueArr = [];
+            $.each(historyList, function(i, el){
+                if($.inArray(el, uniqueArr) === -1) uniqueArr.push(el);
+            });
+            window.localStorage.setItem('search_history', uniqueArr.join('|||'));
+        });
+        $('.history h1 span').click(function () {
+            $('.history ul li').remove();
+            window.localStorage.removeItem('search_history');
+        });
+    </script>
+</body>
+</html>

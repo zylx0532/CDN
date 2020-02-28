@@ -1,0 +1,12 @@
+<div class="footer text-center">
+    {block method="page.list" name=list}
+    <span class="aboutlink">
+        {loop=$list}
+        <a href="{link=page.detail pageid=$loop.id key=$loop.key}" title="{$loop.name}"> {$loop.name} </a>
+        {/loop}
+    </span>
+    <span class="inline-block ml40">Copyright © 2009 - 2019 <a href="{$pt.config.siteurl}" target="_blank">{$kx.config.sitename}</a>. All Rights Reserved . 版权所有{$kx.config.sitename}</span>
+</div>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/js/jquery-3.3.1.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/js/layer/layer.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/js/common.js"></script>

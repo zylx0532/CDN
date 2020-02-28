@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>作品信息 - 原创专区 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/css/style.css"/>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico"/>
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__"/>
+    <style>
+        .labels {
+            height: 51px;
+        }
+
+        .labels li {
+            padding: 15px 40px;
+            background-color: #e5e5e5;
+            color: #929297;
+            display: inline-block;
+            float: left;
+        }
+
+        .labels li:hover,
+        .labels li.active {
+            background-color: #fff;
+            color: #323237;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .cover {
+            width: 126px;
+            height: 167px;
+            background: url("https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/images/default_cover.jpg") no-repeat;
+            -webkit-background-size: 100% 100%;
+            background-size: 100% 100%;
+            margin-top: 60px;
+        }
+
+        .cover .name {
+            padding-top: 120px;
+            width: 100%;
+            text-align: center;
+            color: #323237;
+        }
+
+        input, textarea {
+            border: none !important;
+        }
+    </style>
+</head>
+<body>
+{include file="/author/system/header"}
+<div class="body">
+    {include file="/author/system/left"}
+    <div class="right">
+        <div class="labels">
+            <ul>
+                <li><a href="{link=author.chapter.index novelid=$kx.get.novelid type='draft'}">草稿箱</a></li>
+                <li><a href="{link=author.chapter.index novelid=$kx.get.novelid type='published'}">已发布</a></li>
+                <li><a href="{link=author.chapter.index novelid=$kx.get.novelid type='recycle'}">回收站</a></li>
+                <li class="active"><a href="{link=author.novel.index novelid=$kx.get.novelid}">作品设置</a></li>
+            </ul>
+        </div>
+        <div class="container bg-white">
+
+            <div class="h100 fl" style="width: 280px;">
+                <div class="cover ma">
+                    {if $novel.cover}
+                    <img class="w100 h100" src="{$novel.cover}" alt="">
+                    {else}
+                    <div class="name">{$novel.name}</div>
+                    {/if}
+                </div>
+            </div>
+            <div class="h100 fl" style="width: 600px;">
+                <div class="form-item">
+                    <label class="form-label" for="field_name">作品名称</label>
+                    <div class="form-input-block">
+                        <input type="text" name="name" id="field_name" value="{$novel.name}" readonly>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="form-label" for="field_id">书号</label>
+                    <div class="form-input-block">
+                        <input type="text" name="name" id="field_id" value="{$novel.id}" readonly>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="form-label" for="field_words">字数(万)</label>
+                    <div class="form-input-block">
+                        <input type="text" name="name" id="field_words" value="{$data.words}" readonly>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="form-label" for="field_mark">收藏</label>
+                    <div class="form-input-block">
+                        <input type="text" name="name" id="field_mark" value="{$data.mark}" readonly>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="form-label" for="field_category">作品类型</label>
+                    <div class="form-input-block">
+                        <input type="text" name="tags" id="field_category" value="{$category.name}" readonly>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="form-label" for="field_tags">作品类型</label>
+                    <div class="form-input-block">
+                        <input type="text" name="tags" id="field_tags" value="{$novel.tags}" readonly>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="form-label" for="field_intro">作品简介</label>
+                    <div class="form-input-block">
+                        <textarea name="intro" id="field_intro" cols="30" rows="10" readonly>{$novel.intro}</textarea>
+                    </div>
+                </div>
+                <div class="form-item">
+                    <label class="form-label"></label>
+                    <div class="form-input-block">
+                        <a href="{link=author.novel.edit novelid=$kx.get.novelid}"
+                           class="bg-red color1 plr20 ptb10">修改</a>
+                    </div>
+                </div>
+            </div>
+            <div style="clear: both"></div>
+        </div>
+    </div>
+</div>
+{include file="/author/system/footer"}
+</body>
+</html>

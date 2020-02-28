@@ -1,0 +1,10 @@
+<script src="//res2.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script>
+    wx.config({$config});
+    wx.ready(function () {
+        wx.chooseWXPay({$payconfig});
+    });
+    wx.error(function (res) {
+        alert(res)
+    });
+</script>

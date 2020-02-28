@@ -1,0 +1,2 @@
+/** PTNovelSearch-v4.1.2 LPPL License By http://www.ptcms.com/ */
+ ;layui.define(function(a){var e=(layui.$,layui.layer,layui.laytpl,layui.setter,layui.view,layui.admin);e.events.logout=function(){e.req({url:"/manage/user/logout.json",type:"get",data:{},done:function(a){e.exit()}})},a("common",{})});

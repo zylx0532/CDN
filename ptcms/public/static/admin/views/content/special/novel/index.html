@@ -1,0 +1,93 @@
+<title>书籍列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营管理</cite></a>
+        <a><cite>专题管理</cite></a>
+        <a><cite>书籍列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="addNovel">
+    <div style="margin: 10px 10px 0 0">
+        <form id="addNovelForm">
+            <div class="layui-form-item">
+                <label class="layui-form-label">书籍:</label>
+                <div class="layui-input-block">
+                    <select name="novel_id" id="novel" lay-ignore></select>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">评分:</label>
+                <div class="layui-input-block">
+                    <input type="hidden" name="star">
+                    <div id="star"></div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">评价:</label>
+                <div class="layui-input-block">
+                    <textarea name="comment" style="height: 350px;" placeholder="请输入评价"
+                              class="layui-textarea"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+</script>
+<script>
+    var config = {
+        api: {
+            list: '/manage/content/special/novel/list.json',
+            del: '/manage/content/special/novel/del.json',
+            add: '/manage/content/special/novel/add.json',
+        },
+        topButton: {
+            add: {},
+            del: {},
+        },
+        actionButton: {
+            edit: {},
+            del: {},
+        },
+        table: {
+            where: {special_id: layui.router().search.special_id},
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'novel_id', title: '书籍ID', align: 'center', width: 80},
+                {field: 'user', title: '用户', align: 'center', width: 100},
+                {field: 'novel', title: '书籍', width: 160},
+                {field: 'author', title: '作者', width: 160},
+                {field: 'star', title: '评分', align: 'center', width: 60},
+                {field: 'comment', title: '评价'},
+                {field: 'create_time', title: '创建时间', templet: '#table-timestamp'},
+                {title: '操作', width: 160, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

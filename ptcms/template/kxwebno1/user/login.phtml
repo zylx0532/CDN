@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>用户登录 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/login.css"/>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+</head>
+<body>
+<!-- 头部 -->
+<div class="w100 pt-head-bg" style="background:none;margin-top: 10px;">
+    <div class="pt-head">
+        <img src="https://qidian.gtimg.com/qd/images/logo_2x.78ab6.png" class="pt-logo" title="{$kx.config.sitename}">
+        <span class="lh100 size16 fr" style="margin-top: 50px;">我要免费看小说! 我要 <a title="注册" href="{link=user.auth.register}" class="color2">免费注册</a>，<a title="注册" href="{link=user.auth.login}" class="color2">登录已有账号</a></span>
+    </div>
+</div>
+
+<!-- 导航栏 -->
+<div class="pt-navbg" style="background:none;">
+    <div class="pt-nav" style="background-color: #FF5555;height: 76px">
+        <div class="text-center size26 color1 pt20">用户中心</div>
+    </div>
+</div>
+
+<!-- 内容 -->
+<div class="pt-content" style="margin: 27px auto;">
+    <div class="pt-login">
+        <div class="color4 pt-login-title">
+            <a data-type="login" class="cursor mr20 pb10 size16 pt-btn1 pt-select">账号登录</a>
+            {if $kx.config.oauth.power}
+            <a data-type="oauth" class="cursor size16 pb10 pt-btn2">快捷登录</a>
+            {/if}
+        </div>
+        <!-- 账号登录 -->
+        <div class="pt-login-box">
+            <form class="pt-accountlogin clearfix" method="post" action="{link=user.auth.login}">
+                <input type="text" name="username" placeholder="请输入您的账号" class="pt-login-account">
+                <input type="password" name="password" placeholder="请输入您的密码" class="pt-login-password">
+                <input type="hidden" name="comeurl" value="{$comeurl}">
+                <button class="cursor pt-login-btn">登录</button>
+                <div class="size12 color4" style="padding-bottom: 90px;">
+                    <div class="fr">
+                        <a href="{link=user.auth.register}" class="color4">注册账号</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="pt-oauth-box" style="display: none;margin-top: 100px;margin-bottom: 175px;">
+            <div class=" pt-quicklogin">
+                <a href="{link=user.auth.third type=qq}"><img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/qq.png"></a>
+                <a href="{link=user.auth.third type=weibo}"><img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/wb.png"></a>
+                <a href="{link=user.auth.third type=weixin}"><img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/wx.png"></a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- 底部版权-->
+<div class="pt-copyright" style="margin-top: 0;margin-bottom: 0;">
+    <div class="color4 footer-info">Copyright © 2009 - 2019 <a href="{$kx.config.siteurl}" target="_blank">{$kx.config.sitename}</a>. All Rights Reserved . 版权所有{$kx.config.sitename}</div>
+    <div class="color4 footer-info">Power by <a href="http://www.ptcms.com" target="_blank">PT聚合小说搜索聚合程序 {$kx.PRO_VERSION} Build{$kx.PRO_TIME}</a>，模版设计：<a href="http://www.pakey.net" target="_blank">Pakey</a>，<a href="http://www.miitbeian.gov.cn/" target="_blank" rel="nofollow">{$kx.config.beian}</a></div>
+</div>
+<div class="none">
+    {$kx.config.tongji.pc}
+</div>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/jquery-3.3.1.js"></script>
+<script>
+    $('.pt-login-title a').click(function () {
+        if ($(this).data('type') === 'oauth' && parseInt('{=$kx.config.oauth.power?0:1}')){
+            return alert('暂未开放');
+        }
+        $(this).addClass('pt-select').siblings().removeClass('pt-select');
+        if ($(this).data('type') === 'login'){
+            $('.pt-oauth-box').hide();
+            $('.pt-login-box').show();
+        }else{
+            $('.pt-login-box').hide();
+            $('.pt-oauth-box').show();
+        }
+    });
+</script>
+</body>
+</html>

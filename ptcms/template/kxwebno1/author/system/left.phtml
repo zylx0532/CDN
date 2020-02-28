@@ -1,0 +1,115 @@
+<div class="left bg-white">
+    <style>
+        .icon {
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 10px;
+        }
+
+        .icon-home {
+            background: url("https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/author/images/icon-home.png");
+        }
+
+        li.active .icon-home {
+            background: url("https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/author/images/icon-home-active.png");
+        }
+
+        .icon-novel {
+            background: url("https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/author/images/icon-novel.png");
+        }
+
+        li.active .icon-novel {
+            background: url("https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/author/images/icon-novel-active.png");
+        }
+
+        .icon-stat {
+            background: url("https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/author/images/icon-stat.png");
+        }
+
+        li.active .icon-stat {
+            background: url("https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/author/images/icon-stat-active.png");
+        }
+
+        .icon-money {
+            background: url("https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/author/images/icon-money.png");
+        }
+
+        li.active .icon-money {
+            background: url("https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/author/images/icon-money-active.png");
+        }
+
+        .icon-userinfo {
+            background: url("https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/author/images/icon-userinfo.png");
+        }
+
+        li.active .icon-userinfo {
+            background: url("https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/author/images/icon-userinfo-active.png");
+        }
+        .add_novel:before{
+            content: '+';
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+            left: 60px;
+            position: relative;
+            margin-left: -20px;
+            font-weight: 700;
+        }
+        .add_novel a{
+            color: #929292 !important;
+        }
+    </style>
+    <ul class="nav">
+        <li class="{=$pagesign == 'home'?'active':''}">
+            <a href="{link=author.author.index}">
+                <i class="icon icon-home"></i>专区首页
+            </a>
+        </li>
+        <li class="{=in_array($pagesign, ['novel','chapter'])?'active':''}">
+            {if in_array($pagesign, ['novel','chapter'])}
+            <a href="javascript:void(0);">
+                <i class="icon icon-novel"></i>作品管理
+            </a>
+            <ul class="sub-nav">
+                {loop=novels}
+                <li class="{=$kx.get.novelid==$loop.id?'active':''}" style="width: 165px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+                    <a href="{link=author.chapter.index novelid=$loop.id}" title="{$loop.name}">{$loop.name}</a>
+                </li>
+                {/loop}
+                <li class="add_novel"><a href="{link=author.novel.add}">创建作品</a></li>
+            </ul>
+            {else}
+            <a href="{link=author.novel.index}">
+                <i class="icon icon-novel"></i>作品管理
+            </a>
+            {/if}
+        </li>
+        <li class="{=$pagesign == 'stat'?'active':''}">
+            <a href="{link=author.stat.index}">
+                <i class="icon icon-stat"></i>数据统计
+            </a>
+        </li>
+        <li class="{=in_array($pagesign, ['incomeindex','incomerecord','incomemanage','incomeguarantee'])?'active':''}">
+            {if in_array($pagesign, ['incomeindex','incomerecord','incomemanage','incomeguarantee'])}
+            <a href="javascript:void(0);">
+                <i class="icon icon-money"></i>稿酬收入
+            </a>
+            <ul class="sub-nav">
+                <li class="{=$pagesign=='incomerecord'?'active':''}"><a href="{link=author.income.record}">收入明细</a></li>
+                <li class="{=in_array($pagesign, ['incomemanage','incomeguarantee'])?'active':''}"><a href="{link=author.income.manage}">提现管理</a></li>
+            </ul>
+            {else}
+            <a href="{link=author.income.record}">
+                <i class="icon icon-money"></i>稿酬收入
+            </a>
+            {/if}
+        </li>
+        <li class="{=$pagesign == 'authorinfo'?'active':''}">
+            <a href="{link=author.author.info}">
+                <i class="icon icon-userinfo"></i>作家资料
+            </a>
+        </li>
+    </ul>
+</div>

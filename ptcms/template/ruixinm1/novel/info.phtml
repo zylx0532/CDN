@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/css/global.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/flexible.min.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="mobile">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.mobileurl}__SELF__" />
+    {if ($kx.config.ampurl)}<link rel="amphtml" href="{$kx.config.ampurl}__SELF__">{/if}
+    {if ($kx.config.mipurl)} <link rel="miphtml" href="{$kx.config.mipurl}__SELF__">{/if}
+    <meta property="og:type" content="novel"/>
+    <meta property="og:title" content="{$novel.name}"/>
+    <meta property="og:description" content="{$novel.intro|showIntroLine}"/>
+    <meta property="og:image" content="{$novel.cover}"/>
+    <meta property="og:novel:category" content="{$category.name}"/>
+    <meta property="og:novel:author" content="{$author.name}"/>
+    <meta property="og:novel:book_name" content="{$novel.name}"/>
+    <meta property="og:novel:read_url" content="{$kx.config.mobileurl}{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}"/>
+    <meta property="og:url" content="{$kx.config.mobileurl}{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}"/>
+    <meta property="og:novel:author_link" content="{$kx.config.mobileurl}{link=author.space.index authorid=$author.id pinyin=$author.pinyin name=$author.name}"/>
+    <meta property="og:novel:status" content="{if $novel.is_over}完结{else} 连载中{/if}"/>
+    <meta property="og:novel:update_time" content="{$last.time|date='Y-m-d H:i:s'}"/>
+    <meta property="og:novel:latest_chapter_name" content="{$last.name}"/>
+    <meta property="og:novel:latest_chapter_url" content="{$kx.config.mobileurl}{link=novel.chapter.read novelid=$novel.id pinyin=$novel.pinyin chapterid=$last.id}"/>
+    <style>.pt-book-intro{overflow: hidden;text-overflow: ellipsis;display: -webkit-box;-webkit-box-orient: vertical;}</style>
+</head>
+<body>
+<!-- 头部 -->
+<div class="w100  bg-white flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/return.png" class="pt-return">
+    <div class="size18 bold color37">{$novel.name}</div>
+    <div>
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/ellipsis.png" class="mr5 pt-ellipsis">
+    </div>
+    <div class="pt5 pb5 pt-tip">
+        <a href="{link=index.index}" class="block color1 text-center pt-tip-item" title="{$kx.config.sitename}">前往首页</a>
+        <a href="{link=novel.search.index}" class="block color1 text-center pt-tip-item">搜索小说</a>
+        <a href="{link=user.mark.index}" class="block color1 text-center pt-tip-item" rel="nofollow">我的书架</a>
+        <a href="{link=user.index.index}" class="block color1 text-center pt-tip-item" rel="nofollow">个人中心</a>
+    </div>
+</div>
+
+<!-- 内容 -->
+<div class="flex-wrp bg-white pt-bookdetail">
+    <img src="{$novel.cover}" class="mr15">
+    <div class="flex-item flex-wrp flex-cell flex-between pt5">
+        <div class="flex-wrp flex-between lh100 w100 size14 color7">
+            <h1 class="size14">{$novel.name}</h1>
+            <div class="size12 color4">评分 <span class="size14 color2 num-avg-star" data-star-score="{$data.star_score}" data-star-num="{$data.star_num}">{$data.star_score}</span></div>
+        </div>
+        <div class="size12 lh100 ">作者：<a title="{$author.name}" href="{link=author.space.index authorid=$author.id pinyin=$author.pinyin name=$author.name}">{$author.name}</a></div>
+        <div class="size12 lh100 color4">分类：<a title="{$category.name}" href="{link=novel.category.list categoryid=$category.id key=$category.key}">{$category.name}</a></div>
+        <div class="size12 lh100 color4">
+            {=$data.words}万字 / {$data.allvisit}次点击
+        </div>
+        <div class="flex-wrp">
+            <div class="mr15 pt-btn {=$last.id?'bg-red':''}">
+                {if $last.id}
+                <a href="{link=novel.chapter.read novelid=$novel.id pinyin=$novel.pinyin chapterid=1}" class="color1">立即阅读</a>
+                {else}
+                <a href="javascript:void(0);" class="color42">立即阅读</a>
+                {/if}
+            </div>
+            <div class="pt-btn"><a title="{$novel.name}TXT全文下载" href="{link=novel.novel.down novelid=$novel.id pinyin=$novel.pinyin}" class="color42">TXT下载</a></div>
+        </div>
+    </div>
+</div>
+<div class="bg-white relative plr15 pb15 mb10 size12 color4">
+    <span class="compulsory-row-three pt-book-intro">{$novel.intro|showIntroLine}</span>
+    <span class="size12 color2 bg-white pt-open" style="right: .15rem;">[展开]</span>
+</div>
+
+<!-- 章节目录 -->
+<div class="w100 mb10 bg-white lh100 pt-chapter">
+    <div class="flex-wrp flex-between mb5">
+        <div class="size14 color7 bold pt-chapter-title">章节目录</div>
+        {if $last.id}
+        <div class="size12 color4">最近更新 {$last.time|date="m-d H:i:s"}</div>
+        {/if}
+    </div>
+    <div class="border-b pb5 pt-chapter-list">
+        {block method=chapter.list novelid=$novel.id num=3 name=$list sort=desc}
+        {loop}
+        <div class="flex-wrp flex-between pt10 pb10">
+            <a title="{$loop.name}" class="size12 color5 compulsory-row-one" style="width: 90%;height: 12px;" href="{link=novel.chapter.read novelid=$novel.id pinyin=$novel.pinyin chapterid=$loop.chapterid}">
+                {$loop.name}
+            </a>
+            {if $novel.type == App\Model\Novel\Novel::TYPE_TOLL || $novel.type == App\Model\Novel\Novel::TYPE_VIP_FREE && $userinfo.vip_expire_time < time()}
+                {if $loop.type == App\Model\Novel\Chapter::TYPE_TOLL}
+                    {block method="chapter.issubscribe" userid=$userinfo.id novelid=$novel.id chapterid=$loop.chapterid name=$issubscribe}
+                    {if !$issubscribe}
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/icon_lock.png" style="height: 16px;width: 16px;vertical-align: middle;margin-top: -3px;">
+                    {/if}
+                {/if}
+            {/if}
+        </div>
+        {/loop}
+    </div>
+    <a title="{$novel.name}最新章节目录" href="{link=novel.novel.dir novelid=$novel.id pinyin=$novel.pinyin}">
+        <div class="flex-wrp flex-between mt15">
+            <div class="size16 color4">
+                <img class="mr5" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/icon_read_catalog.png" alt="章节目录" style="vertical-align: middle;margin-top: -5px;width: 16px;">查看完整章节目录
+            </div>
+            <div>
+                <span class="size12 color4 mr15">共{$last.id}章</span>
+                <span class="size14 color5">></span>
+            </div>
+        </div>
+    </a>
+</div>
+<!-- 我要推荐 -->
+<div class="w100 ptb10 bg-white flex-wrp" style="position: fixed;bottom: 0;">
+    <div class="inline-block w33 flex-wrp flex-cell flex-center pt-tj-btn">
+        <div class="inline-block size12 color92">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/icon_vote.png" alt="推荐">
+            推荐 (<span class="num-vote">{$data.vote}</span>)
+        </div>
+    </div>
+    <div class="inline-block w33 flex-wrp flex-cell flex-center pt-star-btn">
+        <div class="inline-block size12 color92">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/icon_star.png" alt="评分">
+            评分 (<span class="num-star-people">{$data.star_num}</span>)
+        </div>
+    </div>
+    <div class="inline-block w33 flex-wrp flex-cell flex-center btn-mark">
+        <div class="inline-block size12 color92">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/icon_mark.png" alt="收藏">
+            <span class="mark-title">{$ismark|default='收藏','取消收藏'}</span> (<span class="num-mark">{$data.mark}</span>)
+        </div>
+    </div>
+</div>
+<div class="w100 mt10 mb10 ptb15 bg-white flex-wrp">
+    <div class="w50 flex-wrp border-r-d5 flex-center btn-interactive-vote">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/icon_ticket.png" alt="我要砸月票">
+        <span class="ml10 size16 color32 bold">我要砸月票</span>
+    </div>
+    <div class="w50 flex-wrp border-r-d5 flex-center btn-interactive-reward">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/icon_reward.png" alt="我要赏红包">
+        <span class="ml10 size16 color32 bold">我要赏红包</span>
+    </div>
+</div>
+
+<!-- 本书作者 -->
+<div class="w100 mb10 bg-white lh100 pt-new">
+    <div class="flex-wrp flex-between border-b">
+        <div class="size14 color7 bold pt-new-title">本书作者</div>
+        <a href="{link=author.space.index authorid=$author.id pinyin=$author.pinyin name=$author.name}" class="size12 color4 mr15">查看详情 ></a>
+    </div>
+
+    <div class="flex-wrp pt-author-pro border-b">
+        <img src="/static/image/noavatar.gif" class="mr10 pt-author-icon" alt="{$author.name}">
+        <div class="flex-item flex-wrp flex-cell flex-around">
+            <div class="size14 color32">{$author.name}</div>
+            <div class="compulsory-row lh140 size12 color4">VIP签约作家</div>
+        </div>
+    </div>
+
+    <div class="w100 overflow-x">
+        <div class="flex-wrp pt-new-cont">
+            {block method="novel.list" name=list author=$author.id num=6 order='postdate'}
+            {section loop=$list item=$loop}
+            <a title="{$loop.novel.name}" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}">
+                <div class="size12 pt-new-item">
+                    <img src="{$loop.novel.cover}" alt="{$loop.novel.name}">
+                    <div class="compulsory-row pt10 pb5 color7">{$loop.novel.name}</div>
+                </div>
+            </a>
+            {/section}
+        </div>
+    </div>
+</div>
+
+<!-- 热门评论 -->
+<div class="w100 mb10 bg-white lh100 pt-comment" style="min-height: 11vh;">
+    <div class="flex-wrp flex-between ">
+        <div class="size14 color7 bold pt-comment-title">热门评论</div>
+        <a title="{$author.name}讨论区" href="{link=novel.comment.list novelid=$novel.id pinyin=$novel.pinyin}" class="size12 color4 mr15">查看全部 ></a>
+    </div>
+    {block method="comment.list" name=commentlist type='novel' userid=$userinfo.id typeid=$novel.id}
+    {if empty($commentlist)}
+    <div style="text-align: center;padding-bottom: .1rem;">暂无评论</div>
+    {else}
+    {loop=commentlist}
+    <div class="flex-wrp plr15 pt-comment-cont" data-comment-id="{$loop.id}">
+        <img src="{$loop.user.avatar}" class="mr20 pt-comment-icon" alt="{$loop.user.name}">
+        <div class="flex-item flex-wrp flex-cell flex-around">
+            <div class="flex-wrp lh100 flex-between">
+                <div class="size14 color4">{$loop.user.name}</div>
+                <div class="size12 color4">{$loop.datetime|date="Y-m-d H:i:s"}</div>
+            </div>
+            <a href="{link=novel.comment.post novelid=$novel.id pinyin=$novel.pinyin commentid=$loop.id}">
+                <div class="compulsory-row lh150 ptb10 size14 color32">{$loop.content}</div>
+            </a>
+            <div class="text-right lh100 comment-btn {$loop.rating|boolval|default='','disable'}">
+                <div class="inline-block comment-btn-up {=$loop.rating=='good'?'active':''}">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/praise{=$loop.rating=='good'?'_hover':''}.png" alt="">
+                    <span class="size12 color4 number">{$loop.good_num}</span>
+                </div>
+                <div class="inline-block comment-btn-down {=$loop.rating=='bad'?'active':''}">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/tread{=$loop.rating=='bad'?'_hover':''}.png" alt="">
+                    <span class="size12 color4 number">{$loop.bad_num}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/loop}
+    {/if}
+</div>
+
+<!-- 猜你喜欢 -->
+<div class="w100 bg-white lh100 pt-recomment">
+    <div class="size14 color7 bold pt-recomment-title">猜你喜欢</div>
+    <div class="pt-recomment-cont">
+        {block method="novel.list" name=list order=weekvisit sort=desc num=3}
+        {section loop=$list item=$loop}
+        <div class="flex-wrp pt-recomment-item">
+            <a href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}">
+                <img src="{$loop.novel.cover}" class="mr15" alt="{$loop.novel.name}">
+            </a>
+            <div class="flex-item pt5" style="max-width: 2.65rem">
+                <div class="flex-wrp flex-between">
+                    <div class="size14 color7">
+                        <a href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                    </div>
+                    <div class="color2 size14">{$loop.data.mark} <span class="size12">人在追</span></div>
+                </div>
+                <div class="size12 compulsory-row mb10 mt10 lh130 color4">
+                    {$loop.novel.intro}
+                </div>
+                <div class="flex-wrp flex-between">
+                    <div class="color5 size12"><a href="">{$loop.author.name}</a></div>
+                    <div class="pt-recomment-label"><a title="{$loop.category.name}" href="{link=novel.category.list categoryid=$loop.category.id key=$loop.category.key}">{$loop.category.name}</a></div>
+                </div>
+            </div>
+        </div>
+        {/section}
+    </div>
+</div>
+
+<!-- 我要评分 -->
+<div class="pt-pop-grade pt-star-box" data-type="star">
+    <div class="pt-cont">
+        <div class="flex-wrp flex-between flex-align-center plr25">
+            <div class="pt-close"></div>
+            <div class="flex-wrp flex-center">
+                <div class="size18 bold colord5">—</div>
+                <div class="bold size18 color2 plr15">我要评分</div>
+                <div class="size18 bold colord5">—</div>
+            </div>
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_pop_catalogue_close.png" class="pt-close">
+        </div>
+        <div class="flex-wrp flex-flow-row flex-around plr10 mt30">
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="1"><span class="size14">1</span>分</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="2"><span class="size14">2</span>分</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="3"><span class="size14">3</span>分</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="4"><span class="size14">4</span>分</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="5"><span class="size14">5</span>分</div>
+        </div>
+        <div class="flex-wrp flex-center size14 color1 pt-submit">确认提交</div>
+    </div>
+</div>
+<!-- 成功评分、已添加到书架、已推荐 -->
+<div class="pt-pop-grade pt-tj-box" data-type="vote">
+    <div class="pt-cont">
+        <div class="flex-wrp flex-between flex-align-center plr25">
+            <div class="pt-close"></div>
+            <div class="flex-wrp flex-center">
+                <div class="size18 bold colord5">—</div>
+                <div class="bold size18 color2 plr15">我要推荐</div>
+                <div class="size18 bold colord5">—</div>
+            </div>
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_pop_catalogue_close.png" class="pt-close">
+        </div>
+        <div class="flex-wrp flex-flow-row flex-around plr10 mt30">
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="1"><span class="size14">1</span>票</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="2"><span class="size14">2</span>票</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="3"><span class="size14">3</span>票</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="4"><span class="size14">4</span>票</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="5"><span class="size14">5</span>票</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="6"><span class="size14">6</span>票</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="7"><span class="size14">7</span>票</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="8"><span class="size14">8</span>票</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="9"><span class="size14">9</span>票</div>
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="all">所有</div>
+        </div>
+        <div class="flex-wrp flex-center size14 color1 pt-submit">确认提交</div>
+    </div>
+</div>
+<!-- 我要投票 月票 -->
+<div class="pt-pop-grade pt-interactive-vote-box" data-type="interactive-vote" data-value="1">
+    <div class="pt-cont">
+        <div class="flex-wrp flex-between flex-align-center plr25">
+            <div class="pt-close"></div>
+            <div class="flex-wrp flex-center">
+                <div class="size18 bold colord5">—</div>
+                <div class="bold size18 color2 plr15">我要投票</div>
+                <div class="size18 bold colord5">—</div>
+            </div>
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_pop_catalogue_close.png" class="pt-close">
+        </div>
+        <div class="text-center plr10 mt30 mb20">
+            <div><img style="width: 50px;" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/ticket.png" alt="我要投票"></div>
+            <div class="size16 bold color32 mt30 mb20">当前共计 <span class="color2 total">{$userinfo.assets.surplus_ticket}</span> 张{$kx.config.user.ticket_caption}，请选择投票数</div>
+            <div class="ticket_select">
+                <button class="bold minus"></button>
+                <span class="size18 plr15 color2 bold">1</span>
+                <button class="bold plus"></button>
+            </div>
+        </div>
+        <div class="flex-wrp flex-center size14 color1 bg-red pt-submit">确认提交</div>
+    </div>
+</div>
+<!-- 我要打赏 -->
+<div class="pt-pop-grade pt-interactive-reward-box" data-type="interactive-reward">
+    <div class="pt-cont">
+        <div class="flex-wrp flex-between flex-align-center plr25">
+            <div class="pt-close"></div>
+            <div class="flex-wrp flex-center">
+                <div class="size18 bold colord5">—</div>
+                <div class="bold size18 color2 plr15">我要打赏</div>
+                <div class="size18 bold colord5">—</div>
+            </div>
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/read_pop_catalogue_close.png" class="pt-close">
+        </div>
+        <div class="flex-wrp flex-flow-row flex-around plr10 mt30">
+            {loop=$kx.config.reward.list}
+            <div class="flex-wrp flex-center color62 size12 mb15 pt-square" data-value="{$loop}">
+                <span class="size14">{$loop}</span>{$kx.config.user.money_caption}
+            </div>
+            {/loop}
+        </div>
+        <div class="flex-wrp flex-flow-row flex-around mt30 mb20">
+            <span class="size16 color62" style="margin-left: -20px;">当前账户余额：<span class="color2 size18 plr5">{$userinfo.assets.balance}</span>{$kx.config.user.money_caption}</span>
+            <a class="color2 size14" style="margin-top: 2px;" href="{link=user.pay.recharge}">前往充值></a>
+        </div>
+        <div class="flex-wrp flex-center size14 color1 pt-submit">确认提交</div>
+    </div>
+</div>
+<!-- 底部版权 -->
+{include file="/system/footer"}
+<script>var __ADD_STAR='{link=user.star.add}',__NOVEL_ID='{$novel.id}',__NOVEL_NAME='{$novel.name}',__ADD_MARK='{link=user.mark.add}',__DEL_MARK='{link=user.mark.del}',__ADD_VOTE='{link=user.vote.add}',__RATING_COMMENT='{link=novel.comment.rating}',__ADD_COMMENT='{link=novel.comment.add}',__ADD_VOTE_TICKET='{link=novel.novel.ticket}',__ADD_REWARD='{link=novel.novel.reward}';</script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/layer/mobile/layer.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/novel.js"></script>
+</body>
+</html>

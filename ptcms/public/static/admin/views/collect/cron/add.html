@@ -1,0 +1,74 @@
+<title>添加任务</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>任务管理</cite></a>
+        <a><cite>添加任务</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">添加任务</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="command">
+
+</script>
+<script>
+    var config = {
+        api: {
+            submit: '/manage/collect/cron/add.json'
+        },
+        done: function (layui) {
+            layui.$('input[name=customize]').parents('.layui-form-item').hide();
+            layui.form.on('select(action)', function (data) {
+                console.log(data);
+                if (data.value !== 'collect:update:list' && data.value !== 'collect:cleanLog') {
+                    layui.$('input[name=customize]').parents('.layui-form-item').show();
+                } else {
+                    layui.$('input[name=customize]').parents('.layui-form-item').hide();
+                }
+            });
+        },
+        fields: [
+            {name: '任务名', key: 'name', type: 'text',},
+            {
+                name: '执行命令',
+                key: 'action',
+                type: 'select',
+                filter: 'action',
+                extra: {
+                    'collect:update:list': '列表采集',
+                    'cron:cleanLog': '清理采集日志',
+                    'customize': '自定义',
+                },
+                intro: "一旦添加不允许修改所调用的任务"
+            },
+            {name: '自定义命令行', key: 'customize', type: 'text',},
+            {name: '参数', key: 'param', type: 'text',},
+            {name: '运行时间', key: 'interval', type: 'text', intro: '时间间隔(单位秒)或当天具体时刻'},
+            {name: '状态', key: 'status', type: 'switch', extra: '启用|禁用'},
+        ],
+    };
+    layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+</script>

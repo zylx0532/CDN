@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>我的书单 - 用户中心 - {$kx.config.sitename}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/style.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/jquery-3.3.1.js"></script>
+</head>
+<body>
+	<!-- 头部 -->
+    {include file="/system/header"}
+
+	<!-- 内容 -->
+	<div class="pt-content">
+		<!-- 面包屑 -->
+		<div class="pt-crumb">
+			<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/crumb_icon.png" class="pt-crumb-icon">
+			<span class="color5">
+                <a href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > <a href="{link=user.index.index}" class="color5">用户中心</a> > <a href="{link=user.booklist.index}">我的书架</a>
+            </span>
+		</div>
+
+
+		<!-- 一楼 -->
+		<div class="pt-floor1">
+            {include file="/system/userleft"}
+			<div class="relative pt-rank">
+                {block method=booklist.list userid=$userinfo.id name=list type=create status=all}
+				<div class="pt-booklist-head">
+					<span class="size16 color3 pl10" style="border-left:5px solid #f55;">我的书单 ({$list|count})</span>
+                    <a href="{link=detail}" class="fr color4 size14">
+                        <span class="size14" style="line-height: 20px;">创建书单</span>
+                        <img src="/template/kxwebno1/images/plus.png">
+                    </a>
+				</div>
+                <ul class="pt-booklist">
+                    {loop}
+                    <li class="pt-booklist-detail">
+                        <a href="{link=detail id=$loop.id}">
+                            <img class="fl pt-booklist-cover" src="{$loop.cover}" alt="{$loop.title}">
+                            <div class="fl pt-booklist-info">
+                                <span class="fl mr60 size24 color3">{$loop.title}</span>
+                                <span class="mr30 fl color62 w100">
+                                    {$loop.user.name}<span class="fr color0">创建于 {$loop.create_time|date="Y-m-d H:i"}</span>
+                                </span>
+                                <div class="compulsory-row fl w100 color92 desc" style="margin-bottom:5px;margin-top:8px;">
+                                    {$loop.intro|showIntroLine}
+                                </div>
+                                <div class="stat">
+                                    书籍 <span class="color2">{$loop.num_novel}</span><span class="color3 plr5">/</span>
+                                    历史浏览 <span class="color2">{$loop.num_allvisit}</span><span class="color3 plr5">/</span>
+                                    收藏 <span class="color2">{$loop.num_mark}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+                <div class="clearfix"></div>
+                {block method=booklist.list userid=$userinfo.id name=list type=mark}
+                <div class="pt-booklist-head">
+                    <span class="size16 color3 pl10" style="border-left:5px solid #f55;">收藏的书单 ({$list|count})</span>
+                </div>
+                <ul class="pt-booklist">
+                    {loop}
+                    <li class="pt-booklist-detail">
+                        <a href="{link=booklist.booklist.detail booklistid=$loop.id}">
+                            <img class="fl pt-booklist-cover" src="{$loop.cover}" alt="{$loop.title}">
+                            <div class="fl pt-booklist-info">
+                                <span class="fl mr60 size24 color3">{$loop.title}</span>
+                                <span class="mr30 fl color62 w100">
+                                    {$loop.user.name}<span class="fr color0">创建于 {$loop.create_time|date="Y-m-d H:i"}</span>
+                                </span>
+                                <div class="compulsory-row fl w100 color92 desc" style="margin-bottom:5px;margin-top:8px;">
+                                    {$loop.intro|showIntroLine}
+                                </div>
+                                <div class="stat">
+                                    书籍 <span class="color2">{$loop.num_novel}</span><span class="color3 plr5">/</span>
+                                    历史浏览 <span class="color2">{$loop.num_allvisit}</span><span class="color3 plr5">/</span>
+                                    收藏 <span class="color2">{$loop.num_mark}</span>
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+                    {/loop}
+                </ul>
+			</div>
+		</div>
+	</div>
+
+	<!-- 底部版权-->
+    {include file="/system/footer"}
+
+	<!-- js-->
+</body>
+</html>

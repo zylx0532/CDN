@@ -1,0 +1,112 @@
+<title>提现申请</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>书籍管理</cite></a>
+        <a><cite>专区原创</cite></a>
+        <a><cite>提现申请</cite></a>
+        <a><cite>提现申请列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+    <script type="text/html" id="status">
+        {{# if(d.VALUE === '1'){ }}
+        <span class="layui-badge layui-bg-gray">待处理</span>
+        {{# }else if(d.VALUE === '2'){ }}
+        <span class="layui-badge">已拒绝</span>
+        {{# }else if(d.VALUE === '3'){ }}
+        <span class="layui-badge layui-bg-blue">已通过</span>
+        {{# }else{ }}
+        <span class="layui-badge-rim">未知状态</span>
+        {{# }}}
+    </script>
+</div>
+<script>
+    var config = {
+        api: {
+            list: '/manage/withdraw/list.json',
+            audit: '/manage/withdraw/audit.json'
+        },
+        actionButton: {
+            past: {
+                text: '通过',
+                style: 'layui-btn-blue',
+                icon: 'layui-icon layui-icon-ok',
+                action: function (obj) {
+                    layer.confirm('确定要 <span style="color: #009688;">[通过]</span> 这条申请记录吗?', function (index) {
+                        layui.admin.req({
+                            url: config.api.audit,
+                            data: {id: obj.data.id, status: 3},
+                            method: 'POST',
+                            success: function (res) {
+                                layer.msg('操作成功');
+                                layui.table.reload('LAY-curd-table');
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }
+            },
+            reject: {
+                text: '拒绝',
+                style: 'layui-btn-danger',
+                icon: 'layui-icon layui-icon-close',
+                action: function (obj) {
+                    layer.confirm('确定要 <span style="color: #ff5722;">[拒绝]</span> 这条申请记录吗?', function (index) {
+                        layui.admin.req({
+                            url: config.api.audit,
+                            data: {id: obj.data.id, status: 2},
+                            method: 'POST',
+                            success: function (res) {
+                                layer.msg('操作成功');
+                                layui.table.reload('LAY-curd-table');
+                            }
+                        });
+                        layer.close(index);
+                    });
+                }
+            },
+        },
+        table: {
+            where: {user_id: 0},
+            page: true,
+            cols: [[
+                {field: 'id', title: 'ID', align: 'center', width: 60},
+                {field: 'user_name', title: '用户名', width: 100},
+                {field: 'author_name', title: '作者名称', width: 100},
+                {field: 'amount', title: '兑换金额', width: 100},
+                {field: 'account_name', title: '账户姓名', width: 90},
+                {field: 'account_info', title: '账户信息', width: 200},
+                {field: 'status', title: '状态', templet: '#status', width: 80},
+                {field: 'create_time', templet: '#table-timestamp', title: '修改时间', width: 160},
+                {field: 'update_time', templet: '#table-timestamp', title: '修改时间', width: 160},
+                {title: '操作', align: 'center', fixed: 'right', toolbar: '#table-curd-list', width: 160}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

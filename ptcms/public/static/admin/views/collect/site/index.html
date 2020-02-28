@@ -1,0 +1,163 @@
+<title>站点列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>站点管理</cite></a>
+        <a><cite>站点列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            batch: '/manage/collect/site/batch.json',
+            del: '/manage/collect/site/del.json',
+            list: '/manage/collect/site/list.json',
+            change: '/manage/collect/site/change.json',
+        },
+        search: {},
+        topButton: {
+            add: {},
+            enable: {
+                text: '启用',
+                action: function () {
+                    checkData = layui.table.checkStatus('LAY-curd-table').data;
+                    if (checkData.length === 0) {
+                        return layui.layer.msg('请选择数据');
+                    }
+                    var items = [], values = [];
+                    layui.each(checkData, function (k, v) {
+                        items.push(v.id);
+                        values.push(1)
+                    });
+                    layui.admin.req({
+                        url: config.api.batch,
+                        data: {type: 'change', items: items, field: 'status', values: values},
+                        method: 'POST',
+                        success: function (res) {
+                            layui.table.reload('LAY-curd-table');
+                            layui.layer.msg('启用成功');
+                        }
+                    })
+                }
+            },
+            disable: {
+                style: 'layui-btn-danger',
+                text: '禁用',
+                action: function () {
+                    checkData = layui.table.checkStatus('LAY-curd-table').data;
+                    if (checkData.length === 0) {
+                        return layui.layer.msg('请选择数据');
+                    }
+                    var items = [], values = [];
+                    layui.each(checkData, function (k, v) {
+                        items.push(v.id);
+                        values.push(0)
+                    });
+                    layui.admin.req({
+                        url: config.api.batch,
+                        data: {type: 'change', items: items, field: 'status', values: values},
+                        method: 'POST',
+                        success: function (res) {
+                            layui.table.reload('LAY-curd-table');
+                            layui.layer.msg('禁用成功');
+                        }
+                    })
+                }
+            },
+        },
+        actionButton: {
+            edit: {},
+            clear: {
+                text: '清空',
+                style: 'layui-btn layui-btn-danger',
+                icon: 'layui-icon layui-icon-engine',
+                action: function (obj) {
+                    layer.confirm('您确定要清空站点"' + obj.data.name + '"采集数据么？<br/>这个操作是不可逆的！', {icon: 3, title: '操作提示'}, function (index) {
+                        layui.layer.open({
+                            type: 2,
+                            title: '执行脚本',
+                            shadeClose: false,
+                            shade: false,
+                            maxmin: true,
+                            area: ['893px', '600px'],
+                            content: '/manage/collect/site/clear.html?siteid=' + obj.data.id + '&access_token=' + encodeURIComponent(layui.data('layuiAdmin').access_token)
+                        });
+                        layer.close(index);
+                    });
+                }
+            },
+            del: {
+                action: function (obj) {
+                    console.log(obj.data.num);
+                    if (obj.data.num > 0) {
+                        layui.admin.error('站点还有数据，不能进行删除操作！<br/>如果要删除请您先进行清空操作')
+                    } else {
+                        layer.confirm('真的删除站点"' + obj.data.name + '"么?', function (index) {
+                            layui.admin.req({
+                                url: config.api.del,
+                                data: {id: obj.data.id},
+                                method: 'POST',
+                                success: function (res) {
+                                    layer.msg('删除成功');
+                                    obj.del();
+                                }
+                            });
+                            layer.close(index);
+                        });
+                    }
+                }
+            }
+        },
+        table: {
+            page: true,
+            limit: 30,
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'ID', align: 'center', width: 60},
+                {field: 'name', title: '站点名称', align: 'center'},
+                {field: 'key', title: '站点KEY', width: 150},
+                {field: 'url', title: '站点地址'},
+                {field: 'num', title: '内容数量'},
+                {field: 'weight', title: '权重', align: 'center', width: 60},
+                {field: 'type', title: '类型', width: 100, align: 'center', templet: '#table-label', data: {data: '{"0":"普通站点","1":"原创站点","2":"优质站点"}'}},
+                {
+                    field: 'status',
+                    title: '状态',
+                    templet: '#table-switch',
+                    align: 'center',
+                    width: 80,
+                    data: {text: '正常|禁用'}
+                },
+                {title: '操作', width: 200, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

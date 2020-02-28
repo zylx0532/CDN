@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/style.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/jquery-3.3.1.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+</head>
+<body>
+<!-- 头部 -->
+{include file="system/header"}
+
+<!-- 内容 -->
+<div class="pt-content">
+    <!-- 面包屑 -->
+    <div class="pt-crumb">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/crumb_icon.png" class="pt-crumb-icon">
+        <span class="color5"><a title="{$kx.config.sitename}" href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > {$name}</span>
+    </div>
+
+
+    <!-- 一楼 -->
+    <div class="pt-floor1">
+        <div class="pt-list">
+            <!-- 我的 -->
+            <div class="fr pt-toplist">
+                <div class="border-b size18 bold color8 pb10 pt-toplist-title">{$kx.config.sitename}</div>
+                <div class="pt-toplist-item">
+                    {block method="page.list" name=list}
+                    {section loop=$list item=$loop}
+                    <a title="{$loop.name}" href="{link=page.detail pageid=$loop.id key=$loop.key}" {if $loop.key == $key}class="color2"{/if}>
+                        <span class="mr10">·</span><span>{$loop.name}</span>
+                    </a>
+                    {/section}
+                </div>
+            </div>
+        </div>
+        <!-- 推荐 -->
+        <div class="relative pt-rank">
+            <!-- 书架title -->
+            <div class="pt-privacy-title">
+                <span class="color2 size24">{$name}</span>
+            </div>
+            <div class="pt-privacy-desc">
+                <span>时间：{$update_time|date="Y-m-d H:i:s"}</span>
+            </div>
+            <div class="pt-privacy-cont">
+                {$content|parseTpl}
+            </div>
+        </div>
+    </div>
+    <!-- 广告位 -->
+</div>
+
+<!-- 底部版权-->
+{include file="/system/footer"}
+
+<!-- js-->
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/rankdetail.js"></script>
+</body>
+</html>

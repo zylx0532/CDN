@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+	<title>Document</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/css/global.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/flexible.min.js"></script>
+	<style>
+		.pt-close{
+			width:0.18rem;
+			height:0.18rem;
+		}
+		.pt-cont{
+			width:3.45rem;
+			height:2.4rem;
+			background-color: #fff;
+			padding-top:0.15rem;
+			margin:0 auto;
+			border-radius: 0.05rem;
+			position: relative;
+		}
+		.pt-text{
+			width:100%;
+			height:1.35rem;
+			padding:0 0.15rem 0.15rem 0.15rem;
+			border-bottom: 0.01rem solid #E9E9E9;
+			font-size: 0.14rem;
+			color:#929297;
+		}
+		.pt-text::-webkit-input-placeholder{
+		    color:#929297;
+		}
+		.pt-sum{
+			position: absolute;
+			top:1.15rem;
+			right:0.15rem;
+			z-index:2;
+		}
+		.pt-upload{
+			width:0.7rem;
+			height:0.7rem;
+			background-color: #D5D5D5;
+			border-radius: 0.05rem;
+		}
+		.pt-img-delete{
+			width:0.23rem;
+			height:0.23rem;
+		}
+		.pt-img-add{
+			width:0.23rem;
+			height:0.23rem;
+		}
+		.pt-file{
+			position: absolute;
+            left: 0;
+            top:0;
+            width:0.7rem;
+			height:0.7rem;
+            /*border: 0.03125rem dashed #d5d5d5;*/
+            /*border-radius: 0.25rem;*/
+            opacity: 0;
+		}
+		.pt-phone{
+			width:3.45rem;
+			height:0.5rem;
+			margin:0 auto;
+			margin-top:0.01rem;
+		}
+		.pt-submit{
+			width:3rem;
+			height:0.4rem;
+			border-radius: 0.4rem;
+			background-color: #FF5555;
+			margin:0 auto;
+			margin-top:0.35rem;
+		}
+	</style>
+</head>
+<body>
+	<!-- 头部 -->
+	<div class="w100 flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+		<div></div>
+		<div class="size18 bold color37">章节报错</div>
+		<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/read_pop_catalogue_close.png" class="pt-close">
+	</div>
+
+	<!-- 内容 -->
+	<div class="pt-cont">
+		<textarea placeholder="请在此输入报错内容" class="pt-text"></textarea>
+	</div>
+	<div class="flex-wrp flex-align-center bg-white plr15 pt-phone">
+		<div class="mr15 size14 color32">联系电话</div>
+		<input type="number" placeholder="请输入您的手机号码" class="size14 color92">
+	</div>
+	
+	<div class="flex-wrp flex-center size14 color1 pt-submit">确认提交</div>
+
+	<!-- js -->
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/jquery-3.3.1.js"></script>
+	<script>
+	// 字数限制
+	$('.pt-text').on("input propertychange",function(){
+		var val = $(this).val();
+		var count = "";
+		if(val.length > 200) {
+			$(this).val(val.substring(0,200));
+		}
+		count = $(this).val().length;
+		$('.pt-num').text(count);
+	})
+	</script>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>账户充值 - 用户中心 - {$kx.config.sitename}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/global.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/style.css"/>
+</head>
+<body>
+	<!-- 头部 -->
+    {include file="/system/header"}
+
+	<!-- 内容 -->
+	<div class="pt-content">
+		<!-- 面包屑 -->
+		<div class="pt-crumb">
+			<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/crumb_icon.png" class="pt-crumb-icon">
+			<span class="color5">
+                <a href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > <a href="{link=user.index.index}" class="color5">用户中心</a> > <a href="{link=user.pay.recharge}">账户充值</a>
+            </span>
+		</div>
+
+		<!-- 一楼 -->
+		<div class="pt-floor1 bg-white pt-recharge" style="padding: 50px;">
+			<label>账号</label>
+            <div class="pb30 pt10">
+                <img class="avatar" src="{$userinfo.avatar}" alt="{$userinfo.name}">
+                <span class="size16 color32 bold">{$userinfo.name}</span>
+            </div>
+            <label>充值方式</label>
+            <div class="pt20 pt-recharge-platform">
+                <ul>
+                    <li class="size16 text-center lh50 color32 pt-active" data-platform="1">
+                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/alipay.png" alt="支付宝"> 支付宝
+                    </li>
+                    <li class="size16 text-center lh50 color32 ml10" data-platform="2">
+                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/wx.png" alt="微信"> 微信
+                    </li>
+                </ul>
+            </div>
+            <label>充值金额</label>
+            <ul class="pt-recharge-list mt20">
+                {section loop=$kx.config.vip.list item=$loop}
+                <li data-price="{$i.index}">
+                    &yen;<span class="size24 color32">{$i.index}</span>
+                    <span>({$loop.name})</span>
+                </li>
+                {/section}
+            </ul>
+            <button class="color1 pay">立即支付</button>
+            <div class="mt30">
+                <input type="checkbox" checked="checked" id="read_and_agree">
+                <label for="read_and_agree" class="color3">我已阅读同意 <a href="" class="color2">《付款协议》</a></label>
+            </div>
+		</div>
+	</div>
+
+	<!-- 底部版权-->
+    {include file="/system/footer"}
+    <!-- js-->
+    <script>
+        $('.pt-recharge li').click(function () {
+            $(this).siblings().removeClass('pt-active');
+            $(this).addClass('pt-active');
+            if ($(this).parent().hasClass('pt-recharge-list')) {
+                $('.pay').html('立即支付 &yen;' + $(this).data('price'));
+            }
+            if ($('.pt-recharge-platform li.pt-active').length && $('.pt-recharge-list li.pt-active').length) {
+                $('.pay').addClass('bg-red');
+            } else {
+                $('.pay').removeClass('bg-red');
+            }
+        });
+        $('.pay').click(function () {
+            if(!$('#read_and_agree').prop('checked')){
+                return alert('请先阅读并同意协议');
+            }
+
+            var platform = $('.pt-recharge-platform li.pt-active'), price = $('.pt-recharge-list li.pt-active');
+            if (platform.length === 1 && price.length === 1) {
+                window.location.href = '{link=user.pay.unifiedOrder method=2 type=2}&type_info=' + price.data('price') + '&platform=' + platform.data('platform')
+            }
+        });
+    </script>
+</body>
+</html>

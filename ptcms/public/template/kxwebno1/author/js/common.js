@@ -1,0 +1,2 @@
+/** PTNovelSearch-v4.1.2 LPPL License By http://www.ptcms.com/ */
+ ;function request(e,t,o,n,a){n=void 0===n?"post":n,a=void 0===a?"json":a;var l=null;$.ajax({url:e,method:n,data:t,dataType:a,beforeSend:function(){null===l&&(l=layer.load(1,{shade:[.1,"#000"]}))},success:function(e){e.code?layer.alert(e.msg,{icon:2},function(t){e.data.redirect?window.location.href=e.data.redirect:layer.close(t)}):o(e)},complete:function(){null!==l&&(layer.close(l),l=null)}})}function post(e,t,o){request(e,t,o,"post")}function get(e,t,o){request(e,t,o,"get")}

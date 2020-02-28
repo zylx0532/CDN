@@ -1,0 +1,58 @@
+<title>管理员列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>成员管理</cite></a>
+        <a><cite>添加管理员</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">添加管理员</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认添加</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var config;
+    layui.admin.req({
+        url: '/manage/data/response.json',
+        method: 'POST',
+        data: {admin_role: 'select'},
+        success: function (res) {
+            config = {
+                api: {
+                    submit: '/manage/user/admin/add.json'
+                },
+                fields: [
+                    {name: '角色', key: 'role_id', type: 'select', extra: res.data.admin_role.select},
+                    {name: '用户名', key: 'name', type: 'text',},
+                    {name: '密码', key: 'password', type: 'password',},
+                    {name: '重复密码', key: 'password_repeat', type: 'password',},
+                    {name: '认证码', key: 'auth_code', type: 'password',},
+                    {name: '重复认证码', key: 'auth_code_repeat', type: 'password',},
+                    {name: '前台状态', key: 'user_status', type: 'switch', extra: '启用|禁用', value: 1},
+                    {name: '后台状态', key: 'admin_status', type: 'switch', extra: '启用|禁用', value: 1},
+                ],
+            };
+            layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+        }
+    });
+</script>

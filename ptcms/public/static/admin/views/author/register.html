@@ -1,0 +1,164 @@
+<title>申请列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>书籍管理</cite></a>
+        <a><cite>专区原创</cite></a>
+        <a><cite>作者管理</cite></a>
+        <a><cite>申请列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            list: '/manage/author/register.json',
+            audit: '/manage/author/audit.json'
+        },
+        topButton: {
+            pass: {
+                text: '通过', action: function (obj) {
+                    checkData = layui.table.checkStatus('LAY-curd-table').data;
+                    if (checkData.length === 0) {
+                        return layui.layer.msg('请选择数据');
+                    }
+                    var values = [];
+                    layui.each(checkData, function (k, v) {
+                        values.push(v.id);
+                    });
+                    layui.admin.req({
+                        url: config.api.audit,
+                        data: {action: 'pass', id: values},
+                        method: 'POST',
+                        success: function (res) {
+                            layui.table.reload('LAY-curd-table');
+                            layui.layer.msg('操作成功');
+                        }
+                    })
+                }
+            },
+            reject: {
+                text: '拒绝', style: 'layui-btn-danger', action: function (obj) {
+                    checkData = layui.table.checkStatus('LAY-curd-table').data;
+                    if (checkData.length === 0) {
+                        return layui.layer.msg('请选择数据');
+                    }
+                    var values = [];
+                    layui.each(checkData, function (k, v) {
+                        values.push(v.id);
+                    });
+                    layui.admin.req({
+                        url: config.api.audit,
+                        data: {action: 'reject', id: values},
+                        method: 'POST',
+                        success: function (res) {
+                            layui.table.reload('LAY-curd-table');
+                            layui.layer.msg('操作成功');
+                        }
+                    })
+                }
+            }
+        },
+        actionButton: {
+            info: {
+                text: '详情', style: 'layui-btn-normal', icon: 'layui-icon layui-icon-form', action: function (obj) {
+                    layui.layer.open({
+                        type: 1,
+                        skin: 'layui-layer-rim',
+                        area: '500px',
+                        btn: '关闭',
+                        title: '详情',
+                        content: '<table class="layui-table"></table>',
+                        success: function (layero, index) {
+                            var table = layero.find('.layui-layer-content table');
+                            table.append('<tr><th>用户ID</th><td>' + obj.data.user.id + '</td></tr>');
+                            table.append('<tr><th>用户名</th><td>' + obj.data.user.name + '</td></tr>');
+                            table.append('<tr><th>作者ID</th><td>' + obj.data.id + '</td></tr>');
+                            table.append('<tr><th>作者笔名</th><td>' + obj.data.name + '</td></tr>');
+                            table.append('<tr><th>作者简介</th><td>' + obj.data.intro + '</td></tr>');
+                            table.append('<tr><th>作者真名</th><td>' + obj.data.truename + '</td></tr>');
+                            table.append('<tr><th>性别</th><td>' + (obj.data.sex === '1' ? '男' : '女') + '</td></tr>');
+                            table.append('<tr><th>身份证号</th><td>' + obj.data.idcard + '</td></tr>');
+                            table.append('<tr><th>电话</th><td>' + obj.data.mobile + '</td></tr>');
+                            table.append('<tr><th>邮箱</th><td>' + obj.data.email + '</td></tr>');
+                            table.append('<tr><th>QQ</th><td>' + obj.data.qq + '</td></tr>');
+                            table.append('<tr><th>所在地</th><td>' + obj.data.province + obj.data.city + obj.data.district + '</td></tr>');
+                            table.append('<tr><th>详细地址</th><td>' + obj.data.address + '</td></tr>');
+                            layero.resize();
+                        }
+                    });
+                }
+            },
+            pass: {
+                text: '通过', icon: 'layui-icon layui-icon-auz', action: function (obj) {
+                    layui.admin.req({
+                        url: config.api.audit,
+                        data: {id: obj.data.id, action: 'pass'},
+                        method: 'post',
+                        success: function (res) {
+                            layui.table.reload('LAY-curd-table');
+                            layui.layer.msg('操作成功');
+                        }
+                    });
+                }
+            },
+            reject: {
+                text: '拒绝', style: 'layui-btn-danger', icon: 'layui-icon layui-icon-tips', action: function (obj) {
+                    layui.admin.req({
+                        url: config.api.audit,
+                        data: {id: obj.data.id, action: 'reject'},
+                        method: 'post',
+                        success: function (res) {
+                            layui.table.reload('LAY-curd-table');
+                            layui.layer.msg('操作成功');
+                        }
+                    });
+                }
+            }
+        },
+        table: {
+            where: {status: 0},
+            page: true,
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'ID', align: 'center', width: 60},
+                {field: 'name', title: '笔名', width: 100, align: 'center'},
+                {field: 'truename', title: '实名', width: 100, align: 'center'},
+                {field: 'sex', title: '性别', width: 80, align: 'center'},
+                {field: 'mobile', title: '电话', width: 120, align: 'center'},
+                {field: 'email', title: '邮箱', width: 200, align: 'center'},
+                {field: 'province', title: '省', width: 80, align: 'center'},
+                {field: 'city', title: '市', width: 80, align: 'center'},
+                {field: 'district', title: '区/县', width: 80, align: 'center'},
+                {field: 'address', title: '地址'},
+                {title: '操作', width: 220, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

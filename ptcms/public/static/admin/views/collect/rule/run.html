@@ -1,0 +1,152 @@
+<title>执行规则</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>执行规则</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">执行规则</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认执行</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var config;
+    layui.admin.req({
+        url: '/manage/data/response.json',
+        method: 'POST',
+        data: {rule: 'select'},
+        success: function (res) {
+            config = {
+                api: {submit: '/manage/collect/rule/run.json'},
+                submit: function (obj) {
+                    switch (obj.field.type) {
+                        case 'test':
+                            layui.layer.open({
+                                type: 2,
+                                title: '执行测试',
+                                shadeClose: false,
+                                shade: false,
+                                maxmin: true,
+                                area: ['893px', '600px'],
+                                content: '/manage/collect/rule/run.html?type=test&id=' + obj.field.id + '&access_token=' + encodeURIComponent(layui.data('layuiAdmin').access_token)
+                            });
+                            break;
+                        case 'run':
+                            layui.layer.open({
+                                type: 2,
+                                title: '执行采集',
+                                shadeClose: false,
+                                shade: false,
+                                maxmin: true,
+                                area: ['893px', '600px'],
+                                content: '/manage/collect/rule/run.html?type=run&id=' + obj.field.id + '&access_token=' + encodeURIComponent(layui.data('layuiAdmin').access_token)
+                            });
+                            break;
+                        case 'cron':
+                            layui.admin.req({
+                                url: config.api.submit,
+                                data: obj.field,
+                                method: 'POST',
+                                success: function (res) {
+                                    layui.admin.success('添加成功', {
+                                        yes: function (index) {
+                                            location.reload()
+                                        },
+                                        btn2: function () {
+                                            location.hash = config.url.index;
+                                        }
+                                    })
+                                }
+                            });
+                            break;
+                    }
+                    return false;
+                },
+                done: function (layui) {
+                    layui.form.on('radio', function (obj) {
+                        if (obj.elem.name === 'type') {
+                            if (obj.value === 'test') {
+                                layui.$('input[name=interval]').parents('.layui-form-item').hide();
+                                layui.$('input[name=ext]').parents('.layui-form-item').hide();
+                            } else if(obj.value === 'run') {
+                                layui.$('input[name=interval]').parents('.layui-form-item').show();
+                                layui.$('input[name=ext]').parents('.layui-form-item').hide();
+                            } else {
+                                layui.$('input[name=interval]').parents('.layui-form-item').show();
+                                layui.$('input[name=ext]').parents('.layui-form-item').show();
+                            }
+                            if (obj.value === 'run') {
+                                layui.$('input[name=interval]').val(0);
+                            } else {
+                                layui.$('input[name=interval]').val(600);
+                            }
+                        }
+                    });
+                    if (layui.router().search.type === 'test') {
+                        layui.$('input[name=interval]').parents('.layui-form-item').hide();
+                        layui.$('input[name=ext]').parents('.layui-form-item').hide();
+                    } else if (layui.router().search.type === 'run') {
+                        layui.$('input[name=interval]').val(0);
+                        layui.$('input[name=ext]').parents('.layui-form-item').hide();
+                    }
+                },
+                fields: [
+                    {
+                        name: '选用规则',
+                        key: 'id',
+                        type: 'select',
+                        extra: res.data.rule.select,
+                        require: true,
+                        value: layui.router().search.id
+                    },
+                    {
+                        name: '采集间隔时间',
+                        key: 'interval',
+                        type: 'num',
+                        require: true,
+                        value: 600,
+                        intro: '单位秒，0只运行一次，大于0为循环运行',
+                    },
+                    {
+                        name: '附加参数',
+                        key: 'ext',
+                        type: 'text',
+                        value: '',
+                        intro: '采集附加参数，请参考帮助填写',
+                    },
+                    {
+                        name: '采集形式',
+                        key: 'type',
+                        type: 'radio',
+                        extra: 'test:运行测试(需保持浏览器打开状态) cron:加入后台计划任务（后台运行）',
+                        require: true,
+                        value: layui.router().search.type
+                    },
+                ],
+            };
+            layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+        }
+    });
+</script>

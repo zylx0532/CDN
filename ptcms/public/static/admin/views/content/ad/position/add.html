@@ -1,0 +1,61 @@
+<title>添加广告位</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营设置</cite></a>
+        <a><cite>广告设置</cite></a>
+        <a><cite>添加广告位</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">添加广告位</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认发布</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            submit: '/manage/content/ad/position/add.json'
+        },
+        done: function () {
+            layui.form.verify({
+                adkey: function (value, elem) {
+                    if (!new RegExp("^[a-zA-Z0-9]+$").test(value)) {
+                        return '仅能使用字母和数字,不能使用其他字符';
+                    }
+                    if (/^([0-9])/.test(value)) {
+                        return '不能使用数字起头';
+                    }
+                }
+            });
+        },
+        fields: [
+            {name: '标题', key: 'title', type: 'text',},
+            {name: '标识', key: 'key', type: 'text', verify: 'adkey'},
+            {name: '宽', key: 'width', type: 'num', value: 0},
+            {name: '高', key: 'height', type: 'num', value: 0},
+            {name: '描述', key: 'intro', type: 'textarea',},
+            {name: '状态', key: 'status', type: 'switch', extra: '正常|隐藏'},
+        ],
+    };
+    layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+</script>

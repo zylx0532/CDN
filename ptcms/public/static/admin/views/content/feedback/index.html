@@ -1,0 +1,112 @@
+<title>反馈列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营管理</cite></a>
+        <a><cite>留言反馈</cite></a>
+        <a><cite>反馈列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="ratingTpl">
+    <span style="color: #5FB878;">{{d.good_num}}</span> / <span style="color: #FF5722;">{{d.bad_num}}</span>
+</script>
+<script>
+    var config = {
+        api: {
+            batch: '/manage/content/feedback/batch.json',
+            list: '/manage/content/feedback/list.json',
+            del: '/manage/content/feedback/del.json',
+            change: '/manage/content/feedback/change.json'
+        },
+        search: {
+            status:{type:'select',data:{'-1':'已废弃','0':'待处理','1':'已处理'},text:'状态'}
+        },
+        topButton: {
+            del: {},
+        },
+        actionButton: {
+            solved: {
+                text: '已处理', action: function (obj) {
+                    var $ = layui.$;
+                    var data = obj.data;
+                    layui.admin.req({
+                        url: config.api.change,
+                        data: {
+                            id: data.id,
+                            field: 'status',
+                            value: 1
+                        },
+                        method: 'POST',
+                        success: function (res) {
+                            layui.$(obj.tr.get(0)).find('td[data-field=status] div').text('已处理');
+                            layui.layer.msg('操作成功');
+                        }
+                    });
+                }
+            },
+            discard: {
+                text: '废弃', action: function (obj) {
+                    var $ = layui.$;
+                    var data = obj.data;
+                    layui.admin.req({
+                        url: config.api.change,
+                        data: {
+                            id: data.id,
+                            field: 'status',
+                            value: -1
+                        },
+                        method: 'POST',
+                        success: function (res) {
+                            layui.$(obj.tr.get(0)).find('td[data-field=status] div').text('已废弃');
+                            layui.layer.msg('操作成功');
+                        }
+                    });
+                }
+            },
+            del: {},
+        },
+        table: {
+            page: true,
+            limit: 30,
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'ID', align: 'center', width: 60},
+                {field: 'user.name', title: '用户', width: 100},
+                {field: 'novel.name', title: '书籍', width: 100},
+                {field: 'chapter.name', title: '章节', width: 100},
+                {field: 'title', title: '标题', align: 'center', width: 100},
+                {field: 'content', title: '内容', align: 'center'},
+                {field: 'status', title: '状态', align: 'center', width: 100,},
+                {field: 'datetime', title: '反馈时间', width: 140},
+                {title: '操作', width: 200, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

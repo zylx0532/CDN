@@ -1,0 +1,79 @@
+<title>分类管理</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>书籍管理</cite></a>
+        <a><cite>分类管理</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+
+<script>
+    var config = {
+        api: {
+            batch: '/manage/content/category/batch.json',
+            list: '/manage/content/category/list.json',
+            del: '/manage/content/category/del.json',
+            change: '/manage/content/category/change.json'
+        },
+        search: {
+        },
+        topButton: {
+            add: {},
+            del: {},
+        },
+        actionButton: {
+            addSub: {
+                text: '子类', icon: 'layui-icon layui-icon-add-1', action: function (obj) {
+                    location.hash = layui.router().href + 'add/pid=' + obj.data.id
+                }
+            },
+            edit: {},
+            del: {},
+        },
+        table: {
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'ID', align: 'center', width: 60},
+                {field: 'showname', title: '分类名称'},
+                {field: 'key', title: '分类KEY', width: 100},
+                {field: 'position', title: '排序', edit: 'text', width: 100},
+                {
+                    field: 'status',
+                    title: '状态',
+                    templet: '#table-switch',
+                    align: 'center',
+                    width: 100,
+                    data: {text: '显示|隐藏'}
+                },
+                {title: '操作', width: 220, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

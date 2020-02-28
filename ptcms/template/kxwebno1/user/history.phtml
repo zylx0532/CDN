@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>阅读历史 - 用户中心 - {$kx.config.sitename}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/style.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/jquery-3.3.1.js"></script>
+    <style>
+        .pt-rank .pt-btn {
+            line-height: 30px;
+            height: 30px;
+        }
+    </style>
+</head>
+<body>
+	<!-- 头部 -->
+    {include file="/system/header"}
+
+	<!-- 内容 -->
+	<div class="pt-content">
+		<!-- 面包屑 -->
+		<div class="pt-crumb">
+			<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/crumb_icon.png" class="pt-crumb-icon">
+			<span class="color5">
+                <a href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > <a href="{link=user.index.index}" class="color5">用户中心</a> > <a href="{link=user.history.index}">阅读历史</a>
+            </span>
+		</div>
+
+		<div class="pt-floor1">
+            {include file="/system/userleft"}
+			<div class="relative pt-rank">
+                {block method=mark.history userid=$userinfo.id name=list}
+                <!-- 书架title -->
+				<div class="pt-rank-head">
+					<span class="size18 color2 mr10">我看过的书</span>
+					<span class="size12 color4">（共<span class="color2">{$list|count}</span>本）</span>
+                    <span class="fr"><a href="{link=user.history.clear}">清空记录</a></span>
+				</div>
+                {loop}
+                <div class="pt-rank-detail">
+                    <a href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" class="fl">
+                        <img src="{$loop.novel.cover}">
+                    </a>
+                    <div class="fl pt-rank-detail-middle">
+                        <div class="fl w100 lh100">
+							<span class="fl mr60">
+								<a href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" class="size18 color2">{$loop.novel.name}</a>
+							</span>
+                            <span class="fl color7">
+								<span class="mr30">作者：<a href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">{$loop.author.name}</a> </span>
+							</span>
+                            {if $loop.markinfo.newnum>0}<span class="fr color5"><b class="color2">{$loop.newnum}</b> 章未读</span>{/if}
+                        </div>
+                        <div class="compulsory-row fl w100 color5 desc" style="margin-bottom:5px;margin-top:8px;">
+                            {$loop.novel.intro|showIntroLine}
+                        </div>
+                        <div class="fl lh100 w100" style="margin-bottom:7px;">
+                            <span>
+                                读到：
+                                <a href="{link=novel.chapter.read pinyin=$loop.novel.pinyin novelid=$loop.novel.id chapterid=$loop.markinfo.nextid}">
+                                    <span class="color2 mr20">{$loop.markinfo.name}</span>
+                                </a>
+                            </span>
+                        </div>
+                        <div class="fl lh100 w100">
+                            <span>
+                                最新：
+                                <a href="{link=novel.chapter.read pinyin=$loop.novel.pinyin novelid=$loop.novel.id chapterid=$loop.last.id}">
+                                    <span class="color2 mr20">{$loop.last.name}</span>
+                                </a>
+                            </span>
+                            <span class="color0 size12">{$loop.last.time|date="Y-m-d H:i:s"}</span>
+                        </div>
+                    </div>
+                    <div class="fr mr30">
+                        <a href="{link=novel.chapter.read pinyin=$loop.novel.pinyin novelid=$loop.novel.id chapterid=$loop.nextid}" class="mb10 color2 border-red pt-btn read">继续阅读</a>
+                        {if $loop.ismark}
+                        <a href="javascript:void(0);" class="border-c9 color4 pt-btn mark">已在书架</a>
+                        {else}
+                        <a href="{link=user.mark.add novelid=$loop.novel.id chapterid=$loop.chapter.id}" class="mb10 border-c9 color4 pt-btn mark">加入书架</a>
+                        {/if}
+                        <a href="{link=user.history.del novelid=$loop.novel.id}" class="mb10 border-c9 color4 pt-btn">移出记录</a>
+                    </div>
+                </div>
+                {/loop}
+			</div>
+		</div>
+		<!-- 广告位 -->
+	</div>
+
+	<!-- 底部版权-->
+    {include file="/system/footer"}
+</body>
+</html>

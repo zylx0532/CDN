@@ -1,0 +1,59 @@
+<title>发布新闻</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营设置</cite></a>
+        <a><cite>新闻管理</cite></a>
+        <a><cite>发布新闻</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">发布新闻</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="hidden" name="id">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认发布</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+    var config;
+    layui.admin.req({
+        url: '/manage/data/response.json',
+        method: 'POST',
+        data: {news_category: 'select'},
+        success: function (res) {
+            config = {
+                api: {
+                    submit: '/manage/content/news/news/add.json'
+                },
+                fields: [
+                    {name: '分类', key: 'category_id', type: 'select', extra: res.data.news_category.select},
+                    {name: '标题', key: 'title', type: 'text',},
+                    {name: '置顶', key: 'is_top', type: 'switch', extra: '是|否'},
+                    {name: '推荐', key: 'is_good', type: 'switch', extra: '是|否'},
+                    {name: '状态', key: 'status', type: 'switch', extra: '显示|隐藏'},
+                    {name: '内容', key: 'content', type: 'editor',},
+                ],
+            };
+            layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+        }
+    });
+</script>

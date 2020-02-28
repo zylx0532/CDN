@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>基础资料 - 用户中心 - {$kx.config.sitename}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/global.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/css/style.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/js/cropper/cropper.min.css"/>
+</head>
+<body>
+	<!-- 头部 -->
+    {include file="/system/header"}
+
+	<!-- 内容 -->
+	<div class="pt-content">
+		<!-- 面包屑 -->
+		<div class="pt-crumb">
+			<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/images/crumb_icon.png" class="pt-crumb-icon">
+			<span class="color5">
+                <a href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > <a href="{link=user.index.index}" class="color5">用户中心</a> > <a href="{link=user.info.index}">基础资料</a>
+            </span>
+		</div>
+
+
+		<!-- 一楼 -->
+		<div class="pt-floor1">
+            {include file="/system/userleft"}
+			<!-- 推荐 -->
+			<div class="relative pt-rank">
+				<!-- 书架title -->
+				<div class="pt-rank-head">
+					<span class="mr10 size16 color2 bold">基础资料</span>
+				</div>
+				<div class="pt-info-cont">
+                    <input type="file" id="file_avatar" name="file" style="display: none;" accept="image/*">
+                    <form action="" method="post">
+                        <div class="mb20 pt-info-cont-head">
+                            <input type="hidden" name="avatar" value="{$userinfo.avatar}">
+                            <span class="fl mr40 color8 w80">头像</span>
+                            <span class="mr20 fl pt-info-head-icon"><img src="{$userinfo.avatar}"></span>
+                            <span class="fl cursor color2" onclick="$('#file_avatar').click()">上传头像</span>
+                        </div>
+                        <div class="mb20 pt-info-cont-intro">
+                            <span class="fl mr40 color8 w80">昵称</span>
+                            <input type="text" class="border-c9" name="nickname" value="{$userinfo.nickname}">
+                            <span class="fl color4"></span>
+                        </div>
+                        <div class="mb20 pt-info-cont-intro">
+                            <span class="fl mr40 color8 w80">邮箱</span>
+                            <input type="text" class="border-c9" name="email" value="{$userinfo.email}">
+                            <span class="fl color4"></span>
+                        </div>
+                        <div class="mb20 pt-info-cont-sex">
+                            <span class="fl mr40 color8 w80">性别</span>
+                            <input type="radio" name="sex" value="0" class="mr5" {=$userinfo.sex=='0'?'checked':''}>
+                            <label for="secret" class="mr20">保密</label>
+                            <input type="radio" name="sex" value="1" class="mr5" {=$userinfo.sex=='1'?'checked':''}>
+                            <label for="male" class="mr20">男</label>
+                            <input type="radio" name="sex" value="2" class="mr5" {=$userinfo.sex=='2'?'checked':''}>
+                            <label for="female">女</label>
+                        </div>
+                        <div class="pt-info-cont-intro">
+                            <span class="fl mr40 color8 w80">简介</span>
+                            <textarea class="fl" name="intro">{$userinfo.intro}</textarea>
+                            <span class="fl color4">可以进行简短的自我描述，不超过100字</span>
+                        </div>
+                        <button type="submit" class="fl cursor pt-info-cont-save mb10">提交保存</button>
+                    </form>
+				</div>
+			</div>
+		</div>
+		<!-- 广告位 -->
+	</div>
+
+	<!-- 底部版权-->
+    {include file="/system/footer"}
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/js/cropper/cropper.min.js"></script>
+    <script>
+        $('#file_avatar').change(function () {
+            var cropper;
+            var files = this.files;
+            done = function (url) {
+                layer.open({
+                    type: 1,
+                    area: ['600px', '500px'],
+                    resize: false,
+                    scrollbar: false,
+                    content: '<img src="' + url + '">',
+                    btn:['确认'],
+                    success: function (layero, index) {
+                        cropper = new Cropper(layero.find('img')[0], {
+                            aspectRatio: 1
+                        });
+                    },
+                    end: function () {
+                        cropper.destroy();
+                    },
+                    yes: function(index, layero){
+                        if (cropper){
+                            var loading = null;
+                            canvas = cropper.getCroppedCanvas({
+                                width: 160,
+                                height: 160,
+                            });
+                            canvas.toBlob(function(blob){
+                                var formData = new FormData();
+                                formData.append('file', blob, 'avatar.jpg');
+                                $.ajax({
+                                    url: '{link=user.info.uploadAvatar}',
+                                    method: 'POST',
+                                    data: formData,
+                                    dataType: 'json',
+                                    processData: false,
+                                    contentType: false,
+                                    beforeSend: function(){
+                                        if(loading === null){
+                                            loading = layer.load(1, {shade: [0.1, '#000']});
+                                        }
+                                    },
+                                    xhr: function () {
+                                        var xhr = new XMLHttpRequest();
+                                        xhr.upload.onprogress = function (e) {
+                                            var percent = '0';
+                                            var percentage = '0%';
+                                            if (e.lengthComputable) {
+                                                percent = Math.round((e.loaded / e.total) * 100);
+                                                percentage = percent + '%';
+                                                console.log(percentage);
+                                            }
+                                        };
+
+                                        return xhr;
+                                    },
+                                    success: function (res) {
+                                        console.log(res);
+                                        if(res.code){
+                                            layer.msg(res.msg);
+                                        }else{
+                                            $('.pt-info-cont-head input').val(res.data.src);
+                                            $('.pt-info-cont-head img').attr('src',res.data.src);
+                                        }
+                                    },
+                                    error: function () {
+                                        layer.msg('上传失败，请刷新页面后重试！');
+                                    },
+                                    complete: function () {
+                                        if(loading !== null){
+                                            layer.close(loading);
+                                            loading = null;
+                                        }
+                                    },
+                                });
+                            });
+                        }
+                        layer.close(index);
+                    }
+                });
+            };
+            if (files && files.length > 0) {
+                file = files[0];
+                if (URL) {
+                    done(URL.createObjectURL(file));
+                } else if (FileReader) {
+                    reader = new FileReader();
+                    reader.onload = function (e) {
+                        done(reader.result);
+                    };
+                    reader.readAsDataURL(file);
+                }
+            }
+        });
+
+    </script>
+    <!-- js-->
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/js/rankdetail.js"></script>
+</body>
+</html>

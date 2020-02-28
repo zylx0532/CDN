@@ -1,0 +1,108 @@
+<title>版本更新</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>版本更新</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">版本更新</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="submit" data-type="save">保存
+                                    </button>
+                                    <button class="layui-btn" lay-submit lay-filter="submit" data-type="update">确认更新
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <blockquote class="layui-elem-quote layui-bg-red" style="border-left-color:red">
+                后台升级功能仅可用于小版本内的升级，大版本升级需要手动升级！！！<br>
+                如支持4.0.*到4.0.45的升级，但是不支持4.0.45到4.1.0的升级！！！<br>
+                大版本升级请参考帮助文档自助升级或者提交工单。
+            </blockquote>
+        </div>
+    </div>
+</div>
+<script>
+    var config;
+    config = {
+        api: {
+            submit: '/manage/system/tool/update.json'
+        },
+        done: function () {
+            config.loadEditData();
+        },
+        submit: function (obj) {
+            layui.admin.req({
+                url: config.api.submit,
+                data: Object.assign({action: layui.$(obj.elem).data('type')}, obj.field),
+                method: 'POST',
+                success: function (res) {
+                    if (layui.$(obj.elem).data('type') === 'update') {
+                        layui.layer.open({
+                            type: 1,
+                            // title: '执行脚本',
+                            shadeClose: false,
+                            shade: false,
+                            maxmin: true,
+                            area: ['893px', '600px'],
+                            content: '',
+                            success: function (layero, index) {
+                                interval = setInterval(function () {
+                                    layui.admin.req({
+                                        url: config.api.submit,
+                                        method: 'POST',
+                                        data: {
+                                            action: 'log',
+                                            name: res.data.log
+                                        },
+                                        success: function (res) {
+                                            if (res.data.content.search('<!-- end -->') >= 0) {
+                                                clearInterval(interval);
+                                                interval = null;
+                                            }
+                                            layero.find('.layui-layer-content').html(res.data.content)[0].scroll(0, 999999);
+                                        }
+                                    });
+                                }, 1000);
+                                if (parseInt(obj.field.interval) > 0) {
+                                    setTimeout(function () {
+                                        clearInterval(interval);
+                                        interval = null;
+                                    }, parseInt(obj.field.interval) * 1000)
+                                }
+                            },
+                            end: function () {
+                                if (interval !== null) clearInterval(interval);
+                            }
+                        });
+                    } else {
+                        layui.admin.tip('操作成功');
+                    }
+                    return false;
+                }
+            });
+            return false;
+        },
+        fields: [
+            {name: '用户名', key: 'username', type: 'text', intro: '请输入您在官网的用户名'},
+            {name: 'APP Secret', key: 'app_secret', type: 'text', intro: "请注意保密"},
+            {name: '数据库迁移', key: 'migrate', type: 'switch', extra: '执行|不执行', value: 1, intro: ''},
+        ],
+    };
+    layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+</script>

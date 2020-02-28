@@ -1,0 +1,40 @@
+<title>Mip</title>
+
+<div class="layui-card layadmin-header">
+  <div class="layui-breadcrumb" lay-filter="breadcrumb">
+    <a lay-href="">主页</a>
+    <a><cite>运营管理</cite></a>
+    <a><cite>书单管理</cite></a>
+    <a><cite>书单设置</cite></a>
+  </div>
+</div>
+
+<div class="layui-fluid">
+  <div class="layui-row layui-col-space15">
+    <div class="layui-col-md12">
+      <div class="layui-card">
+        <div class="layui-card-header">书单设置</div>
+        <div class="layui-card-body" pad15>
+          <div class="layui-form" wid100 lay-filter="LAY-info-form">
+            <div class="layui-fields">
+
+            </div>
+            <div class="layui-card">
+              <div class="layui-form-item">
+                <div class="layui-input-block">
+                  <label class="layui-form-label">
+                    <button class="layui-btn mb" lay-submit lay-filter="submit">确认修改</button>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+    var api = '/manage/setting/booklist.json';
+    layui.use('curd/set', layui.factory('curd/set'));
+</script>

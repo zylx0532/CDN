@@ -1,0 +1,313 @@
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-row layui-col-space15">
+            <script type="text/html" template lay-url="/manage/system/dashboard/data.json?v={{ layui.admin.v }}">
+            <div class="layui-col-sm6 layui-col-md3">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        小说总数
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font">{{ d.data.novel.all}}</p>
+                        <p>
+                            今日新增
+                            <span class="layuiadmin-span-color">{{ d.data.novel.new}} <i class="layui-icon layui-icon-read"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm6 layui-col-md3">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        用户总数
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+                        <p class="layuiadmin-big-font">{{ d.data.user.all}}</p>
+                        <p>
+                            今日新增
+                            <span class="layuiadmin-span-color">{{ d.data.user.new}} <i class="layui-icon layui-icon-user"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm6 layui-col-md3">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        评论总数
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+
+                        <p class="layuiadmin-big-font">{{ d.data.comment.all}}</p>
+                        <p>
+                            今日新增
+                            <span class="layuiadmin-span-color">{{ d.data.comment.new}} <i class="layui-icon layui-icon-dialogue"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-col-sm6 layui-col-md3">
+                <div class="layui-card">
+                    <div class="layui-card-header">
+                        书单总数
+                    </div>
+                    <div class="layui-card-body layuiadmin-card-list">
+
+                        <p class="layuiadmin-big-font">{{ d.data.booklist.all}}</p>
+                        <p>
+                            今日新增
+                            <span class="layuiadmin-span-color">{{ d.data.booklist.new}} <i class="layui-icon layui-icon-templeate-1"></i></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            </script>
+            <div class="layui-col-md8">
+                <div class="layui-row layui-col-space15">
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header">快捷操作</div>
+                            <div class="layui-card-body">
+                                <div class="layui-carousel layadmin-carousel layadmin-shortcut">
+                                    <div carousel-item>
+                                        <ul class="layui-row layui-col-space10">
+                                            <li class="layui-col-xs3">
+                                                <a lay-href="/novel/">
+                                                    <i class="layui-icon layui-icon-read"></i>
+                                                    <cite>小说管理</cite>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs3">
+                                                <a lay-href="/content/comment/">
+                                                    <i class="layui-icon layui-icon-dialogue"></i>
+                                                    <cite>评论管理</cite>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs3">
+                                                <a lay-href="/user/">
+                                                    <i class="layui-icon layui-icon-user"></i>
+                                                    <cite>用户管理</cite>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs3">
+                                                <a lay-href="/template/">
+                                                    <i class="layui-icon layui-icon-code-circle"></i>
+                                                    <cite>模板管理</cite>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs3">
+                                                <a lay-href="/collect/cron/monitor">
+                                                    <i class="layui-icon layui-icon-chart-screen"></i>
+                                                    <cite>任务监控</cite>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs3">
+                                                <a lay-href="/ad/">
+                                                    <i class="layui-icon layui-icon-rmb"></i>
+                                                    <cite>广告管理</cite>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs3">
+                                                <a lay-href="/content/banner/position/">
+                                                    <i class="layui-icon layui-icon-carousel"></i>
+                                                    <cite>轮播图管理</cite>
+                                                </a>
+                                            </li>
+                                        </ul>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md6">
+                        <div class="layui-card">
+                            <div class="layui-card-header">待办事宜</div>
+                            <div class="layui-card-body">
+
+                                <div class="layui-carousel layadmin-carousel layadmin-backlog" data-autoplay="true" data-anim="fade" lay-filter="news" data-interval="5000">
+                                    <div carousel-item>
+                                        <ul class="layui-row layui-col-space10">
+                                            <li class="layui-col-xs6">
+                                                <a href="javascript:;" onclick="layer.tips('未开放', this, {tips: 3});" class="layadmin-backlog-body">
+                                                    <h3>待审作者</h3>
+                                                    <p><cite>0</cite></p>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs6">
+                                                <a lay-href="/novel/" class="layadmin-backlog-body">
+                                                    <h3>待审小说</h3>
+                                                    <p><cite>0</cite></p>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs6">
+                                                <a href="javascript:;" onclick="layer.tips('未开放', this, {tips: 3});" class="layadmin-backlog-body">
+                                                    <h3>待审章节</h3>
+                                                    <p><cite>0</cite></p>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs6">
+                                                <a lay-href="/content/feedback/"  class="layadmin-backlog-body">
+                                                    <h3>代办反馈</h3>
+                                                    <p><cite>0</cite></p>
+                                                </a>
+                                            </li>
+                                        </ul>
+
+                                        <ul class="layui-row layui-col-space10">
+                                            <li class="layui-col-xs6">
+                                                <a lay-href="/content/comment/" class="layadmin-backlog-body">
+                                                    <h3>待审评论</h3>
+                                                    <p><cite>0</cite></p>
+                                                </a>
+                                            </li>
+                                            <li class="layui-col-xs6">
+                                                <a href="javascript:;" onclick="layer.tips('未开放', this, {tips: 3});" class="layadmin-backlog-body">
+                                                    <h3>待审书评</h3>
+                                                    <p><cite>0</cite></p>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="layui-col-md12">
+                        <div class="layui-card">
+                            <div class="layui-card-header">蜘蛛来访</div>
+                            <div class="layui-card-body">
+
+                                <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade" lay-filter="LAY-index-dataview">
+                                    <div carousel-item id="LAY-index-dataview">
+                                        <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="layui-card">
+                            <div class="layui-card-header">
+                                版权信息
+                                <i class="layui-icon layui-icon-tips" lay-tips="要支持的噢" lay-offset="5"></i>
+                            </div>
+                            <div class="layui-card-body layui-text layadmin-text">
+                                <blockquote class="layui-elem-quote">一旦您使用本程序，即代表您同意了下面的条款:</blockquote>
+                                <p>一、PT小说程序 <a href="http://www.ptcms.com" target="_blank">PTCMS</a> 独立开发，严禁使用任何非法手段破解并进行修改发布等行为；</p>
+                                <p>二、不得使用本程序进行违反我国现行法律法规的任何行为，如传播病毒木马、恶意软件、淫秽色情等;</p>
+                                <p>三、严禁使用本程序进行刷流量、刷联盟等行为，如经发现，我们有权在不告知用户的情况下追回程序使用权;</p>
+                                <p>四、本程序仅仅是一个建站程序，如果使用者用于非法用途或者侵犯版权，与本程序无关;</p>
+                                <p style="color:red">五、一旦发现您参与破解或者为破解提供便利，我们有权终止服务并不进行任何补偿;</p>
+                                <p>六、如因用户违反程序使用条例，本站有权终止对该用户的技术支持、更新升级、数据采集等服务并保留追究其相应的法律责任;</p>
+                                <p>七、特殊说明（仅针对本程序聚合搜索模块）：</p>
+                                <p>　　1、PT小说程序聚合搜索模块为小说类垂直搜索引擎，严禁使用本程序做任何违反我国现行法律法规的任何行为;</p>
+                                <p>　　2、PT小说程序聚合搜索模块提供基本的采集功能，可以将其他站点的内容进行采集，用户对此功能进行使用需付完全责任;</p>
+                                <p>　　3、PT小说程序聚合搜索模块仅为一个程序，如何使用完全为用户的个人行为，本公司对此不承担任何责任;</p>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-col-md4">
+                <div class="layui-card">
+                    <div class="layui-card-header">版本信息</div>
+                    <div class="layui-card-body layui-text">
+                        <!--<script type="text/html" template lay-url="https://www.kxcms.com/api/program/version.json?name=PTNovelSearch&version={{ layui.admin.v }}">-->
+                        <table class="layui-table">
+                            <colgroup>
+                                <col width="100">
+                                <col>
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <td>当前版本</td>
+                                <td>
+                                        <!--V{{ layui.admin.v }} (Build {{ layui.admin.t }})-->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>最新版本</td>
+                                <td>
+                                    <!--<a href="{{ d.data.last.url }}" target="_blank">V{{ d.data.last.version }} (Build {{ d.data.last.build }})</a>-->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>更新信息</td>
+                                <td>
+                                    <!--<a href="{{ d.data.last.url }}" target="_blank">更新日志</a>-->
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>一键升级</td>
+                                <td style="padding-bottom: 0;">
+                                    <div class="layui-btn-container">
+                                        <!--<a href="http://www.ptcms.com" target="_blank" class="layui-btn layui-btn-disabled">立即更新</a>
+                                        {{# if(layui.admin.v != d.data.version || layui.admin.t != d.data.build){ }}
+                                        <a lay-href="/system/update" target="_blank" class="layui-btn">立即更新</a>
+                                        {{# }else{ }}
+                                        <button class="layui-btn layui-btn-disabled" type="button">已经最新</button>
+                                        {{# } }}-->
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        </script>
+                    </div>
+                </div>
+
+                <div class="layui-card">
+                    <div class="layui-card-header">官方动态</div>
+                    <div class="layui-card-body layui-text">
+<!--
+                        <script type="text/html" template lay-url="https://www.kxcms.com/api/program/news.json?name=PTNovelSearch">
+                        <table class="layui-table ptcms-news" lay-even lay-skin="nob">
+                            <tbody>
+                            {{# layui.each(d.data,function(k,v){ }}
+                            {{# if (k<7){ }}
+                            <tr>
+                                <td><a href="{{ v.url }}" target="_blank">[{{ v.date }}] {{v.title}}</a></td>
+                            </tr>
+                            {{# } }}
+                            {{# }) }}
+                            </tbody>
+                        </table>
+                        </script>-->
+                    </div>
+                </div>
+                <div class="layui-card">
+                    <div class="layui-card-header">广告</div>
+                    <div class="layui-card-body">
+                        <div class="layadmin-news" style="height: 195px !important">
+                            <div>
+                                <div><a href="https://www.zhiqiang.name" target="_blank" class="layui-bg-blue" style="margin-bottom:5px">睿鑫网络</a></div>
+                                <div><a href="https://www.zhiqiang.name" target="_blank" class="layui-bg-orange" style="margin-bottom:5px;">睿鑫网络</a></div>
+                                <div><a href="https://www.zhiqiang.name" target="_blank" class="layui-bg-green" style="margin-bottom:5px">睿鑫网络</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layui-card">
+                    <div class="layui-card-header">快速导航</div>
+                    <div class="layui-card-body">
+                        <div class="layui-carousel layadmin-news" style="height: 125px !important">
+                            <div>
+                                <div><a href="https://www.kxcms.com/doc/index.html" target="_blank" class="layui-bg-red" style="margin-bottom:5px">快速上手文档</a></div>
+                                <div><a href="https://www.kxcms.com/user/index/index.html" target="_blank" class="layui-bg-cyan">用户中心</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use('console', layui.factory('console'));
+</script>
+

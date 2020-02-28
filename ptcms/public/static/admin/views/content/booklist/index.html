@@ -1,0 +1,184 @@
+<title>书单列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营管理</cite></a>
+        <a><cite>书单管理</cite></a>
+        <a><cite>书单列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="ratingTpl">
+    <span style="color: #5FB878;">{{d.num_good}}</span> / <span style="color: #FF5722;">{{d.num_bad}}</span>
+</script>
+<script type="text/html" id="viewNovels">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户:</label>
+        <div class="layui-input-block">
+            <input type="text" value="{{d.data.user}}" class="layui-input" style="border: none;" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">标题:</label>
+        <div class="layui-input-block">
+            <input type="text" value="{{d.data.title}}" class="layui-input" style="border: none;" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">标签:</label>
+        <div class="layui-input-block">
+            <input type="text" value="{{d.data.tags}}" class="layui-input" style="border: none;" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述:</label>
+        <div class="layui-input-block">
+            <input type="text" value="{{d.data.intro}}" class="layui-input" style="border: none;" disabled>
+        </div>
+    </div>
+    <table lay-filter="viewNovelsTable">
+        <thead>
+        <tr>
+            <th lay-data="{field:'create_time', width:160}">添加时间</th>
+            <th lay-data="{field:'novel', width:160}">书名</th>
+            <th lay-data="{field:'author', width:160}">作者</th>
+            <th lay-data="{field:'star', width:60,align: 'center'}">评分</th>
+            <th lay-data="{field:'comment'}">评语</th>
+            <th lay-data="{field:'action', width:80,align: 'center'}">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{# layui.each(d.list, function(index, item){ }}
+        <tr>
+            <td>{{item.create_time}}</td>
+            <td>{{item.novel.novel.name}}</td>
+            <td>{{item.novel.author.name}}</td>
+            <td>{{item.star}}</td>
+            <td>{{item.comment}}</td>
+            <td>
+                <button onclick="config.removeNovel(this,'{{d.data.id}}','{{item.novel_id}}');"
+                        class="layui-btn layui-btn-xs layui-btn-danger">删除
+                </button>
+            </td>
+        </tr>
+        {{# }); }}
+        </tbody>
+    </table>
+</script>
+<script>
+    var config = {
+        api: {
+            batch: '/manage/content/booklist/batch.json',
+            list: '/manage/content/booklist/list.json',
+            del: '/manage/content/booklist/del.json',
+            change: '/manage/content/booklist/change.json',
+            novel: '/manage/content/booklist/getnovellist.json',
+            removeNovel: '/manage/content/booklist/removenovel.json',
+        },
+        search: {
+            user: {type: 'text', text: '用户名'},
+            status: {type: 'select', text: '审核状态', data: {0: '未审核', 1: '已审核'}},
+        },
+        removeNovel: function (othis, booklistId, novelId) {
+            layer.confirm('确定删除吗？', function (index) {
+                layui.admin.req({
+                    url: config.api.removeNovel,
+                    data: {id: booklistId, novelid: novelId},
+                    success: function (res) {
+                        layui.$(othis).parents('tr').remove();
+                    }
+                });
+            });
+        },
+        topButton: {
+            accept: {text: '通过', field: 'status', value: '1'},
+            reject: {style: 'layui-btn-danger', text: '拒绝', field: 'status', value: '0'},
+            del: {},
+        },
+        actionButton: {
+            view: {
+                text: '查看',
+                icon: 'layui-icon layui-icon-search',
+                action: function (obj) {
+                    layui.admin.req({
+                        url: config.api.novel,
+                        data: {id: obj.data.id},
+                        success: function (res) {
+                            layui.layer.open({
+                                type: 1,
+                                skin: 'layui-layer-rim',
+                                area: ['100%','100%'],
+                                btn: '关闭',
+                                title: obj.data.title,
+                                content: '',
+                                success: function (layero, index) {
+                                    layui.laytpl(viewNovels.innerHTML).render({
+                                        data: obj.data,
+                                        list: res.data
+                                    }, function (html) {
+                                        layero.find('.layui-layer-content').html(html);
+                                        layui.table.init('viewNovelsTable');
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            },
+            del: {},
+        },
+        table: {
+            page: true,
+            limit: 30,
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'ID', align: 'center', width: 60},
+                {field: 'user', title: '用户', align: 'center', width: 100},
+                {field: 'title', title: '标题'},
+                {field: 'tags', title: '标签'},
+                {field: 'num_novel', title: '书籍', align: 'center', width: 60},
+                {field: 'num_mark', title: '收藏', align: 'center', width: 60},
+                {field: 'num_vote', title: '推荐', align: 'center', width: 60},
+                {field: 'num_allvisit', title: '浏览', align: 'center', width: 60},
+                {field: 'num_comment', title: '评论', align: 'center', width: 60},
+                {field: 'rating', title: '评分', templet: '#ratingTpl', align: 'center', width: 60},
+                {field: 'create_time', title: '创建时间', templet: '#table-timestamp'},
+                {
+                    field: 'status',
+                    title: '状态',
+                    templet: '#table-switch',
+                    align: 'center',
+                    width: 100,
+                    data: {text: '正常|隐藏'}
+                },
+                {title: '操作', width: 140, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

@@ -1,0 +1,162 @@
+<title>添加友情链接</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>系统设置</cite></a>
+        <a><cite>信息管理</cite></a>
+        <a><cite>友情链接</cite></a>
+        <a><cite>添加链接</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">添加友情链接</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100>
+                        <!--网站logo-->
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">网站名称 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" value="" class="layui-input" lay-verify="required">
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">网站地址 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="url" value="" class="layui-input" lay-verify="required|url">
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">网站LOGO</label>
+                            <div class="layui-input-block">
+                                <img id="logo_display" style="height: 38px;">
+                                <input type="hidden" name="logo">
+                                <button type="button" class="layui-btn" id="btn_upload_logo">
+                                    <i class="layui-icon">&#xe67c;</i>上传
+                                </button>
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">描述信息</label>
+                            <div class="layui-input-block">
+                                <textarea name="description" class="layui-textarea" lay-verify="required"></textarea>
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">代码颜色</label>
+                            <div class="layui-input-block">
+                                <input type="hidden" name="color">
+                                <div class="color"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">字体粗细</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="is_bold" lay-skin="switch" lay-text="加粗|正常">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">过期时间 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="expire_time" class="layui-input" lay-verify="required" readonly>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">显示状态</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="status" lay-skin="switch" lay-text="显示|隐藏" value="1" checked>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">排序位置</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="position" value="50" class="layui-input">
+                                <div class="layui-form-mid layui-word-aux">越小越靠前</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="submit" >确认添加</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var api_submit = '/manage/system/friendlink/add.json'
+        , url_index = '/setting/friendlink/index'
+        , api_upload = '/manage/system/friendlink/uploadLogo';
+    layui.use(['form', 'upload','colorpicker','laydate'], function (exports) {
+        //渲染
+        var $ = layui.$
+            , layer = layui.layer
+            , laytpl = layui.laytpl
+            , setter = layui.setter
+            , view = layui.view
+            , admin = layui.admin
+            , form = layui.form
+            , upload = layui.upload;
+
+        var $body = $('body');
+
+        upload.render({
+            elem: '#btn_upload_logo',
+            url: api_upload,
+            done: function (res, index, upload) {
+                $('#logo_display').attr('src',res.data.src);
+                $('input[name=logo]').val(res.data.src);
+            },
+            error: function (index, upload) {
+
+            }
+        });
+
+        layui.colorpicker.render({
+            elem: 'div.color',
+            done: function (color) {
+                $('input[name=color]').val(color);
+            }
+        });
+
+        layui.laydate.render({
+            elem: 'input[name=expire_time]',
+            type: 'datetime'
+        });
+
+        form.render();
+
+        form.on('submit(submit)', function (obj) {
+            obj.field.expire_time = (new Date(obj.field.expire_time)).getTime()/1000;
+            //提交修改
+            admin.req({
+                url: api_submit
+                , data: obj.field
+                , method: 'POST'
+                , success: function (res) {
+                    admin.success('添加成功', {
+                        yes: function () {
+                            location.reload()
+                        },
+                        btn2: function () {
+                            location.hash = url_index
+                        }
+                    })
+                }
+            });
+            return false;
+        });
+
+
+    });
+</script>

@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>注册 - 原创专区 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/css/style.css"/>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico"/>
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__"/>
+    <style>
+        .labs {
+            height: 90px;
+            background-color: #f7f8f8;
+        }
+
+        .labs li {
+            display: inline-block;
+            margin-top: 25px;
+            color: rgba(255, 85, 85, 0.5);
+        }
+
+        .labs li span {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            border: 2px solid rgba(255, 85, 85, 0.5);
+            border-radius: 50%;
+            margin-right: 15px;
+            font-weight: 700;
+            font-size: 16px;
+        }
+
+        .labs li:not(:last-child):after {
+            content: '';
+            width: 70px;
+            display: inline-block;
+            border-bottom: 2px solid rgba(255, 85, 85, 0.5);
+            margin: 4px 20px;
+        }
+
+        .labs li.active {
+            border-color: rgba(255, 85, 85, 1) !important;
+            color: rgba(255, 85, 85, 1) !important;
+        }
+
+        .labs li.active span {
+            background-color: #FFDADA;
+        }
+
+        .contents {
+            width: 500px;
+            margin: 80px auto 0;
+        }
+
+        .contents li {
+            display: none;
+        }
+
+        .contents li.active {
+            display: block;
+        }
+
+        .field-input,
+        .field-radio,
+        .field-select {
+            margin: 20px;
+            text-align: left;
+            position: relative;
+        }
+
+        .field-radio input[type=radio]:first-child {
+            margin-left: 100px;
+        }
+
+        .field-radio input[type=radio] {
+            margin-bottom: 10px;
+        }
+        .field-radio input[type=radio] + label{
+            cursor:pointer;
+        }
+
+        .field-label {
+            position: absolute;
+            left: 1px;
+            top: 1px;
+            width: 80px;
+            height: 35px;
+            line-height: 35px;
+            text-align: right;
+            padding-right: 20px;
+            color: #323237;
+            background: #f7f8f8;
+
+        }
+
+        .field-input input,
+        .field-select > select,
+        .field-select .distpicker {
+            height: 35px;
+            line-height: 35px;
+            padding: 0 10px 0 110px;
+            background-color: #fff;
+            border: 1px solid #d9d9d9;
+            width: 80%;
+            width: -moz-calc(100% - 120px);
+            width: -webkit-calc(100% - 120px);
+            width: calc(100% - 120px);
+        }
+
+        .field-select .distpicker select {
+            width: 32%;
+            height: 100%;
+            border: none;
+        }
+
+        .field-select > select {
+            width: 100%;
+            height: 37px;
+        }
+
+
+        .field-tips {
+            margin: 10px 0 10px 110px;
+        }
+
+        .field-input.error *,
+        .field-radio.error *,
+        .field-checkbox.error *,
+        .field-textarea.error * {
+            border-color: #f55 !important;
+            color: #f55 !important;
+        }
+
+
+    </style>
+</head>
+<body>
+{include file="/author/system/header"}
+<div class="body">
+    <div class="bg-white text-center">
+        <form method="post">
+            <ul class="mlr10 mt10 labs">
+                <li class="active"><span>1</span>基础信息</li>
+                <li><span>2</span>信息详情</li>
+                <li><span>3</span>完成申请</li>
+            </ul>
+            <ul class="contents">
+                <li class="active">
+                    <div class="field-input">
+                        <label class="field-label" for="pseudonym">笔名</label>
+                        <input type="text" name="pseudonym" id="pseudonym" placeholder="请输入您的笔名">
+                        <span class="field-tips"></span>
+                    </div>
+                    <div class="field-input">
+                        <label class="field-label" for="password">管理密码</label>
+                        <input type="password" name="password" id="password" placeholder="请输入您的管理密码">
+                        <span class="field-tips">6-16位英文、数字或组合，原创登录和管理操作使用</span>
+                    </div>
+                    <div class="field-input">
+                        <label class="field-label" for="confirm_password">确认密码</label>
+                        <input type="password" name="confirm_password" id="confirm_password" placeholder="请确认您的管理密码">
+                        <span class="field-tips">请再次确认您的管理密码</span>
+                    </div>
+                    <div class="field-input">
+                        <label class="field-label" for="email">电子邮件</label>
+                        <input type="email" name="email" id="email" value="{$userinfo.email}" placeholder="请输入您的电子邮件地址">
+                        <span class="field-tips">请填写常用的电子邮箱，以便快速联系你</span>
+                    </div>
+                    <div class="field-input">
+                        <label class="field-label" for="qq">QQ号码</label>
+                        <input type="text" name="qq" id="qq" placeholder="请输入您的QQ号码">
+                        <span class="field-tips">请填写常用的QQ号码，以便快速联系你</span>
+                    </div>
+                    <div class="mt20 inline-block">
+                        <button type="button" class="bg-red color1 plr45 ptb15 btn-next">下一步</button>
+                    </div>
+                </li>
+                <li class="">
+                    <div class="field-input">
+                        <label class="field-label" for="actual_name">真实姓名</label>
+                        <input type="text" name="actual_name" id="actual_name" placeholder="请输入您的真实姓名">
+                        <span class="field-tips">请输入您的真实姓名并核对无误</span>
+                    </div>
+                    <div class="field-radio">
+                        <label class="field-label">性别</label>
+                        <div>
+                            <input type="radio" name="sex" value="1" id="sex_man"><label for="sex_man">男</label>
+                            <input type="radio" name="sex" value="2" id="sex_woman"><label for="sex_woman">女</label>
+                        </div>
+                        <span class="field-tips"></span>
+                    </div>
+                    <div class="field-input">
+                        <label class="field-label" for="idcard">身份证号</label>
+                        <input type="text" name="idcard" id="idcard" placeholder="请输入您的身份证号">
+                        <span class="field-tips">请输入您的身份证号码并核对无误</span>
+                    </div>
+                    <div class="field-input">
+                        <label class="field-label" for="mobile">手机号码</label>
+                        <input type="text" name="mobile" id="mobile">
+                        <span class="field-tips">请输入您的手机号码，以便快速联系您</span>
+                    </div>
+                    <div class="field-select">
+                        <label class="field-label" for="mobile">所在地</label>
+                        <div class="distpicker" data-toggle="distpicker" id="distpicker">
+                            <select name="province" data-province="选择省"></select>
+                            <select name="city" data-city="选择市"></select>
+                            <select name="district" data-district="选择区"></select>
+                        </div>
+                        <span class="field-tips">请选择您的所在地并完善详细地址</span>
+                    </div>
+                    <div class="field-input">
+                        <label class="field-label" for="address">详细地址</label>
+                        <input type="text" name="address" id="address" placeholder="请完善您的详细地址">
+                        <span class="field-tips"></span>
+                    </div>
+                    <div class="inline-block">
+                        <button type="button" class="bg-red color1 plr45 ptb15 btn-next">下一步</button>
+                        <button type="button" class="plr45 ptb15 color92 bg-none btn-return">返回上一步</button>
+                    </div>
+                    <div class="mt20 field-checkbox">
+                        <input type="checkbox" name="read_and_agree" id="read_and_agree">
+                        <label for="read_and_agree">我已阅读并同意 <a class="color2" href="#">《用户原创投稿协议》</a></label>
+                    </div>
+                </li>
+                <li class="">
+                    <div style="margin-top: 150px;">
+                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/images/success.png" alt="成功申请"
+                             style="vertical-align:middle;">
+                        <span class="color0 size24 inline-block" style="vertical-align:middle;">成功申请</span>
+                    </div>
+                    <p class="mt30">
+                        恭喜，您{=$kx.config.author.reg_power?'已':''}加入原创专区{=$kx.config.author.reg_power?'':'，您的申请已提交请耐心等待审核'}！</p>
+                    <div style="margin-top: 60px">
+                        <a href="{link=author.author.index}" class="bg-red color1 plr45 ptb15 mr20">进入专区</a>
+                        <a href="{link=author.novel.add}" class="plr45 ptb15 color2 border-c-red border">开始创作</a>
+                    </div>
+                </li>
+            </ul>
+        </form>
+    </div>
+</div>
+{include file="/author/system/footer"}
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/js/jquery.distpicker-2.0.5.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/js/jquery.validate.min-1.19.0.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/js/jquery.validate.messages_zh-1.19.0.min.js"></script>
+<script>
+    $('#distpicker').distpicker();
+    $.validator.addMethod("idcard", function (value, element) {
+        var checkCode = function (val) {
+            return /^[1-9]\d{5}(18|19|20)\d{2}((0[1-9])|(1[0-2]))(([0-2][1-9])|10|20|30|31)\d{3}[0-9Xx]$/.test(value);
+        };
+        return checkCode(value);
+    }, "请正确输入身份证号码");
+    $.validator.addMethod("chcharacter", function (value, element) {
+        var tel = /^[\u4e00-\u9fa5]+$/;
+        return this.optional(element) || (tel.test(value));
+    }, "请输入汉字");
+    $.validator.addMethod("stringMinLength", function (value, element, param) {
+        var length = value.length;
+        for (var i = 0; i < value.length; i++) {
+            if (value.charCodeAt(i) > 127) {
+                length++;
+            }
+        }
+        return this.optional(element) || (length >= param);
+    }, $.validator.format("长度不能小于 { 0 }!"));
+    $.validator.addMethod("mobile", function (value, element) {
+        var length = value.length;
+        return this.optional(element) || (length === 11 && /^1[1-9]\d{9}$/.test(value));
+    }, "请输⼊您的手机号码!");
+    $.validator.addMethod("qq", function (value, element) {
+        return this.optional(element) || (value.length >= 5 && /^[1-9]\d{4,11}$/.test(value));
+    }, "请输⼊您的QQ号码!");
+    $.validator.addMethod("pseudonym", function (value, element) {
+        return this.optional(element) || /^[A-Za-z0-9_\-\u4e00-\u9fa5]{2,10}$/.test(value);
+    }, "使用了非法字符!");
+
+</script>
+
+<script>
+    var baseRules = {
+        pseudonym: {required: true, pseudonym: true},
+        password: {required: true, minlength: 5},
+        confirm_password: {equalTo: "#password"},
+        email: {required: true, email: true},
+        qq: {required: true, qq: true},
+    }, form = $('form'), validate = form.validate({
+        rules: baseRules,
+        errorPlacement: function (error, element) {
+            var p = element.parents('.field-input,.field-radio,.field-checkbox,.field-textarea');
+            p.addClass('error');
+            if (p.children('.field-tips').length) {
+                p.children('.field-tips').html(error.html());
+            } else {
+                p.append('<span class="field-tips">' + error.html() + '</span>');
+            }
+        },
+        success: function (succ, element) {
+            $(element).parents('.field-input,.field-radio,.field-checkbox,.field-textarea').removeClass('error');
+        }
+    });
+    $('button.btn-next').click(function () {
+        var index = $(this).parents('li').index();
+        switch (index) {
+            case 0:
+                validate.settings.rules = baseRules;
+                if (form.valid()) {
+                    $(this).parents('li').removeClass('active');
+                    $('.labs li').removeClass('active');
+                    $('.labs li:eq(' + (index + 1) + ')').addClass('active');
+                    $('.contents li:eq(' + (index + 1) + ')').addClass('active');
+                }
+                break;
+            case 1:
+                validate.settings.rules = Object.assign(validate.settings.rules, {
+                    actual_name: {required: true, chcharacter: true},
+                    sex: 'required',
+                    idcard: {required: true, idcard: true},
+                    mobile: {required: true, mobile: true},
+                    address: 'required',
+                    // read_and_agree: 'required',
+                });
+                oli = $(this).parents('li');
+                if (form.valid() && !$('#read_and_agree').prop('checked')) {
+                    layer.msg('请仔细阅读并同意⽤用户协议', function () {
+                    });
+                } else if (form.valid()) {
+                    post('{link=""}', form.serialize(), function (res) {
+                        oli.removeClass('active');
+                        $('.labs li').removeClass('active');
+                        $('.labs li:eq(' + (index + 1) + ')').addClass('active');
+                        $('.contents li:eq(' + (index + 1) + ')').addClass('active');
+                    });
+                }
+                break;
+        }
+    });
+    $('button.btn-return').click(function () {
+        $(this).parents('li').removeClass('active');
+        var index = $(this).parents('li').index() - 1;
+        $('.labs li').removeClass('active');
+        $('.labs li:eq(' + index + ')').addClass('active');
+        $('.contents li:eq(' + index + ')').addClass('active');
+    });
+</script>
+</body>
+</html>

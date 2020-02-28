@@ -1,0 +1,51 @@
+<title>评论管理</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营管理</cite></a>
+        <a><cite>评论管理</cite></a>
+        <a><cite>修改</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">修改</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="hidden" name="id">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认修改</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            submit: '/manage/content/comment/edit.json'
+        },
+        fields: [
+            {name: 'id', key: 'id', type: 'hide',},
+            {name: '所属内容类型', key: 'type', type: 'label',},
+            {name: '所属内容名称', key: 'title', type: 'label',},
+            {name: '评论用户', key: 'user.name', type: 'label',},
+            {name: '评论时间', key: 'datetime', type: 'label'},
+            {name: '评论内容', key: 'content', type: 'textarea'},
+            {name: '评论状态', key: 'status', type: 'switch', extra: '显示|隐藏'},
+        ],
+    };
+    layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+</script>

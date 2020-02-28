@@ -1,0 +1,137 @@
+<title>数据库升级</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>安全维护</cite></a>
+        <a><cite>数据库升级</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="datetimeTpl">
+    {{d.postdate}} / {{d.last_update}}
+</script>
+<script>
+    var config;
+    layui.admin.req({
+        url: '/manage/content/novel/extra.json',
+        method: 'POST',
+        success: function (res) {
+            config = {
+                api: {
+                    list: '/manage/system/migrate/list.json',
+                    run: '/manage/system/migrate/run.json',
+                    ignore: '/manage/system/migrate/ignore.json',
+                },
+                search: {
+                    status: {type: 'select', text: '状态', data: {'-1': '不可执行', '0': '未执行', '1': '已执行'}, value: '0'},
+                },
+                topButton: {
+                    run: {
+                        text: '执行',
+                        action: function () {
+                            var checkData = layui.table.checkStatus('LAY-curd-table').data;
+                            if (checkData.length === 0) {
+                                return layui.layer.msg('请选择数据');
+                            }
+                            var names = [];
+                            var ignore = [];
+                            layui.each(checkData, function (k, v) {
+                                if (v.status !== '0') {
+                                    ignore.push(v.name);
+                                } else {
+                                    names.push(v.name)
+                                }
+                            });
+                            if (ignore.length > 0) {
+                                layui.layer.msg('以下文件因状态异常被忽略<br><br>' + ignore.join('<br>'))
+                            }
+                            layui.admin.req({
+                                url: config.api.run,
+                                data: {names: names},
+                                method: 'POST',
+                                success: function (res) {
+                                    layui.table.reload('LAY-curd-table');
+                                    layui.layer.msg('操作成功');
+                                }
+                            })
+                        }
+                    },
+                    ignore: {
+                        text: '忽略',
+                        action: function () {
+                            layui.layer.confirm('确定删除吗？', function (index) {
+                                var checkData = layui.table.checkStatus('LAY-curd-table').data;
+                                if (checkData.length === 0) {
+                                    return layui.layer.msg('请选择数据');
+                                }
+                                var names = [];
+                                var ignore = [];
+                                layui.each(checkData, function (k, v) {
+                                    if (v.status !== '0') {
+                                        ignore.push(v.name);
+                                    } else {
+                                        names.push(v.name)
+                                    }
+                                });
+                                if (ignore.length > 0) {
+                                    layui.layer.msg('以下文件因状态异常被忽略<br><br>' + ignore.join('<br>'))
+                                }
+                                layui.admin.req({
+                                    url: config.api.ignore,
+                                    data: {names: names},
+                                    method: 'POST',
+                                    success: function (res) {
+                                        layui.reload('LAY-curd-table');
+                                        layui.layer.msg('操作成功');
+                                    }
+                                });
+                            });
+                        }
+                    },
+                },
+                table: {
+                    cols: [[
+                        {type: 'checkbox', fixed: 'left'},
+                        {field: 'name', title: '名称'},
+                        {field: 'time', title: '执行时间', align: 'center', width: 160},
+                        {
+                            field: 'status',
+                            title: '状态',
+                            templet: '#table-label',
+                            align: 'center',
+                            width: 100,
+                            data: {data: {'-1': '不可执行', '0': '未执行', '1': '已执行'}},
+                            disabled: true
+                        },
+                    ]]
+                }
+            };
+            layui.use('curd/list', layui.factory('curd/list'));
+        }
+    });
+</script>

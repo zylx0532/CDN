@@ -1,0 +1,81 @@
+<title>用户列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>用户管理</cite></a>
+        <a><cite>用户列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+
+<script>
+    config = {
+        api: {
+            batch: '/manage/user/user/batch.json',
+            list: '/manage/user/user/list.json',
+            del: '/manage/user/user/del.json',
+            change: '/manage/user/user/change.json',
+            setAdmin: '/manage/user/admin/set.json',
+        },
+        search: {
+            id: {type: 'text', text: 'ID'},
+            name: {type: 'text', text: '用户名'},
+        },
+        topButton: {
+            enable: {field: 'status', value: 1},
+            disable: {field: 'status', value: 0},
+            del: {},
+        },
+        actionButton: {
+            edit: {},
+            del: {},
+            setAdmin: {
+                text: '设为管理员',
+                action: function (obj) {
+                    location.hash = layui.router().href + 'setAdmin/id=' + obj.data.id + '/name=' + obj.data.name
+                }
+            },
+        },
+        table: {
+            page: true,
+            limit: 30,
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'ID', align: 'center', width: 80},
+                {field: 'name', title: '用户名'},
+                {field: 'login_ip', title: '登录IP', align: 'center'},
+                {field: 'login_time', title: '登录时间', align: 'center'},
+                {field: 'reg_ip', title: '注册IP', align: 'center'},
+                {field: 'reg_time', title: '注册时间', align: 'center'},
+                {field: 'status', title: '状态', templet: '#table-switch', width: 100, data: {text: '启用|禁用'}},
+                {title: '操作', width: 230, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

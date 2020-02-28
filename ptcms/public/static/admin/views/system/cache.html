@@ -1,0 +1,87 @@
+<title>更新缓存</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>安全维护</cite></a>
+        <a><cite>更新缓存</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">更新缓存</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认执行</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var config;
+    config = {
+        api: {
+            submit: '/manage/system/cache/clear.json'
+        },
+        submit: function (obj) {
+            layui.admin.req({
+                url: config.api.submit,
+                data: obj.field,
+                method: 'POST',
+                success: function (res) {
+                    layui.admin.tip('更新缓存成功');
+                    return false;
+                }
+            });
+            return false;
+        },
+        fields: [
+            {
+                name: '模板缓存',
+                key: 'type',
+                type: 'checkbox',
+                extra: 'template:更新模板缓存',
+                value: 'template',
+                intro: '解决模板修改后由于缓存导致模板未及时更新，特别是修改头尾公共文件不是所有页面都生效'
+            },
+            {
+                name: '配置缓存',
+                key: 'type',
+                type: 'checkbox',
+                extra: 'config:更新配置缓存',
+                value: 'config',
+                intro: '解决配置修改后由于缓存导致未生效的问题'
+            },
+            {
+                name: 'PHP缓存',
+                key: 'type',
+                type: 'checkbox',
+                extra: 'php:更新PHP缓存',
+                value: 'php',
+                intro: 'opcache开启时会导致刚升级完成后页面未及时生效'
+            },
+            {
+                name: '内存缓存',
+                key: 'type',
+                type: 'checkbox',
+                extra: 'mem:清空内存缓存',
+                value: '',
+                intro: '慎重，清空后再次获取需要较长时间，并会造成较大压力',
+            },
+        ],
+    };
+    layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+</script>

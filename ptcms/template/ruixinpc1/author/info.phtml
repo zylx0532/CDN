@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>作家资料 - 原创专区 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/css/style.css"/>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico"/>
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__"/>
+    <style>
+        .container {
+            padding: 20px;
+        }
+
+        .body ul.label {
+            height: 54px;
+        }
+
+        .body ul.label li {
+            float: left;
+            width: 130px;
+            height: 50px;
+            line-height: 50px;
+            text-align: center;
+            background: #E5E5E5;
+            margin-top: 4px;
+        }
+
+        .body ul.label li.active {
+            background-color: #fff;
+            color: #323237;
+            border-top: 4px solid #f55;
+            margin-top: 0;
+        }
+
+        .body .container li {
+            height: 655px;
+            display: none;
+        }
+
+        .body .container li.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+{include file="/author/system/header"}
+<div class="body">
+    {include file="/author/system/left"}
+    <div class="right">
+        <ul class="label">
+            <li data-type="base" class="active">基本资料</li>
+            <li data-type="details">详细资料</li>
+        </ul>
+        <ul class="container bg-white h100">
+            <li class="base active">
+                <input type="file" id="file_cover" style="display: none" name="file">
+                <form method="post">
+                    <div class="h100 fl" style="width: 600px;">
+                        <div class="form-item">
+                            <label class="form-label" for="field_name">笔名</label>
+                            <div class="form-input-block">
+                                <input type="text" name="name" id="field_name" value="{$authorinfo.name}">
+                            </div>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label" for="field_mobile">电话</label>
+                            <div class="form-input-block">
+                                <input type="text" name="mobile" id="field_mobile" value="{$authorinfo.data.mobile}">
+                            </div>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label" for="field_qq">QQ</label>
+                            <div class="form-input-block">
+                                <input type="text" name="qq" id="field_qq" value="{$authorinfo.data.qq}">
+                            </div>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label" for="field_email">邮箱</label>
+                            <div class="form-input-block">
+                                <input type="email" name="email" id="field_email" value="{$authorinfo.data.email}">
+                            </div>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label" for="field_intro">简介</label>
+                            <div class="form-input-block">
+                                <textarea name="intro" id="field_intro" cols="30"
+                                          rows="10">{$authorinfo.intro}</textarea>
+                            </div>
+                            <div class="form-tips">50-200字</div>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label"></label>
+                            <div class="form-input-block">
+                                <button class="bg-red color1 plr40 ptb5">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="clear: both"></div>
+                </form>
+            </li>
+            <li class="details">
+                <form method="post" class="form-details">
+                    <input type="hidden" name="type" value="details">
+                    <input type="hidden" name="password" value="">
+                    <div class="h100 fl" style="width: 600px;">
+                        <div class="form-item">
+                            <label class="form-label" for="field_truename">真实姓名</label>
+                            <div class="form-input-block">
+                                <input type="text" name="truename" id="field_truename"
+                                       value="{$authorinfo.data.truename}" disabled>
+                            </div>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label" for="field_idcard">身份证号</label>
+                            <div class="form-input-block">
+                                <input type="text" name="idcard" id="field_idcard"
+                                       value="{if $authorinfo.data.idcard}{=substr($authorinfo.data.idcard,0,4)}**********{=substr($authorinfo.data.idcard,-4)}{/if}"
+                                       disabled>
+                            </div>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label" for="field_alipay">支付宝账户</label>
+                            <div class="form-input-block">
+                                <input type="text" name="alipay" id="field_alipay"
+                                       value="{if $authorinfo.data.alipay}{=substr($authorinfo.data.alipay,0,4)}****{=substr($authorinfo.data.alipay,-4)}{/if}">
+                            </div>
+                            <div class="form-tips">用作稿酬输入提现使用</div>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label" for="field_repeat_alipay">确认支付宝账户</label>
+                            <div class="form-input-block">
+                                <input type="text" id="field_repeat_alipay"
+                                       value="{if $authorinfo.data.alipay}{=substr($authorinfo.data.alipay,0,4)}****{=substr($authorinfo.data.alipay,-4)}{/if}">
+                            </div>
+                            <div class="form-tips">用作稿酬输入提现使用</div>
+                        </div>
+                        <div class="form-item">
+                            <label class="form-label"></label>
+                            <div class="form-input-block">
+                                <button type="button" class="bg-red color1 plr40 ptb5 btn-submit">保存</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <div style="clear: both"></div>
+            </li>
+        </ul>
+    </div>
+</div>
+{include file="/author/system/footer"}
+<script>
+    $('.label li').click(function () {
+        $(this).addClass('active').siblings().removeClass('active');
+        $('.container li.' + $(this).data('type')).addClass('active').siblings().removeClass('active');
+    });
+    $('.form-details .btn-submit').click(function () {
+        var othis = $('.form-details');
+        if (!othis.find('#field_alipay').val()) {
+            layer.msg('支付宝账户不能为空');
+            return false;
+        }
+        if (othis.find('#field_alipay').val() !== othis.find('#field_repeat_alipay').val()) {
+            layer.msg('两次支付宝账户输入不一致');
+            return false;
+        }
+        layer.prompt({title: '请输入管理密码，并确认', formType: 1}, function (pass) {
+            layer.load(1, {shade: [0.1, '#000']});
+            console.log(othis.find('input[name=password]').val(pass));
+            othis.find('input[name=password]').val(pass);
+            othis.submit();
+        });
+    });
+</script>
+</body>
+</html>

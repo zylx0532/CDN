@@ -1,0 +1,199 @@
+<title>评论列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营管理</cite></a>
+        <a><cite>评论管理</cite></a>
+        <a><cite>评论列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="ratingTpl">
+    <span style="color: #5FB878;">{{d.good_num}}</span> / <span style="color: #FF5722;">{{d.bad_num}}</span>
+</script>
+<script>
+    var config = {
+        api: {
+            batch: '/manage/content/comment/batch.json',
+            list: '/manage/content/comment/list.json',
+            del: '/manage/content/comment/del.json',
+            change: '/manage/content/comment/change.json',
+            setting: '/manage/setting/comment.json',
+        },
+        search: {
+            user: {type: 'text', text: '用户名'},
+            status: {type: 'select', text: '审核状态',data:{0:'未审核',1:'已审核'}},
+        },
+        topButton: {
+            accept: {
+                text: '通过',
+                action: function () {
+                    var checkStatus = layui.table.checkStatus('LAY-curd-table'),
+                        checkData = checkStatus.data;
+
+                    if (checkData.length === 0) {
+                        return layer.msg('请选择数据');
+                    }
+                    var items = [], values = [];
+                    layui.each(checkData, function (k, v) {
+                        items.push(v.id);
+                        values.push(1)
+                    });
+                    layui.admin.req({
+                        url: config.api.batch,
+                        data: {type: 'change', items: items, field: 'status', values: values},
+                        method: 'POST',
+                        success: function (res) {
+                            if (res.code) {
+                                layer.msg(res.msg, function () {
+                                });
+                            } else {
+                                layer.msg('审核成功');
+                                layui.table.reload('LAY-curd-table');
+                            }
+                        }
+                    })
+                }
+            },
+            reject: {
+                style: 'layui-btn-danger',
+                text: '拒绝',
+                action: function () {
+                    var checkStatus = layui.table.checkStatus('LAY-curd-table'),
+                        checkData = checkStatus.data;
+
+                    if (checkData.length === 0) {
+                        return layer.msg('请选择数据');
+                    }
+                    var items = [], values = [];
+                    layui.each(checkData, function (k, v) {
+                        items.push(v.id);
+                        values.push(0)
+                    });
+                    layui.admin.req({
+                        url: config.api.batch,
+                        data: {type: 'change', items: items, field: 'status', values: values},
+                        method: 'POST',
+                        success: function (res) {
+                            if (res.code) {
+                                layer.msg(res.msg, function () {
+                                });
+                            } else {
+                                layer.msg('审核成功');
+                                layui.table.reload('LAY-curd-table');
+                            }
+                        }
+                    })
+                }
+            },
+            del: {},
+            setting: {
+                text: '评论设置',
+                action: function () {
+                    layui.admin.req({
+                        url: config.api.setting,
+                        data: {'comment#audit': '1'},
+                        method: 'GET',
+                        success: function (res) {
+                            if (res.code) {
+                                layer.msg(res.msg, function () {
+                                });
+                            } else {
+                                layui.layer.msg('用户发表评论是否需要审核?' + (parseInt(res.data.values['comment#audit'])?'(当前:不需要)':'(当前:需要)'), {
+                                    time: 0,
+                                    btn: ['需要', '不需要'],
+                                    yes: function (index) {
+                                        layui.admin.req({
+                                            url: config.api.setting,
+                                            data: {'comment#audit': '0'},
+                                            method: 'POST',
+                                            success: function (res) {
+                                                if (res.code) {
+                                                    layer.msg(res.msg, function () {
+                                                    });
+                                                } else {
+                                                    layer.msg('修改成功');
+                                                }
+                                            }
+                                        });
+                                        layui.layer.close(index);
+                                    },
+                                    btn2: function () {
+                                        layui.admin.req({
+                                            url: config.api.setting,
+                                            data: {'comment#audit': '1'},
+                                            method: 'POST',
+                                            success: function (res) {
+                                                if (res.code) {
+                                                    layer.msg(res.msg, function () {
+                                                    });
+                                                } else {
+                                                    layer.msg('修改成功');
+                                                }
+                                            }
+                                        });
+                                    },
+                                });
+                            }
+                        }
+                    });
+                }
+            },
+        },
+        actionButton: {
+            edit: {},
+            del: {},
+        },
+        table: {
+            page: true,
+            limit: 30,
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'ID', align: 'center', width: 60},
+                {field: 'type', title: '类型', align: 'center'},
+                {field: 'title', title: '所属内容名称', maxWidth: 100},
+                {field: 'user.name', title: '用户名', width: 100},
+                {field: 'content', title: '内容'},
+                {field: 'post_num', title: '回复', edit: 'text', align: 'center', width: 60},
+                {field: 'view_num', title: '阅读', align: 'center', width: 60},
+                {field: 'rating', title: '评分', templet: '#ratingTpl', align: 'center', width: 60},
+                {field: 'datetime', title: '评论时间'},
+                {
+                    field: 'status',
+                    title: '状态',
+                    templet: '#table-switch',
+                    align: 'center',
+                    width: 100,
+                    data: {text: '正常|隐藏'}
+                },
+                {title: '操作', width: 140, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

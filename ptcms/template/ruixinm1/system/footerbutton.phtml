@@ -1,0 +1,18 @@
+<div class="w100 flex-wrp flex-between size12 color4 flex-align-center pt-tabbar">
+    <a class="pt-tabbar-item pt-tabbar-mark {if ($pagesign =='user' && ($userleftsign == 'mark' || $userleftsign == 'history') )}active{/if}" href="{if $islogin}{link=user.mark.index}{else}{link=user.history.index}{/if}">
+        <div class="pt-tabbar-chunk"></div>
+        <div class="lh100">书架</div>
+    </a>
+    <a class="pt-tabbar-item pt-tabbar-home {if ($pagesign!='user')}active{/if}" href="{link=index.index}">
+        <div class="pt-tabbar-chunk"></div>
+        <div class="lh100">书城</div>
+    </a>
+    <a class="pt-tabbar-item pt-tabbar-booklist {if ($pagesign=='booklist')}active{/if}" href="{link=booklist.booklist.index}">
+        <div class="pt-tabbar-chunk"></div>
+        <div class="lh100">书单</div>
+    </a>
+    <a class="pt-tabbar-item pt-tabbar-my {if ($pagesign=='user' && $userleftsign!='mark' && $userleftsign!='history')}active{/if}" href="{link=user.index.index}">
+        <div class="pt-tabbar-chunk"></div>
+        <div class="lh100">我的</div>
+    </a>
+</div>

@@ -1,0 +1,73 @@
+<title>统计详情</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>统计日志</cite></a>
+        <a><cite>推送日志</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            list: '/manage/system/log/submit/index.json',
+        },
+        search: {
+            datetime: {type: 'date', text: '按时间查看', date: true, config: {type: 'date', format: 'yyyy-MM-dd',}},
+        },
+        table: {
+            where: layui.router().search,
+            page: false,
+            limit: 30,
+            cols: [[
+                {field: 'date', title: '日期',rowspan:2,align:"center"},
+                {field: 'submit', title: '提交',colspan: 4,align:"center"},
+                {field: 'ping', title: 'ping',colspan: 4,align:"center"},
+                {field: 'mip', title: 'MIP',colspan: 2,align:"center"},
+                {field: 'xiongzhang', title: '熊掌号',colspan: 2,align:"center"},
+                // {field: 'amp_ampamp', title: 'AMP',rowspan: 2,align:"center"},
+            ],[
+                {field: 'submit_pc', title: 'PC',align:"center"},
+                {field: 'submit_mobile', title: '手机',align:"center"},
+                {field: 'submit_mip', title: '百度MIP',align:"center"},
+                {field: 'submit_smmip', title: '神马MIP',align:"center"},
+                // {field: 'submit_amp', title: 'AMP',align:"center"},
+                {field: 'ping_pc', title: 'PC',align:"center"},
+                {field: 'ping_mobile', title: '手机',align:"center"},
+                {field: 'ping_mip', title: '百度MIP',align:"center"},
+                {field: 'ping_smmip', title: '神马MIP',align:"center"},
+                // {field: 'ping_amp', title: 'AMP',align:"center"},
+                {field: 'mip_mip', title: '百度',align:"center"},
+                {field: 'mip_smmip', title: '神马',align:"center"},
+                {field: 'xiongzhang_new', title: '日级',align:"center"},
+                {field: 'xiongzhang_all', title: '周级',align:"center"},
+            ]],
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

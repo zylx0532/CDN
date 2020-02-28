@@ -1,0 +1,161 @@
+<title>添加配置</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>开发选项</cite></a>
+        <a><cite>配置管理</cite></a>
+        <a><cite>添加配置</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">添加配置</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">配置名称 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" value="" class="layui-input" lay-verify="required">
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">配置KEY <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="key" value="" class="layui-input" lay-verify="required">
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">配置值 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <textarea name="value" class="layui-textarea" lay-verify="required"></textarea>
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">配置说明</label>
+                            <div class="layui-input-block">
+                                <textarea name="intro" class="layui-textarea"></textarea>
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">配置类型</label>
+                            <div class="layui-input-block">
+                                <select name="type" lay-verify="">
+                                    <option value="text">单行文本</option>
+                                    <option value="num">数字</option>
+                                    <option value="radio">单选框</option>
+                                    <option value="switch">开关选择</option>
+                                    <option value="checkbox">多选框</option>
+                                    <option value="select">下拉选择</option>
+                                    <option value="textarea">多行文本</option>
+                                    <option value="array">数组</option>
+                                </select>
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">配置分组 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="group" value="" class="layui-input" lay-verify="required">
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">排序位置</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="position" value="50" class="layui-input">
+                                <div class="layui-form-mid layui-word-aux">越大越靠前</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">附加配置</label>
+                            <div class="layui-input-block">
+                                <textarea name="extra" class="layui-textarea"></textarea>
+                                <div class="layui-form-mid layui-word-aux">用于生成表单的附加的内容</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">附加样式</label>
+                            <div class="layui-input-block">
+                                <textarea name="style" class="layui-textarea"></textarea>
+                                <div class="layui-form-mid layui-word-aux">用于生成表单的附加的样式</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">是否生效</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="isshow" lay-skin="switch" lay-text="使用|不使用" value="1"
+                                       checked>
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">是否在前台生效，某些配置仅作为辅助配置存在</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">配置状态</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="status" lay-skin="switch" lay-text="正常|禁用" value="1"
+                                       checked>
+                            </div>
+                            <div class="layui-form-mid layui-word-aux">在某些情况下可以临时关闭网站</div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <button class="layui-btn" lay-submit lay-filter="submit">确认添加</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var api_submit = '/manage/system/configure/add.json'
+        , url_index = '/development/configure/index'
+    layui.use(['form', 'upload'], function (exports) {
+        var $ = layui.$
+            , layer = layui.layer
+            , laytpl = layui.laytpl
+            , setter = layui.setter
+            , view = layui.view
+            , admin = layui.admin
+            , form = layui.form
+            , upload = layui.upload;
+
+        var $body = $('body');
+
+        form.render();
+        values = {};
+        layui.each(layui.router().search, function (k, v) {
+            values[k] = decodeURIComponent(v);
+        });
+        form.val('LAY-info-form', values);
+        form.on('submit(submit)', function (obj) {
+            //提交修改
+            admin.req({
+                url: api_submit
+                , data: obj.field
+                , method: 'POST'
+                , success: function (res) {
+                    admin.success('添加成功', {
+                        yes: function () {
+                            location.reload()
+                        },
+                        btn2: function () {
+                            location.hash = url_index
+                        }
+                    })
+                }
+            });
+            return false;
+        });
+
+
+    });
+</script>

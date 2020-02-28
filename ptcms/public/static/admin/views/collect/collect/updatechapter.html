@@ -1,0 +1,165 @@
+<title>执行规则</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>内容更新</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">内容更新</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认执行</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <blockquote class="layui-elem-quote layui-bg-green">
+                内容更新为对小说所有源进行一次校验看是否有新章节未采集
+            </blockquote>
+        </div>
+    </div>
+</div>
+<script>
+    var config, checkbox = [];
+    layui.admin.req({
+        url: '/manage/data/response.json',
+        method: 'POST',
+        data: {rule: 'select'},
+        success: function (res) {
+            config = {
+                submit: function (obj) {
+                    if(obj.field.mode === 'page'){
+                        layui.layer.open({
+                            type: 2,
+                            title: '执行结果',
+                            shadeClose: false,
+                            shade: false,
+                            maxmin: true,
+                            area: ['893px', '600px'],
+                            content: '/manage/collect/collect/updatechapter.html?start=' + obj.field.start + '&end=' + obj.field.end + '&limit=' + obj.field.limit + '&interval=' + obj.field.interval + '&access_token=' + encodeURIComponent(layui.data('layuiAdmin').access_token)
+                        });
+                    }else{
+                        var t = Math.round(new Date().getTime() / 1000), interval = null;
+                        layui.admin.req({
+                            url: '/manage/collect/collect/updatechapter.json',
+                            data: {
+                                start: obj.field.start,
+                                end: obj.field.end,
+                                t: t
+                            },
+                            method: 'POST',
+                            success: function () {
+                                layui.layer.open({
+                                    type: 1,
+                                    title: '执行脚本',
+                                    shadeClose: false,
+                                    shade: false,
+                                    maxmin: true,
+                                    area: ['893px', '600px'],
+                                    content: '',
+                                    success: function (layero, index) {
+                                        interval = setInterval(function () {
+                                            layui.admin.req({
+                                                url: '/manage/collect/collect/log.json',
+                                                data: {
+                                                    type: 'updatechapter',
+                                                    t: t
+                                                },
+                                                success: function (res) {
+                                                    if (res.data.content.search('<!-- end -->') >= 0) {
+                                                        clearInterval(interval);
+                                                        interval = null;
+                                                    }
+                                                    layero.find('.layui-layer-content').html(res.data.content)[0].scroll(0,999999);
+                                                }
+                                            });
+                                        }, 1000);
+                                        if (parseInt(obj.field.interval) > 0) {
+                                            setTimeout(function () {
+                                                clearInterval(interval);
+                                                interval = null;
+                                            }, parseInt(obj.field.interval) * 1000)
+                                        }
+                                    },
+                                    end: function () {
+                                        if (interval !== null) clearInterval(interval);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    return false;
+                },
+                done: function (layui) {
+                    layui.form.on('radio', function (obj) {
+                        if (obj.elem.name === 'mode') {
+                            if (obj.value === 'shell') {
+                                layui.$('.page_param').hide();
+                            } else {
+                                layui.$('.page_param').show();
+                            }
+                        }
+                    });
+                },
+                fields: [
+                    {
+                        name: '采集模式',
+                        key: 'mode',
+                        type: 'radio',
+                        extra: 'page:前台页面采集 shell:后台离线采集',
+                        require: true,
+                        value: 'page',
+                        intro: "后台采集可以关闭浏览器运行，在手动采集日志中查看进度；前台页面采集必须保证浏览器是打开状态"
+                    },
+                    {
+                        name: '开始ID',
+                        key: 'start',
+                        type: 'num',
+                        require: true,
+                        value: 1,
+                        intro: '请输入要开始更新的书号',
+                    },
+                    {
+                        name: '结束ID',
+                        key: 'end',
+                        type: 'num',
+                        value: '',
+                        intro: '请输入要结束更新的书号',
+                    },
+                    {
+                        name: '单次书号',
+                        key: 'limit',
+                        type: 'num',
+                        value: 200,
+                        intro: '每采集多少本做一次翻页处理',
+                        style: 'page_param',
+                    },
+                    {
+                        name: '翻页间隔',
+                        key: 'interval',
+                        type: 'num',
+                        value: 10,
+                        intro: '翻页等待多长时间',
+                        style: 'page_param',
+                    },
+                ],
+            };
+            layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+        }
+    });
+</script>

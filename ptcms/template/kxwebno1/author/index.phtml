@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>专区首页 - 原创专区 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/author/css/style.css"/>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+    <style>
+        .right .user{
+            height: 226px;
+            background-color: #fff;
+            padding: 0 20px;
+        }
+        .right .user .info,
+        .right .user .stat{
+            height:95px;
+        }
+        .right .user .info{
+            padding-top: 15px;
+        }
+        .right .user .info img{
+            width:60px;
+            height:60px;
+            background:#DBDBDB;
+            border-radius:50%;
+            margin-left: 40px;
+            margin-top: 15px;
+        }
+        .right .user .stat li{
+            margin-top: 20px;
+            width: 24%;
+        }
+        .right .user .stat li:not(:last-child){
+            border-right: 1px solid #ededed;
+        }
+    </style>
+</head>
+<body>
+{include file="/author/system/header"}
+<div class="body">
+    {include file="/author/system/left"}
+    <div class="right">
+        <div class="user bg-white">
+            <div class="info w100">
+                <a href="{link=user.info.index}">
+                    <img class="fl" src="{$authorinfo.user.avatar}" alt="{$authorinfo.name}">
+                </a>
+                <div class="fl pt20 pl20" style="width:80%;">
+                    <span class="size20 color32 bold">{$authorinfo.name}{=$authorinfo.status == \App\Model\Author\Author::STATUS_PENDING?'<span class="color92"> (审核中)</span>':($authorinfo.status == \App\Model\Author\Author::STATUS_PASS?'':'<span class="color-red"> (异常)</span>')}</span>
+                    <p>尊敬的作者您好，今天是{=date('Y年m月d日')}，您已累计创作{=(new DateTime())->setTimestamp($authorinfo.data.create_time)->diff((new DateTime()))->format('%a')+1}天，祝您在创作的道路上越走越远~</p>
+                </div>
+            </div>
+            <ul class="stat text-center border w100">
+                <li class="inline-block">
+<!--                    <a href="{link=author.novel.index}">-->
+                        <p class="color2 size24">{$authorinfo.stat.novel} <span class="color92 size14">本</span></p>
+                        <span class="color0">我的作品</span>
+<!--                    </a>-->
+                </li>
+                <li class="inline-block">
+                    <a href="{link=author.stat.index}">
+                        <p class="color2 size24">{=number_format($authorinfo.stat.words/10000,'4','.','')} <span class="color92 size14">万字</span></p>
+                        <span class="color0">累计字数</span>
+                    </a>
+                </li>
+                <li class="inline-block">
+                    <a href="{link=author.stat.index}">
+                        <p class="color2 size24">{$authorinfo.stat.mark} <span class="color92 size14">万人</span></p>
+                        <span class="color0">累计收藏</span>
+                    </a>
+                </li>
+                <li class="inline-block">
+                    <a href="{link=author.stat.index}">
+                        <p class="color2 size24">{$authorinfo.stat.allvisit} <span class="color92 size14">万次</span></p>
+                        <span class="color0">总计访问</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <style>
+            .news ul li::before {
+                float: left;
+                content: "●";
+                color: #e9e9e9;
+                display: inline-block;
+                width: 15px;
+                margin-left: 10px;
+            }
+            .news ul li:not(:first-child){
+                border-top: 1px solid #e9e9e9;
+            }
+        </style>
+        <div class="news bg-white mt10 p20" style="min-height: 475px;">
+            <img class="ml20" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/author/images/icon-novel.png" alt="专题新闻" style="transform:translateY(5px);">
+            <span class="ml10 color0 size16" style="line-height: 20px">专题新闻</span>
+            <ul class="border mt20">
+                {block method="news.list" name=list num=10}
+                {loop}
+                <li class="p15">
+                    <a href="{link=news.detail newsid=$loop.id}" title="{$loop.title}" target="_blank">
+                        <span class="fl compulsory-row-one color0" style="width: 80%">[{$loop.category.name}] {$loop.title}</span>&nbsp;
+                        <span class="fr colore9">2019-01-02 15:30</span>
+                    </a>
+                </li>
+                {/loop}
+            </ul>
+        </div>
+    </div>
+</div>
+{include file="/author/system/footer"}
+</body>
+</html>

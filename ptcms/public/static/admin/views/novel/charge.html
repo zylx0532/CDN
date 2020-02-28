@@ -1,0 +1,61 @@
+<title>收费设置</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>书籍管理</cite></a>
+        <a><cite>原创专区</cite></a>
+        <a><cite>作品列表</cite></a>
+        <a><cite>收费设置</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">收费设置</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="hidden" name="id">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认修改</button>
+                                    <button type="button" class="layui-btn layui-btn-normal" onclick="window.history.back()">取消修改</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var config = {
+        api: {
+            submit: '/manage/content/novel/charge.json'
+        },
+        done: function (layui) {
+            config.loadEditData();
+        },
+        fields: [
+            {name: 'id', key: 'id', type: 'hide',},
+            {name: '书籍类型', key: 'type', type: 'radio', extra: "0:免费\n1:收费\n2:收费-会员免费"},
+            {name: '千字价格', key: 'words_money', type: 'num', intro: '章节千字金币购买价格;floor(floor(章节字数 / 100) * 千字价格 / 10) = 章节价格'},
+            {name: '千字价格(会员)', key: 'words_vip_money', type: 'num', intro: '章节千字金币购买价格(会员);floor(floor(章节字数 / 100) * 千字价格 / 10) = 章节价格'},
+            {name: '作者收益比例', key: 'subscription_revenue_ratio', type: 'num', intro: '用户订阅章节返还给作者的比例,计算结果向下取整'},
+            {
+                name: '作者收益比例(会员)',
+                key: 'vip_subscription_revenue_ratio',
+                type: 'num',
+                intro: '用户订阅章节返还给作者的比例,计算结果向下取整(会员)'
+            },
+        ],
+    };
+    layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+</script>

@@ -1,0 +1,92 @@
+<title>模板参数设置</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>系统设置</cite></a>
+        <a><cite>信息管理</cite></a>
+        <a><cite>模板管理</cite></a>
+        <a><cite>模板参数设置</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <blockquote class="layui-elem-quote layui-bg-orange">设置的参数您可以在模版中通过 {$kx.tplconfig.参数KEY} 调用;</blockquote>
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto" style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            list: '/manage/template/config.json',
+            config: '/manage/template/config.json',
+        },
+        tableEdit: function (obj, elem) {
+        },
+        topButton: {
+            add: {
+                text: '添加一行',
+                action: function () {
+                    layui.table.cache["LAY-curd-table"].push({name: '', key: '', value: ''});
+                    tableIns.reload({url: '', data: layui.table.cache["LAY-curd-table"]})
+                }
+            },
+            save: {
+                text: '保存',
+                action: function () {
+                    var items = [];
+                    layui.each(layui.table.cache["LAY-curd-table"], function (k, v) {
+                        if (!(v instanceof Array) && v.key) {
+                            items.push(v);
+                        }
+                    });
+                    layui.admin.req({
+                        url: config.api.config,
+                        data: {template: layui.router().search.template, items: items},
+                        method: 'POST',
+                        success: function (res) {
+                            tableIns.reload({url: '', data: res.data});
+                            layer.msg('操作成功');
+                        }
+                    });
+                }
+            }
+        },
+        actionButton: {
+            del: {
+                action(obj) {
+                    obj.del()
+                }
+            },
+        },
+        table: {
+            where: {template: layui.router().search.template},
+            height: 0,
+            cols: [[
+                {field: 'name', title: '参数名', edit: 'text'},
+                {field: 'key', title: '参数KEY', edit: 'text'},
+                {field: 'value', title: '参数值', edit: 'text'},
+                {title: '操作', width: 220, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]],
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

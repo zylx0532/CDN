@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>我的推荐 - 用户中心 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/style.css"/>
+</head>
+<body>
+    <!-- 头部 -->
+    {include file="/system/header"}
+    <!-- 内容 -->
+    <div class="pt-content">
+        <!-- 面包屑 -->
+        <div class="pt-crumb">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/crumb_icon.png" class="pt-crumb-icon">
+            <span class="color5">
+                <a href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > <a href="{link=user.index.index}" class="color5">用户中心</a> > <a href="{link=user.vote.index}">我的推荐</a>
+            </span>
+        </div>
+
+        <!-- 一楼 -->
+        <div class="pt-floor1">
+            {include file="/system/userleft"}
+            <!-- 推荐 -->
+            <div class="relative pt-rank">
+                <div class="pt-rank-head">
+                    <a href="{link=user.vote.index}" class="color5 mr10">我推荐的书籍</a>
+                    <span class="mr10">|</span>
+                    <a href="{link=user.vote.booklist}" class="color7 bold">我推荐的书单</a>
+                </div>
+                <div class="pt-user-table">
+                    {block method="pagination" name="paginate" page=$page limit=$pageSize count=$count maxpage=50 section=3}
+                    {block method="user.voteList" name=voteList type='booklist' userid=$userinfo.id page=$page}
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>书单</th>
+                            <th>时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {if empty($voteList)}
+                        <tr>
+                            <td colspan="5">您似乎来到了没有数据存在的荒原~~~</td>
+                        </tr>
+                        {else}
+                        {section loop=$voteList item=$loop}
+                        <tr>
+                            <td><a href="{link=booklist.booklist.detail id=$loop.booklist.id}">{$loop.booklist.title}</a></td>
+                            <td>{$loop.create_time|date="Y-m-d H:i:s"}</td>
+                        </tr>
+                        {/section}
+                        {/if}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 分页 -->
+                {if !empty($voteList) && $paginate.total>1}
+                <div class="pt-pages">
+                    <div class="pt30 color5">
+                        {if $paginate.prev}
+                        <a href="{link=user.vote.booklist page=$paginate.prev}"><span><</span></a>
+                        {else}
+                        <span class="disable"><</span>
+                        {/if}
+                        {loop=paginate.items}
+                        <a href="{link=user.vote.booklist page=$loop.num}">
+                            <span class="{$loop.status|default='','pt-pages-select'}">{$loop.num}</span>
+                        </a>
+                        {/loop}
+                        {if $paginate.next}
+                        <a href="{link=user.vote.booklist page=$paginate.next}"><span>></span></a>
+                        {else}
+                        <span class="disable">></span>
+                        {/if}
+                    </div>
+                </div>
+                {/if}
+            </div>
+        </div>
+    </div>
+
+{include file="/system/footer"}
+</body>
+</html>

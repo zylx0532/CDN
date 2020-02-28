@@ -1,0 +1,23 @@
+<div class="pt-copyright">
+    <div class="pt-copyright-line"></div>
+    <div class="color2 aboutlink">
+        {block method="page.list" name=list}
+        {loop=$list}
+        <a href="{link=page.detail pageid=$loop.id key=$loop.key}" title="{$loop.name}">{$loop.name}</a>
+        {/loop}
+    </div>
+    <div class="color4 footer-info" style="margin-top:28px;">Copyright © 2009 - 2019 <a href="{$kx.config.siteurl}" target="_blank">{$kx.config.sitename}</a>. All Rights Reserved . Copyright <a href="{$kx.config.siteurl}" target="_blank">{$kx.config.sitename}</a></div>
+    <div class="color4 footer-info">The content of this website is the list of links obtained by <a href="{$kx.config.siteurl}" target="_blank">{$kx.config.sitename}</a> according to your instructions,<br> which does not mean that <a href="{$kx.config.siteurl}" target="_blank">{$kx.config.sitename}</a> is in favor of the content or position of the searched website.</div>
+    <div class="color4 footer-info">If the copyright owner thinks that it is harmful to your interests to place your works on this website,<br> please send an email to "{if $kx.config.email}{$kx.config.email}{else}{$kx.config.qq}@qq.com{/if}", which will be deleted immediately after the confirmation of this website.</div>
+    <div class="color4 footer-info">Power by <a href="https://www.zhiqiang.name" target="_blank">RuiXin {$kx.PRO_VERSION} Build v0.1</a>，Design：<a href="https://www.zhiqiang.name" target="_blank">Blood.Cold</a>，<a href="http://www.miitbeian.gov.cn/" target="_blank" rel="nofollow">{$kx.config.beian}</a></div>
+    <div class="color4 footer-info">__RUNINFO__</div>
+</div>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/js/jquery-3.3.1.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/js/layer/layer.js"></script>
+<div class="none">
+    {$kx.config.tongji.pc}
+    {if $kx.config.app.use_cdn}
+    <script src="/api/stat/novel/info.js"></script>
+    <script src="/api/stat/novel/read.js"></script>
+    {/if}
+</div>

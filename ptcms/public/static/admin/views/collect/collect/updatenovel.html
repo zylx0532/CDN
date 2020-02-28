@@ -1,0 +1,212 @@
+<title>执行规则</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>信息更新</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">信息更新</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认执行</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <blockquote class="layui-elem-quote layui-bg-green">
+                信息更新小说是从基准站更新的，无需选择规则！<br/>
+                不选用规则则以小说的基准站进行更新，选用规则如果该小说有这个源则把源替换为这个规则并以这个规则进行更新！！！
+            </blockquote>
+        </div>
+    </div>
+</div>
+<script>
+    var config, checkbox = [];
+    layui.admin.req({
+        url: '/manage/data/response.json',
+        method: 'POST',
+        data: {rule: 'select'},
+        success: function (res) {
+            config = {
+                submit: function (obj) {
+                    var checkvar = checkbox.join(',');
+                    if (obj.field.mode === 'page') {
+                        layui.layer.open({
+                            type: 2,
+                            title: '执行结果',
+                            shadeClose: false,
+                            shade: false,
+                            maxmin: true,
+                            area: ['893px', '600px'],
+                            content: '/manage/collect/collect/updatenovel.html?start=' + obj.field.start + '&ruleid=' + obj.field.ruleid + '&data=' + checkvar + '&end=' + obj.field.end + '&limit=' + obj.field.limit + '&interval=' + obj.field.interval + '&access_token=' + encodeURIComponent(layui.data('layuiAdmin').access_token)
+                        });
+                    } else {
+                        var t = Math.round(new Date().getTime() / 1000), interval = null;
+                        layui.admin.req({
+                            url: '/manage/collect/collect/updatenovel.json',
+                            data: {
+                                ruleid: obj.field.ruleid,
+                                start: obj.field.start,
+                                end: obj.field.end,
+                                data: checkvar,
+                                t: t
+                            },
+                            method: 'POST',
+                            success: function () {
+                                layui.layer.open({
+                                    type: 1,
+                                    title: '执行脚本',
+                                    shadeClose: false,
+                                    shade: false,
+                                    maxmin: true,
+                                    area: ['893px', '600px'],
+                                    content: '',
+                                    success: function (layero, index) {
+                                        interval = setInterval(function () {
+                                            layui.admin.req({
+                                                url: '/manage/collect/collect/log.json',
+                                                data: {
+                                                    type: 'updatenovel',
+                                                    t: t
+                                                },
+                                                success: function (res) {
+                                                    if (res.data.content.search('<!-- end -->') >= 0) {
+                                                        clearInterval(interval);
+                                                        interval = null;
+                                                    }
+                                                    layero.find('.layui-layer-content').html(res.data.content)[0].scroll(0, 999999);
+                                                }
+                                            });
+                                        }, 1000);
+                                        if (parseInt(obj.field.interval) > 0) {
+                                            setTimeout(function () {
+                                                clearInterval(interval);
+                                                interval = null;
+                                            }, parseInt(obj.field.interval) * 1000)
+                                        }
+                                    },
+                                    end: function () {
+                                        if (interval !== null) clearInterval(interval);
+                                    }
+                                });
+                            }
+                        });
+                    }
+                    return false;
+                },
+                done: function (layui) {
+                    layui.form.on('radio', function (obj) {
+                        if (obj.elem.name === 'mode') {
+                            if (obj.value === 'shell') {
+                                layui.$('.page_param').hide();
+                            } else {
+                                layui.$('.page_param').show();
+                            }
+                        }
+                    });
+                    layui.form.on('checkbox', function (data) {
+                        var index;
+                        if (data.elem.checked) {
+                            checkbox.push(data.value)
+                        } else {
+                            index = checkbox.indexOf(data.value);
+                            if (index > -1) {
+                                checkbox.splice(index, 1)
+                            }
+                        }
+                        if (data.value === 'lcfirst'){
+                            index = checkbox.indexOf('ucfirst');
+                            if (index > -1) {
+                                layui.$('input[name="type[]"][value=ucfirst]').attr('checked',false);
+                                layui.form.render();
+                                checkbox.splice(index, 1);
+                            }
+                        }else if(data.value === 'ucfirst'){
+                            index = checkbox.indexOf('lcfirst');
+                            if (index > -1) {
+                                layui.$('input[name="type[]"][value=lcfirst]').attr('checked',false);
+                                layui.form.render();
+                                checkbox.splice(index, 1);
+                            }
+                        }
+                    });
+                },
+                fields: [
+                    {
+                        name: '采集模式',
+                        key: 'mode',
+                        type: 'radio',
+                        extra: 'page:前台页面采集 shell:后台离线采集',
+                        require: true,
+                        value: 'page',
+                        intro: "后台采集可以关闭浏览器运行，在手动采集日志中查看进度；前台页面采集必须保证浏览器是打开状态"
+                    },
+                    {
+                        name: '选用规则',
+                        key: 'ruleid',
+                        type: 'select',
+                        extra: res.data.rule.select,
+                        require: false,
+                        intro: "如无必要请勿选择，选择后，小说书源会按照所选规则的进行更新基准站并替换为该站",
+                        value: layui.router().search.ruleid
+                    },
+                    {
+                        name: '开始ID',
+                        key: 'start',
+                        type: 'num',
+                        require: true,
+                        value: 1,
+                        intro: '请输入要开始更新的书号',
+                    },
+                    {
+                        name: '结束ID',
+                        key: 'end',
+                        type: 'num',
+                        value: '',
+                        intro: '请输入要结束更新的书号',
+                    },
+                    {
+                        name: '单次书号',
+                        key: 'limit',
+                        type: 'num',
+                        value: 200,
+                        intro: '每采集多少本做一次翻页处理',
+                        style: 'page_param',
+                    },
+                    {
+                        name: '翻页间隔',
+                        key: 'interval',
+                        type: 'num',
+                        value: 10,
+                        intro: '翻页等待多长时间',
+                        style: 'page_param',
+                    },
+                    {
+                        name: '更新内容',
+                        key: 'type',
+                        type: 'checkbox',
+                        extra: 'category:分类 intro:简介 cover:封面 isover:更新状态 num_words:字数 tag:TAG lcfirst:拼音首字母小写 ucfirst:拼音首字母大写',
+                        value: '',
+                        intro: '请选择要更新的内容',
+                    },
+                ],
+            };
+            layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+        }
+    });
+</script>

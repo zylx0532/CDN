@@ -1,0 +1,150 @@
+<title>用户组管理</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>用户管理</cite></a>
+        <a><cite>用户组管理</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layui-btn-normal layuiadmin-btn" data-type="add">添加</button>
+                <button class="layui-btn layui-btn-danger layuiadmin-btn" data-type="batchDel">删除</button>
+            </div>
+            <script type="text/html" id="statusTpl">
+                <input type="checkbox" lay-skin="switch" lay-text="正常|禁用" lay-filter="setStatus" value="{{d.id}}" {{d.status== 1 ? 'checked' : '' }}>
+            </script>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+
+<script>
+    var api_batch = '/manage/user/group/batch.json',
+        api_list = '/manage/user/group/list.json',
+        api_del = '/manage/user/group/del.json',
+        api_change = '/manage/user/group/change.json',
+        url_add = '/user/group/add',
+        url_edit = '/user/group/edit';
+    layui.use(['admin', 'table'], function () {
+        var $ = layui.$,
+            admin = layui.admin,
+            table = layui.table,
+            form = layui.form;
+
+        table.render({
+            elem: '#LAY-curd-table',
+            url: api_list,
+            where:{order:'exp',sort:'asc',access_token:layui.data('layuiAdmin').access_token},
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'name', title: '用户组名称'},
+                {field: 'intro', title: '备注信息'},
+                {field: 'exp', title: '所需经验', align: 'center'},
+                {field: 'limitmark', title: '书架', align: 'center'},
+                {field: 'limitstar', title: '评分', align: 'center'},
+                {field: 'limitvote', title: '推荐', align: 'center'},
+                {field: 'limitcomment', title: '评论', align: 'center'},
+                // {field: 'limitcommentreply', title: '评论回复', align: 'center'},
+                // {field: 'limitcommentrating', title: '评论评分', align: 'center'},
+                {field: 'max_sign', title: '连签', align: 'center'},
+                {field: 'max_star', title: '单日评分', align: 'center'},
+                {field: 'max_vote', title: '单日推荐', align: 'center'},
+                {field: 'max_comment', title: '单日评论', align: 'center'},
+                // {field: 'max_comment_reply', title: '单日评论回复', align: 'center'},
+                // {field: 'max_comment_rating', title: '单日评论评分', align: 'center'},
+                {field: 'max_invite_visit', title: '邀请访问', align: 'center'},
+                {field: 'max_invite_reg', title: '邀请注册', align: 'center'},
+                {title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]],
+            page: true,
+            limit: 30,
+            height: 'full-320',
+        });
+
+        //监听工具条
+        table.on('tool(LAY-curd-table)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'edit') {
+                location.hash = url_edit + '/id=' + data.id;
+            }else if (obj.event === 'del') {
+                layer.confirm('真的删除这条记录么', function (index) {
+                    admin.req({
+                        url: api_del,
+                        data: {id: data.id},
+                        method: 'POST',
+                        success: function (res) {
+                            layer.msg('删除成功');
+                        }
+                    });
+                    obj.del();
+                    layer.close(index);
+                });
+            }
+        });
+
+        //监听搜索
+        form.on('submit(LAY-front-search)', function (data) {
+            var field = data.field;
+            //执行重载
+            table.reload('LAY-curd-table', {
+                where: field
+            });
+        });
+
+        //事件
+        var active = {
+            add: function () {
+                location.hash = url_add;
+            },
+            batchDel: function () {
+                var checkStatus = table.checkStatus('LAY-curd-table'),
+                    checkData = checkStatus.data; //得到选中的数据
+
+                if (checkData.length === 0) {
+                    return layer.msg('请选择数据');
+                }
+                layer.confirm('确定删除吗？', function (index) {
+                    var items = [];
+                    layui.each(checkData, function (k, v) {
+                        items.push(v.id)
+                    });
+                    admin.req({
+                        url: api_batch,
+                        data: {type: 'del', items: items},
+                        method: 'POST',
+                        success: function (res) {
+                            table.reload('LAY-curd-table');
+                            layer.msg('已删除');
+                        }
+                    })
+                });
+            }
+        };
+
+        form.on('switch(setStatus)', function (obj) {
+            admin.req({
+                url: api_change,
+                data: {field: 'status', value: obj.elem.checked ? 1 : 0, id: this.value},
+                method: 'POST',
+                success: function (res) {
+                    layer.tips('修改成功', obj.othis);
+                }
+            })
+        });
+
+        $('.layui-btn.layuiadmin-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+</script>

@@ -1,0 +1,108 @@
+<title>章节列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>书籍管理</cite></a>
+        <a><cite>章节列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            list: '/manage/content/chapter/published.json',
+            del: '/manage/content/chapter/del.json',
+            content: '/manage/content/chapter/content.json'
+        },
+        actionButton: {
+            info: {
+                text: '详情', style: 'layui-btn-normal', icon: 'layui-icon layui-icon-form', action: function (obj) {
+                    layui.admin.req({
+                        url: config.api.content,
+                        data: {novelid: obj.data.novel_id, chapterid: obj.data.id, type: 'published'},
+                        method: 'post',
+                        success: function (res) {
+                            layui.layer.open({
+                                type: 1,
+                                skin: 'layui-layer-rim',
+                                area: ['100%', '100%'],
+                                btn: '关闭',
+                                title: obj.data.name,
+                                content: '<style>.chapter_preview p{text-indent: 2em;margin-bottom: 5px;font-size: 16px;line-height: 32px}</style><table class="layui-table chapter_preview"></table>',
+                                success: function (layero, index) {
+                                    var table = layero.find('.layui-layer-content table');
+                                    table.append('<tr><td>' + res.data.content + '</td></tr>');
+                                    table.append('<tr style="background-color:#f2f2f2;"><th style="text-align: center">作者附笔</th></tr>');
+                                    table.append('<tr><td>' + res.data.postscript + '</td></tr>');
+                                }
+                            });
+                        }
+                    });
+                }
+            },
+            del: {
+                action: function (obj) {
+                    layui.layer.confirm('真的删除这条记录么', function (index) {
+                        layui.admin.req({
+                            url: config.api.del,
+                            data: {novelid: obj.data.novel_id, chapterid: obj.data.id},
+                            method: 'POST',
+                            success: function (res) {
+                                layer.msg('删除成功');
+                                obj.del();
+                            }
+                        });
+                        layui.layer.close(index);
+                    });
+                }
+            },
+        },
+        table: {
+            where: {novel_id: layui.router().search.id},
+            page: true,
+            limit: 30,
+            cols: [[
+                {field: 'id', title: 'ID', align: 'center', width: 60},
+                {field: 'order_id', title: 'OID', width: 80},
+                {field: 'author', title: '作者名称', width: 160},
+                {field: 'novel', title: '书籍名称', width: 160},
+                {field: 'name', title: '章节名称'},
+                {
+                    field: 'type',
+                    title: '类型',
+                    templet: '#table-label',
+                    data: {data: {"-1": "采集章节", "-2": "免费章节", "-3": "<span class=\"layui-badge\">收费章节</span>"}},
+                    width: 160,
+                },
+                {field: 'words', title: '字数', width: 80},
+                {title: '操作', width: 160, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

@@ -1,0 +1,65 @@
+<title>作者列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>书籍管理</cite></a>
+        <a><cite>开放专区</cite></a>
+        <a><cite>作者列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+        api: {
+            batch: '/manage/author/batch.json',
+            list: '/manage/author/list.json',
+            del: '/manage/author/del.json',
+            change: '/manage/author/change.json'
+        },
+        topButton: {
+            del: {confirmMessage: '这将会删除作者的所有关联数据,确定要删除吗?'},
+        },
+        actionButton: {
+            del: {confirmMessage: '这将会删除作者的所有关联数据,确定要删除吗?'},
+        },
+        table: {
+            where: {user_id: 0},
+            page: true,
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'ID', align: 'center', width: 60},
+                {field: 'name', title: '作者名称', edit: 'text', width: 200},
+                {field: 'pinyin', title: '作者拼音', edit: 'text', width: 200},
+                {field: 'intro', title: '简介', edit: 'text'},
+                {field: 'num', title: '作品数量', width: 100, align: 'center'},
+                {title: '操作', width: 220, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

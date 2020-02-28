@@ -1,0 +1,70 @@
+<div class="pt-top-nav">
+    <ul class="content">
+        <li class="fl">
+            欢迎访问{$kx.config.sitename}小说网
+        </li>
+        <li class="fr m">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/shortcut_icon.png" class="pt-shortcut-icon">
+            <span class="cursor color4 lh100" onclick="toDesktop('{$kx.config.siteurl}','{$kx.config.sitename}')">桌面快捷</span>
+        </li>
+        <li class="fr mr20">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/star_icon.png" class="pt-index-icon">
+            <span class="cursor color4 lh100" onclick="addFavorite(document.title,window.location);">加入收藏</span>
+        </li>
+        <li class="fr mr20">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/index_icon.png" class="pt-index-icon">
+            <span class="cursor color4 lh100" onclick="setHome(this);">设为首页</span>
+        </li>
+    </ul>
+</div>
+<div class="w100 pt-head-bg">
+    <div class="pt-head">
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/static/image/logo.png" class="pt-logo" title="{$kx.config.sitename}">
+        <div class="pt-search-box">
+            <form action="{link=novel.search.result}">
+                <div class="pt-serachbg">
+                    <input type="text" name="searchkey" placeholder="请输入您要搜索的书名" class="pt-serarch-input" value="{$kx.get.searchkey}">
+                </div>
+                <button type="submit" class="pt-search-btn">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/search.png" class="pt-search-icon">
+                </button>
+            </form>
+        </div>
+        <ul class="inline-block size14 color4 fr pt-head-list">
+            <li>
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/person_icon.png" class="pt-person-icon">
+                {if ($islogin)}
+                <span class="color2 lh100">
+                    <a href="{link=user.index.index}" class="color2">{=$userinfo.nickname?:$userinfo.name}</a>
+                    <span>|</span>
+                    <a href="{link=user.pay.recharge}" class="color2">充值</a>
+                </span>
+                {else}
+                <span class="color2 lh100"><a title="登录" href="{link=user.auth.login}" class="color2">登录</a> | <a title="注册" href="{link=user.auth.register}" class="color2">注册</a></span>
+                {/if}
+            </li>
+            <li>
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/book_icon.png" class="pt-book-icon">
+                <a rel="nofollow" href="{link=user.mark.index}" class="color4 lh100">我的书架</a>
+            </li>
+            <li class="inline-block">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/history_icon.png" class="pt-history-icon">
+                <a rel="nofollow" href="{link=user.history.index}" class="color4 lh100">阅读历史</a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<!-- 导航栏 -->
+<div class="pt-navbg">
+    <div class="pt-nav">
+        <a title="首页" href="{link=index.index}"{if $pagesign=='index'} class="pt-active"{/if}>首页</a>
+        <a title="排行" href="{link=novel.rank.index}"{if $pagesign=='rank'} class="pt-active"{/if}>排行</a>
+        <a title="分类" href="{link=novel.category.index}"{if $pagesign=='category'} class="pt-active"{/if}>分类</a>
+        <a title="完本" href="{link=novel.over.index}"{if $pagesign=='over'} class="pt-active"{/if}>完本</a>
+        <a title="书单" href="{link=booklist.booklist.index}"{if $pagesign=='booklist'} class="pt-active"{/if}>书单</a>
+        <a title="专题" href="{link=special.index}"{if $pagesign=='special'} class="pt-active"{/if}>专题</a>
+        <a title="用户中心" href="{link=user.index.index}" class="fr{if $pagesign=='user'}  pt-active{/if}">用户中心</a>
+        <a title="原创专区" href="{link=author.author.index}" class="fr" target="_blank">原创专区</a>
+    </div>
+</div>

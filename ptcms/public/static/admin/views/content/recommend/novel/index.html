@@ -1,0 +1,88 @@
+<title>小说列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营管理</cite></a>
+        <a><cite>推荐管理</cite></a>
+        <a><cite>小说列表</cite></a>
+    </div>
+</div>
+
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var recommend_id = layui.router().search.recommend_id,
+        period_id = layui.router().search.period_id,
+        config = {
+            api: {
+                batch: '/manage/content/recommendNovel/batch.json',
+                list: '/manage/content/recommendNovel/list.json',
+                del: '/manage/content/recommendNovel/del.json',
+                change: '/manage/content/recommendNovel/change.json',
+            },
+            search: {
+                name: {type: 'text', text: '小说名称'},
+            },
+            topButton: {
+                add: {
+                    action: function () {
+                        location.hash = '/content/recommend/novel/add/recommend_id=' + recommend_id + '/period_id=' + period_id;
+                    }
+                },
+                reorder: {},
+                del: {},
+            },
+            actionButton: {
+                edit: {
+                    action: function (obj) {
+                        location.hash = '/content/recommend/novel/edit/id=' + obj.data.id;
+                    }
+                },
+                del: {},
+            },
+            table: {
+                page: true,
+                limit: 30,
+                where: {recommend_id: recommend_id, period_id: period_id},
+                cols: [[
+                    {type: 'checkbox', fixed: 'left'},
+                    {field: 'id', width: 60, title: 'ID', align: 'center'},
+                    {field: 'recommend_title', title: '所属推荐位'},
+                    {field: 'period_title', title: '所属栏目'},
+                    {field: 'novel_name', title: '小说名称'},
+                    {field: 'score', title: '小说评分'},
+                    {field: 'caption', title: '小说评语'},
+                    {field: 'position', title: '排序序号', edit: 'text', align: 'center', width: 90},
+                    {field: 'status', title: '状态', templet: '#statusTpl', align: 'center', width: 100},
+                    {field: 'create_time', title: '添加时间'},
+                    {field: 'update_time', title: '最后更新时间'},
+                    {title: '操作', width: 240, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+                ]]
+            }
+        };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

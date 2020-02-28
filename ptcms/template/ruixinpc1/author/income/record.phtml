@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据统计 - 原创专区 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/css/style.css"/>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico"/>
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__"/>
+    <style>
+
+    </style>
+</head>
+<body>
+{include file="/author/system/header"}
+<div class="body">
+    {include file="/author/system/left"}
+    <div class="right bg-white h100" style="min-height: 160px;">
+        <div class="mlr20 mt30">
+            <img style="vertical-align: middle;margin-top: -5px;" src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/images/income.png" alt="收入明细">
+            <span class="color0 size16 bold ml10">收入管理</span>
+        </div>
+        <ul class="stat border stat_total mlr20 mtb30" >
+            <li class="inline-block border-r" style="width: 33%;">
+                <span class="ml30 color0 inline-block mtb20 size18 bold">累计订阅</span>
+                <span class="color2 ml40 size16 bold">{$stat.subscription}<span class="color92">{$kx.config.user.money_caption}</span></span>
+            </li>
+            <li class="inline-block border-r" style="width: 33%;">
+                <span class="ml30 color0 inline-block mtb20 size18 bold">累计打赏</span>
+                <span class="color2 ml40 size16 bold">{$stat.reward}<span class="color92">{$kx.config.user.money_caption}</span></span>
+            </li>
+            <li class="inline-block" style="width: 32%;">
+                <span class="ml30 color0 inline-block mtb20 size18 bold">累计{$kx.config.user.ticket_caption}</span>
+                <span class="color2 ml40 size16 bold">{$stat.ticket}<span class="color92">张</span></span>
+            </li>
+        </ul>
+    </div>
+    <div class="right mt20" style="min-height: 545px;height: 545px;">
+        <style>
+            .body ul.label li{
+                float: left;
+                width: 130px;
+                height: 50px;
+                line-height: 50px;
+                text-align: center;
+                background: #E5E5E5;
+                margin-top: 4px;
+            }
+            .body ul.label li.active{
+                background-color: #fff;
+                color: #323237;
+                border-top: 4px solid #f55;
+                margin-top: 0;
+            }
+        </style>
+        <ul class="label" style="height: 54px;">
+            <a href="{link=author.income.record type='subscription'}"><li class="{=$type=='subscription'?'active':''}">订阅明细</li></a>
+            <a href="{link=author.income.record type='reward'}"><li class="{=$type=='reward'?'active':''}">打赏明细</li></a>
+            <a href="{link=author.income.record type='ticket'}"><li class="{=$type=='ticket'?'active':''}">月票明细</li></a>
+        </ul>
+        <div class="bg-white pt20" style="height: 470px;">
+            <style>
+                table {
+                    width: 100%;
+                    text-align: center;
+                    color: #323237;
+                }
+
+                table th {
+                    height: 40px;
+                    background-color: #F5F5F7;
+                    text-align: center;
+                    font-weight: 700;
+                }
+
+                table thead tr {
+                    border: 1px solid #F5F5F5;
+                }
+
+                table td {
+                    height: 35px;
+                }
+
+                table tbody tr {
+                    border: 1px solid #E9E9E9;
+                }
+            </style>
+            {block method="pagination" name="paginate" page=$page limit=$pagesize count=$count maxpage=50 section=3}
+            <table class="mlr20" style="width: 950px;">
+                <thead>
+                <tr>
+                    <th>昵称</th>
+                    <th>时间</th>
+                    <th>{=$type=='ticket'?'数量':'金额'}</th>
+                    <th>书籍</th>
+                    {if $type == 'subscription'}
+                    <th>章节</th>
+                    {/if}
+                </tr>
+                </thead>
+                <tbody>
+                {loop=$records}
+                <tr>
+                    <td>{=$loop.user.nickname?:$loop.user.name}</td>
+                    <td>{$loop.create_time|date='Y-m-d'}</td>
+                    {if $type == 'subscription'}
+                    <td><span class="color2">{$loop.money_log.num}</span>{$kx.config.user.money_caption}</td>
+                    {else}
+                    <td><span class="color2">{$loop.num}</span>{=$type=='ticket'?'张':$kx.config.user.money_caption}</td>
+                    {/if}
+                    <td>{$loop.novel.name}</td>
+                    {if $type == 'subscription'}
+                    <td>{$loop.chapter.name}</td>
+                    {/if}
+                </tr>
+                {/loop}
+                </tbody>
+            </table>
+            {if $paginate.total>1}
+            <div class="pt-pages mtb10 text-center">
+                <div class="pt10 color5">
+                    {if $paginate.prev}
+                    <a class="inline-block ptb5 plr10" href="{link=author.income.record type=$type page=$paginate.prev}"><span><</span></a>
+                    {else}
+                    <span class="disable"><</span>
+                    {/if}
+                    {loop=paginate.items}
+                    <a class="inline-block ptb5 plr10" href="{link=author.income.record type=$type page=$loop.num}">
+                        <span class="{$loop.status|default='','color2'}">{$loop.num}</span>
+                    </a>
+                    {/loop}
+                    {if $paginate.next}
+                    <a class="inline-block ptb5 plr10" href="{link=author.income.record type=$type page=$paginate.next}"><span>></span></a>
+                    {else}
+                    <span class="disable">></span>
+                    {/if}
+                </div>
+            </div>
+            {/if}
+        </div>
+    </div>
+</div>
+{include file="/author/system/footer"}
+</body>
+</html>

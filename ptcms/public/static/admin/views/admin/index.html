@@ -1,0 +1,134 @@
+<title>管理员列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>成员管理</cite></a>
+        <a><cite>管理员列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var config;
+    layui.admin.req({
+        url: '/manage/data/response.json',
+        method: 'POST',
+        data: {admin: 'select', admin_role: 'select'},
+        success: function (res) {
+            config = {
+                api: {
+                    batch: '/manage/user/admin/batch.json',
+                    list: '/manage/user/admin/list.json',
+                    del: '/manage/user/admin/del.json',
+                    change: '/manage/user/admin/change.json',
+                    userDel: '/manage/user/user/del.json',
+                    userBatch: '/manage/user/user/batch.json',
+                },
+                search: {
+                    create_user_id: {type: 'select', text: '创建用户', data: res.data.admin.select, search: true},
+                    role_id: {type: 'select', text: '角色', data: res.data.admin_role.select, search: true},
+                    name: {type: 'text', text: '用户名'},
+                },
+                topButton: {
+                    add: {},
+                    addByUser: {
+                        text: '从用户添加', action() {
+                            location.hash = '/user/'
+                        }
+                    },
+                    del: {
+                        success: function () {
+                            layui.layer.confirm('管理员已删除,用户前台信息是否保留？',
+                                {btn: ['保留', '删除']},
+                                function (index) {
+                                    layui.layer.close(index);
+                                    layui.table.reload('LAY-curd-table');
+                                },
+                                function () {
+                                    var checkData = layui.table.checkStatus('LAY-curd-table').data;
+                                    var items = [];
+                                    layui.each(checkData, function (k, v) {
+                                        items.push(v.user_id)
+                                    });
+                                    layui.admin.req({
+                                        url: config.api.userBatch,
+                                        data: {type: 'del', items: items},
+                                        method: 'POST',
+                                        success: function (res) {
+                                            layui.layer.msg('已删除');
+                                        }
+                                    });
+                                    layui.table.reload('LAY-curd-table');
+                                }
+                            );
+                        }
+                    },
+                },
+                actionButton: {
+                    del: {
+                        success: function (obj) {
+                            layui.layer.confirm('管理员已删除,用户前台信息是否保留？',
+                                {btn: ['保留', '删除']},
+                                function (index) {
+                                    layui.layer.close(index);
+                                },
+                                function () {
+                                    layui.admin.req({
+                                        url: config.api.userDel,
+                                        data: {id: obj.data.user_id},
+                                        method: 'POST',
+                                        success: function (res) {
+                                            layui.layer.msg('删除成功');
+                                        }
+                                    });
+                                }
+                            );
+                            obj.del();
+                        }
+                    },
+                },
+                table: {
+                    page: true,
+                    limit: 30,
+                    cols: [[
+                        {type: 'checkbox', fixed: 'left'},
+                        {field: 'id', title: 'ID', align: 'center', width: 80},
+                        {field: 'name', title: '用户名'},
+                        {field: 'login_ip', title: '登录IP', align: 'center'},
+                        {field: 'login_num', title: '登录次数', align: 'center'},
+                        {field: 'login_time', title: '登录时间', align: 'center'},
+                        {field: 'create_time', title: '添加时间', align: 'center'},
+                        {field: 'create_user', title: '添加用户', align: 'center'},
+                        {field: 'status', title: '状态', templet: '#table-switch', width: 100, data: {text: '启用|禁用'}},
+                        {title: '操作', width: 80, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+                    ]]
+                }
+            };
+            layui.use('curd/list', layui.factory('curd/list'));
+        }
+    });
+</script>

@@ -1,0 +1,132 @@
+<title>任务列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>任务管理</cite></a>
+        <a><cite>任务列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="action-label">
+    {{#
+    var data = typeof d.CONFIG.data === 'object' ? d.CONFIG.data : JSON.parse(d.CONFIG.data);
+    var text = data[d.VALUE] ? data[d.VALUE] : d.VALUE
+    }}
+    {{ text }}
+</script>
+<script>
+    var config = {
+        api: {
+            batch: '/manage/collect/cron/batch.json',
+            list: '/manage/collect/cron/list.json',
+            change: '/manage/collect/cron/change.json',
+            del: '/manage/collect/cron/del.json'
+        },
+        search: {},
+        topButton: {
+            add: {},
+            enable: {
+                text: '启用',
+                action: function () {
+                    checkData = layui.table.checkStatus('LAY-curd-table').data;
+                    if (checkData.length === 0) {
+                        return layui.layer.msg('请选择数据');
+                    }
+                    var items = [], values = [];
+                    layui.each(checkData, function (k, v) {
+                        items.push(v.id);
+                        values.push(1)
+                    });
+                    layui.admin.req({
+                        url: config.api.batch,
+                        data: {type: 'change', items: items, field: 'status', values: values},
+                        method: 'POST',
+                        success: function (res) {
+                            layui.table.reload('LAY-curd-table');
+                            layui.layer.msg('操作成功，禁用即时生效，启用需要根据您计划任务决定！');
+                        }
+                    })
+                }
+            },
+            disable: {
+                style: 'layui-btn-danger',
+                text: '禁用',
+                action: function () {
+                    checkData = layui.table.checkStatus('LAY-curd-table').data;
+                    if (checkData.length === 0) {
+                        return layui.layer.msg('请选择数据');
+                    }
+                    var items = [], values = [];
+                    layui.each(checkData, function (k, v) {
+                        items.push(v.id);
+                        values.push(0)
+                    });
+                    layui.admin.req({
+                        url: config.api.batch,
+                        data: {type: 'change', items: items, field: 'status', values: values},
+                        method: 'POST',
+                        success: function (res) {
+                            layui.table.reload('LAY-curd-table');
+                            layui.layer.msg('禁用成功');
+                        }
+                    })
+                }
+            },
+            del: {},
+        },
+        actionButton: {
+            edit: {},
+            del: {},
+        },
+        table: {
+            page: true,
+            limit: 30,
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'id', title: 'ID', align: 'center', width: 60},
+                {field: 'name', title: '任务名称', align: 'center'},
+                {field: 'action', title: '调用地址',templet: '#action-label', data: {data: '{"collect:update:list":"列表采集","task:visitreset":"重置点击数","task:resetstatcache": "重置统计缓存","task:handlestat": "统计数据更新","seo:ping":"新内容主动推送","seo:submit":"每日链接全量","seo:mip":"每日MIP全量","seo:amp":"每日AMP全量","seo:xiongzhang":"每日熊掌号全量","seo:xiongzhangnew":"每日熊掌号原创新增","task:visitinc":"大流量点击数增加","task:proxy":"代理平台数据更新","cron:cleanLog":"清理30日以前的采集日志"}'}},
+                {field: 'interval', title: '时间设置'},
+                {field: 'lastruntime', title: '最后一次运行时间', templet: '#table-timestamp', width: 165},
+                // {field: 'nowruntime', title: '本次运行时间', templet: '#table-timestamp', width: 180},
+                {field: 'nextruntime', title: '下次运行时间', templet: '#table-timestamp', width: 165},
+                {
+                    field: 'status',
+                    title: '状态',
+                    templet: '#table-switch',
+                    align: 'center',
+                    width: 100,
+                    data: {text: '正常|禁用'}
+                },
+                {title: '操作', width: 140, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

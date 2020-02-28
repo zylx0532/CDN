@@ -1,0 +1,143 @@
+<title>专题列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营管理</cite></a>
+        <a><cite>专题管理</cite></a>
+        <a><cite>专题列表</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="viewNovels">
+    <div class="layui-form-item">
+        <label class="layui-form-label">用户:</label>
+        <div class="layui-input-block">
+            <input type="text" value="{{d.data.user}}" class="layui-input" style="border: none;" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">标题:</label>
+        <div class="layui-input-block">
+            <input type="text" value="{{d.data.title}}" class="layui-input" style="border: none;" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">标签:</label>
+        <div class="layui-input-block">
+            <input type="text" value="{{d.data.tags}}" class="layui-input" style="border: none;" disabled>
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">描述:</label>
+        <div class="layui-input-block">
+            <input type="text" value="{{d.data.intro}}" class="layui-input" style="border: none;" disabled>
+        </div>
+    </div>
+    <table lay-filter="viewNovelsTable">
+        <thead>
+        <tr>
+            <th lay-data="{field:'create_time', width:160}">添加时间</th>
+            <th lay-data="{field:'novel', width:160}">书名</th>
+            <th lay-data="{field:'author', width:160}">作者</th>
+            <th lay-data="{field:'star', width:60,align: 'center'}">评分</th>
+            <th lay-data="{field:'comment'}">评语</th>
+            <th lay-data="{field:'action', width:80,align: 'center'}">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{# layui.each(d.list, function(index, item){ }}
+        <tr>
+            <td>{{item.create_time}}</td>
+            <td>{{item.novel.novel.name}}</td>
+            <td>{{item.novel.author.name}}</td>
+            <td>{{item.star}}</td>
+            <td>{{item.comment}}</td>
+            <td>
+                <button onclick="config.removeNovel(this,'{{d.data.id}}','{{item.novel_id}}');"
+                        class="layui-btn layui-btn-xs layui-btn-danger">删除
+                </button>
+            </td>
+        </tr>
+        {{# }); }}
+        </tbody>
+    </table>
+</script>
+<script>
+    var config = {
+        api: {
+            batch: '/manage/content/special/special/batch.json',
+            list: '/manage/content/special/special/list.json',
+            del: '/manage/content/special/special/del.json',
+            change: '/manage/content/special/special/change.json',
+        },
+        search: {
+            user: {type: 'text', text: '用户名'},
+            status: {type: 'select', text: '状态', data: {0: '禁用', 1: '启用'}},
+        },
+        topButton: {
+            add: {},
+            del: {},
+        },
+        actionButton: {
+            novel: {
+                text: '小说管理',
+                icon: 'layui-icon layui-icon-list',
+                action: function (obj) {
+                    location.hash = '/content/special/special_id=' + obj.data.id + '/novel/';
+                }
+            },
+            edit: {},
+            del: {},
+        },
+        table: {
+            page: true,
+            limit: 30,
+            cols: [[
+                {type: 'checkbox', fixed: 'left'},
+                {field: 'cover', title: '封面', templet: '#table-img', width: 100,},
+                {field: 'id', title: 'ID', align: 'center', width: 60},
+                {field: 'user', title: '用户', align: 'center', width: 100},
+                {field: 'title', title: '标题'},
+                {field: 'intro', title: '描述'},
+                {field: 'num_novel', title: '小说', align: 'center', width: 60},
+                {field: 'num_allvisit', title: '浏览', align: 'center', width: 60},
+                {field: 'create_time', title: '创建时间', templet: '#table-timestamp'},
+                {
+                    field: 'status',
+                    title: '状态',
+                    templet: '#table-switch',
+                    align: 'center',
+                    width: 100,
+                    data: {text: '正常|隐藏'}
+                },
+                {title: '操作', width: 230, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

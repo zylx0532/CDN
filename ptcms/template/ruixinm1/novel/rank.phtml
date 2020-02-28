@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/css/global.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/flexible.min.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+</head>
+<body>
+
+	<!-- 导航 -->
+    <div class="flex-wrp flex-center bg-white w100 size14 pt-nav">
+        <a href="{link=index.index}" class="color5 mr20">精选</a>
+        <a href="{link=novel.rank.index}" class="color5 mr20 pt-select">排行</a>
+        <a href="{link=novel.category.index}" class="color5 mr20">分类</a>
+        <a href="{link=novel.over.index}" class="color5">完本</a>
+    </div>
+	
+	<!-- 排行分类 -->
+	<div class="flex-wrp flex-flow-row pt-ranksort">
+        {block method="rank.out" name=list}
+        {loop}
+		<div class="w50 pd5">
+			<a class="flex-wrp flex-cell flex-center pt-ranksort-item" href="{link=novel.rank.list key=$loop.key}">
+				<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/{$loop.key}.jpg" class="pt-rank-icon">
+				<div class="lh100 mt10">{$loop.name}</div>
+			</a>
+		</div>
+        {/loop}
+	</div>
+    <div class="bg-white mb10 pt-list fl">
+        {block method="rank.list" name=list}
+        {loop}
+        <div class="flex-wrp flex-align-center flex-between w50 fl mb25 ">
+            <div class="flex-wrp flex-align-center text-center w100">
+                <a title="{$loop.name}" class="size14 lh100 color7 w100" href="{link=novel.rank.list key=$loop.key}">{$loop.name}</a>
+            </div>
+        </div>
+        {/loop}
+    </div>
+
+    <!-- 底部版权 -->
+    {include file="/system/footer"}
+    <!-- 底部按钮 -->
+    {include file="/system/footerbutton"}
+	<!-- js -->
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/index.js"></script>
+</body>
+</html>

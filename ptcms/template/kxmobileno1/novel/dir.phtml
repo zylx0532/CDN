@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/css/global.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/flexible.min.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+</head>
+<body class="bg-f27">
+	<div class="relative w100  bg-white flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+        {if $kx.get.subscribe}
+        <span class="color32 bold size16 select-all">全选</span>
+        <div class="size16 bold color37">{$novel.name}</div>
+        <span class="pt-return" style="width:.32rem">取消</span>
+        {else}
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/return.png" class="pt-return">
+        <div class="size18 bold color37">{$novel.name}</div>
+        <div>
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/ellipsis.png" class="mr5 pt-ellipsis">
+        </div>
+        <div class="pt5 pb5 pt-tip">
+            <a href="{link=novel.novel.index novelid=$novel.id pinyin=$novel.pinyin}" class="block color1 text-center pt-tip-item" title="{$novel.name}">回到书页</a>
+            <a href="{link=index.index}" class="block color1 text-center pt-tip-item" title="{$kx.config.sitename}">前往首页</a>
+            <a href="{link=novel.search.index}" class="block color1 text-center pt-tip-item">搜索小说</a>
+            <a href="{link=user.mark.index}" class="block color1 text-center pt-tip-item" rel="nofollow">我的书架</a>
+            <a href="{link=user.index.index}" class="block color1 text-center pt-tip-item" rel="nofollow">个人中心</a>
+        </div>
+        {/if}
+	</div>
+    <style>
+
+    </style>
+	<!-- 内容 -->
+    {block method=novel.charge novelid=$novel.id name=$charge}
+    {~$charge = $userinfo.vip_expire_time < time()?$charge.words_money:$charge.words_vip_money}
+    <div class="bg-white plr15 {=$kx.get.subscribe?'subscribe':''}" data-words_money="{$charge}">
+		<div class="w100 ptb10 border-b size14 color4">
+            <span class="mr10 inline-block" style="height:.25rem;line-height:.25rem">{$novel.is_over|default="连载中",'已完结'}</span>
+            {if !$kx.get.subscribe}<span class="inline-block" style="height:.25rem;line-height:.25rem"> 共{$last.id}章</span>{/if}
+            <div class="fr inline-block">
+                {if $sort=='desc'}
+                <a class="flex-wrp flex-center pt-antitone" href="{link=novel.novel.dir novelid=$novel.id pinyin=$novel.pinyin sort='asc' subscribe=$kx.get.subscribe}">
+                    <span class="size14 color2">倒序</span>
+                </a>
+                {else}
+                <a class="flex-wrp flex-center pt-antitone" href="{link=novel.novel.dir novelid=$novel.id pinyin=$novel.pinyin sort='desc' subscribe=$kx.get.subscribe}">
+                    <span class="size14 color2">正序</span>
+                </a>
+                {/if}
+            </div>
+        </div>
+        {block method=chapter.list novelid=$novel.id page=$paginate.current name=$list sort=$sort}
+        {loop}
+        {if $kx.get.subscribe}
+            {~if($loop.type!=\App\Model\Novel\Chapter::TYPE_TOLL)continue;}
+            {~if($novel.type == App\Model\Novel\Novel::TYPE_VIP_FREE && $userinfo.vip_expire_time > time())continue;}
+            {block method="chapter.issubscribe" userid=$userinfo.id novelid=$novel.id chapterid=$loop.chapterid name=$issubscribe}
+            {~if($issubscribe)continue;}
+        {/if}
+        {block method=chapter.calculatePriceByPrice wordsnum=$loop.words price=$charge name=$price}
+        <div class="border-b chapter-list">
+            <input type="checkbox" value="{$loop.chapterid}" data-price="{$price}" id="chapter_{$loop.chapterid}">
+            <label class="pl30" for="chapter_{$loop.chapterid}">
+                <a title="{$loop.name}" class="w100 flex-wrp flex-align-center flex-between pt10 pb10" {if !$kx.get.subscribe} href="{link=novel.chapter.read novelid=$novel.id pinyin=$novel.pinyin chapterid=$loop.chapterid}"{/if}>
+                    <div class="flex-wrp"><span class="mr15 size12 color62">{$loop.name}</span></div>
+                    {if $novel.type == App\Model\Novel\Novel::TYPE_TOLL || $novel.type == App\Model\Novel\Novel::TYPE_VIP_FREE && $userinfo.vip_expire_time < time()}
+                        {if $loop.type == App\Model\Novel\Chapter::TYPE_TOLL}
+                            {block method="chapter.issubscribe" userid=$userinfo.id novelid=$novel.id chapterid=$loop.chapterid name=$issubscribe}
+                            {if !$issubscribe}
+                            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/icon_lock.png" class="pt-arrow-right">
+                            {/if}
+                        {/if}
+                    {elseif $novel.type == App\Model\Novel\Novel::TYPE_VIP_FREE && $userinfo.vip_expire_time > time()}
+                        <span class="size12">会员免费</span>
+                    {/if}
+                    <span class="pt-arrow-right size12">{=$price}{$kx.config.user.money_caption}</span>
+                </a>
+            </label>
+		</div>
+        {/loop}
+        {if $kx.get.subscribe}
+        <div class="bottom bg-white w100">
+            <div class="fl pt10 pl20">
+                <div class="color32 size14">已选择 <span class="selected_num">0</span> 章/<span class="selected_money">0</span>{$kx.config.user.money_caption}</div>
+                <div class="size12">当前余额 <span class="color2 total">{=$userinfo.assets.balance?:0}</span> 金币</div>
+            </div>
+            <button class="color1 bg-red fr ptb10 plr25 mt15 mb15 mr15">立即订阅</button>
+        </div>
+        {/if}
+	</div>
+    <!-- 底部版权 -->
+    {include file="/system/footer"}
+    <script>var __NOVEL_ID = '{$novel.id}', __RECHARGE_URL = '{link=user.pay.recharge}',__SUBSCRIBE_URL = '{link=novel.novel.subscribe}';</script>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/layer/mobile/layer.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/dir.js"></script>
+</body>
+</html>

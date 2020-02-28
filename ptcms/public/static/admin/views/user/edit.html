@@ -1,0 +1,100 @@
+<title>修改用户</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>用户管理</cite></a>
+        <a><cite>用户列表</cite></a>
+        <a><cite>修改用户</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">修改用户</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">用户名 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" value="" class="layui-input" lay-verify="required">
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">密码 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="password" name="password" value="" class="layui-input" placeholder="******">
+                                <div class="layui-form-mid layui-word-aux">不修改密码请留空</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">状态</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="status" lay-skin="switch" lay-text="正常|禁用" value="1" checked>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <input type="hidden" name="id">
+                                <button class="layui-btn" lay-submit lay-filter="submit">确认修改</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var api_submit = '/manage/user/user/edit.json'
+        , url_index = '/user/index';
+    layui.use(['form', 'upload','editor'], function (exports) {
+        var $ = layui.$
+            , layer = layui.layer
+            , laytpl = layui.laytpl
+            , setter = layui.setter
+            , view = layui.view
+            , admin = layui.admin
+            , form = layui.form
+            , upload = layui.upload
+            , editor = layui.editor('#content_editor');
+
+        var $body = $('body');
+
+
+        editor.create();
+
+        form.render();
+
+        admin.req({
+            url: api_submit + '?id=' + layui.router().search.id
+            , success: function (res) {
+                form.val('LAY-info-form', res.data);
+                editor.txt.html(res.data.content)
+            }
+        });
+
+        form.on('submit(submit)', function (obj) {
+            //提交修改
+            admin.req({
+                url: api_submit
+                , data: obj.field
+                , method: 'POST'
+                , success: function (res) {
+                    layer.open({
+                        icon: 1,
+                        title: '操作成功',
+                        content: '修改成功',
+                        end:function () {
+                            location.hash = url_index
+                        }
+                    });
+                }
+            });
+            return false;
+        });
+    });
+</script>

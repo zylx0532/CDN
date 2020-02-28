@@ -1,0 +1,121 @@
+<title>修改配置</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>系统设置</cite></a>
+        <a><cite>信息管理</cite></a>
+        <a><cite>单页管理</cite></a>
+        <a><cite>修改单页</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">修改单页</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单页标题 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="name" value="" class="layui-input" lay-verify="required">
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">单页Key <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <input type="text" name="key" value="" class="layui-input" lay-verify="required">
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item layui-form-text">
+                            <label class="layui-form-label">单页内容 <span class="text-red">*</span></label>
+                            <div class="layui-input-block">
+                                <textarea name="content" style="display: none"></textarea>
+                                <div id="content_editor"></div>
+                                <div class="layui-form-mid layui-word-aux"></div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">显示状态</label>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="status" lay-skin="switch" lay-text="显示|隐藏" value="1" checked>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">排序位置</label>
+                            <div class="layui-input-block">
+                                <input type="text" name="position" value="50" class="layui-input">
+                                <div class="layui-form-mid layui-word-aux">越大越靠前</div>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <div class="layui-input-block">
+                                <input type="hidden" name="id">
+                                <button class="layui-btn" lay-submit lay-filter="submit">确认修改</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var api_submit = '/manage/system/page/edit.json'
+        , url_index = '/setting/page/index';
+    layui.use(['form', 'upload','editor'], function (exports) {
+        var $ = layui.$
+            , layer = layui.layer
+            , laytpl = layui.laytpl
+            , setter = layui.setter
+            , view = layui.view
+            , admin = layui.admin
+            , form = layui.form
+            , upload = layui.upload
+            , editor = layui.editor('#content_editor');
+
+        var $body = $('body');
+
+        editor.customConfig.onchange = function (html) {
+            $('textarea[name=content]').val(html);
+        };
+
+        editor.create();
+
+        form.render();
+
+        admin.req({
+            url: api_submit + '?id=' + layui.router().search.id
+            , success: function (res) {
+                form.val('LAY-info-form', res.data);
+                editor.txt.html(res.data.content)
+            }
+        });
+
+        form.on('submit(submit)', function (obj) {
+            //提交修改
+            admin.req({
+                url: api_submit
+                , data: obj.field
+                , method: 'POST'
+                , success: function (res) {
+                    admin.success('修改成功', {
+                        yes: function () {
+                            location.reload()
+                        },
+                        btn2: function () {
+                            location.hash = url_index
+                        }
+                    })
+                }
+            });
+            return false;
+        });
+
+
+    });
+</script>

@@ -1,0 +1,44 @@
+<div class="pt-list">
+    <!-- 我的 -->
+    <div class="fr pt-toplist">
+        <div class="border-b size18 bold color8 pb10 pt-toplist-title">User</div>
+        <div class="pt-toplist-item">
+            <a href="{link=user.index.index}"{if $userleftsign=='index'} class="color2"{/if}><span class="mr10">·</span>UserCP</a>
+            <a href="{link=user.vip.index}"{if $userleftsign=='vip'} class="color2"{/if}><span class="mr10">·</span>VIP</a>
+            <a href="{link=user.assets.index}"{if in_array($userleftsign,['assets','ticket'])} class="color2"{/if}><span class="mr10">·</span>Assets</a>
+            <a href="{link=user.mark.index}"{if $userleftsign=='mark'} class="color2"{/if}><span class="mr10">·</span>Mark</a>
+            <a href="{link=user.history.index}"{if $userleftsign=='history'} class="color2"{/if}><span class="mr10">·</span>History</a>
+            <a href="{link=user.booklist.index}"{if $userleftsign=='booklist'} class="color2"{/if}><span class="mr10">·</span>BookList</a>
+            <a href="{link=user.vote.index}"{if $userleftsign=='vote'} class="color2"{/if}><span class="mr10">·</span>Vote</a>
+            <a href="{link=user.comment.publish}"{if $userleftsign=='comment'} class="color2"{/if}><span class="mr10">·</span>Comment</a>
+            <a href="{link=user.sign.index}"{if $userleftsign=='sign'} class="color2"{/if}><span class="mr10">·</span>Sign</a>
+            <a href="{link=user.star.index}"{if $userleftsign=='star'} class="color2"{/if}><span class="mr10">·</span>Star</a>
+            <a href="{link=user.invite.index}"{if $userleftsign=='invite'} class="color2"{/if}><span class="mr10">·</span>Invite</a>
+            <a href="{link=author.author.index}" target="_blank"><span class="mr10">·</span>Author</a>
+        </div>
+    </div>
+    <!-- 设置 -->
+    <div class="fr pt-toplist none">
+        <div class="border-b bold size18 color8 pb10 pt-toplist-title">Finance</div>
+        <div class="pt-toplist-item">
+            <a href="{link=user.charge.index}"{if $userleftsign=='charge'} class="color2"{/if}><span class="mr10">·</span>Charge</a>
+            <a href="{link=user.consume.index}"{if $userleftsign=='consume'} class="color2"{/if}><span class="mr10">·</span>Consume</a>
+            <a href="{link=user.reward.index}"{if $userleftsign=='reward'} class="color2"{/if}><span class="mr10">·</span>Reward</a>
+            <a href="{link=user.distribution.index}"{if $userleftsign=='distribution'} class="color2"{/if}><span class="mr10">·</span>Distribution</a>
+        </div>
+    </div>
+    <div class="fr pt-toplist">
+        <div class="border-b bold size18 color8 pb10 pt-toplist-title">Set</div>
+        <div class="pt-toplist-item">
+            <a href="{link=user.info.index}"{if $userleftsign=='info'} class="color2"{/if}><span class="mr10">·</span>Info</a>
+            <a href="{link=user.info.pwd}"{if $userleftsign=='pwd'} class="color2"{/if}><span class="mr10">·</span>Password</a>
+            <a href="{link=user.info.bind}"{if $userleftsign=='bind'} class="color2"{/if}><span class="mr10">·</span>Bind</a>
+            <a href="{link=user.auth.logout}"><span class="mr10">·</span>Logout</a>
+        </div>
+    </div>
+</div>
+<style>
+    .pt-rank:not(.pt-user){
+        min-height: 630px;
+    }
+</style>

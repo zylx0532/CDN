@@ -1,0 +1,68 @@
+<title>修改栏目</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营管理</cite></a>
+        <a><cite>推荐管理</cite></a>
+        <a><cite>修改栏目</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">修改栏目</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="hidden" name="id">
+                                    <button class="layui-btn" type="button" lay-submit lay-filter="submit">确认</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var config = {
+            api: {
+                submit: '/manage/content/recommendPeriod/edit.json'
+            },
+            submit: function (obj) {
+                obj.field.show_time = (new Date(obj.field.show_time)).getTime() / 1000;
+                layui.admin.req({
+                    url: config.api.submit,
+                    data: obj.field,
+                    method: 'POST',
+                    success: function (res) {
+                        layui.admin.success('修改成功', {
+                            yes: function () {
+                                location.reload()
+                            },
+                            btn2: function () {
+                                location.hash = '/content/recommend/period/index/recommend_id=' + obj.field.recommend_id
+                            }
+                        })
+                    }
+                });
+                return false;
+            },
+            fields: [
+                {name: 'recommend_id', key: 'recommend_id', type: 'hide'},
+                {name: '栏目名称', key: 'title', type: 'text',},
+                {name: '开始时间', key: 'show_time', type: 'datetime'},
+                {name: '状态', key: 'status', type: 'switch', extra: '正常|隐藏'},
+                {name: '栏目描述', key: 'intro', type: 'textarea',},
+            ],
+        };
+    layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+</script>

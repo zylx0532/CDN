@@ -1,0 +1,152 @@
+<title>添加自定义页面</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营设置</cite></a>
+        <a><cite>自定义页面管理</cite></a>
+        <a><cite>添加自定义页面</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">添加自定义页面</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <input type="hidden" name="id">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="params">
+    <div class="layui-form-item">
+        <input type="hidden" name="{{d.key}}" value="">
+        <label class="layui-form-label">{{d.name}}</label>
+        <div class="layui-form-mid layui-word-aux">
+            在模板内使用 <span style="color: #FF5722;">$params['参数名']</span> 或 <span
+                style="color: #FF5722;">$params.参数名</span> 调用，数组请输入json字符串
+        </div>
+        <div class="layui-input-block">
+            <div class="layui-row replace-rule-box">
+                <table class="layui-table">
+                    <colgroup>
+                        <col width="15%">
+                        <col width="20%">
+                        <col width="55%">
+                        <col width="10%">
+                    </colgroup>
+                    <thead>
+                    <tr>
+                        <th>类型</th>
+                        <th>参数名</th>
+                        <th>参数值</th>
+                        <th class="text-align: center;">
+                            <button class="layui-btn btn-add-param" type="button">添加</button>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</script>
+<script>
+    var config;
+    layui.admin.req({
+        url: '/manage/data/response.json',
+        method: 'POST',
+        data: {custompagetemplate: 'kvselect'},
+        success: function (res) {
+            config = {
+                api: {
+                    submit: '/manage/system/custompage/add.json'
+                },
+                done: function () {
+                    layui.$('.btn-add-param').click(function () {
+                        var tbody = layui.$(this).parents('.layui-form-item').find('tbody');
+                        html = '<tr>' +
+                            '<td><select class="param_type">' +
+                            '<option value="string">文本</option>' +
+                            '<option value="array">数组</option>' +
+                            '</select></td>' +
+                            '<td><input type="text" class="layui-input param_key" placeholder="请输入参数名"></td>' +
+                            '<td><input type="text" class="layui-input param_value" placeholder="请输入参数值"></td>' +
+                            '<td><button class="layui-btn layui-btn-danger" onclick="layui.$(this).parents(\'tr\').remove()">删除</button></td>' +
+                            '</tr>';
+                        tbody.append(html);
+                        layui.form.render();
+                    });
+                },
+                submit: function (obj) {
+                    var types = layui.$('.param_type'),
+                        keys = layui.$('.param_key'),
+                        values = layui.$('.param_value'),
+                        params = [];
+                    if (types.length !== keys.length || keys.length !== values.length) {
+                        layui.layer.msg('参数错误,请刷新页面后重试');
+                        return false;
+                    }
+                    types.each(function (k, v) {
+                        params.push({
+                            key: keys[k].value,
+                            value: values[k].value,
+                            type: types[k].value,
+                        });
+                    });
+                    obj.field.params = JSON.stringify(params);
+                    layui.admin.req({
+                        url: config.api.submit,
+                        data: obj.field,
+                        method: 'POST',
+                        success: function (res) {
+                            if (typeof config.submitSuccess === 'function') {
+                                config.submitSuccess(res);
+                            } else {
+                                layui.admin.success('添加成功', {
+                                    yes: function (index) {
+                                        layui.index.render();
+                                    },
+                                    btn2: function () {
+                                        location.hash = config.url.index;
+                                    }
+                                })
+                            }
+                        }
+                    });
+                    return false;
+                },
+                fields: [
+                    {name: 'URL', key: 'url', type: 'text',intro:'请不要和其他页面url冲突，可以设置成比如“/gg.html”男生频道 “/active/yuandan.html”元旦活动'},
+                    {name: '标题', key: 'title', type: 'text', intro: '在模板内使用 $title 调用'},
+                    {name: '描述', key: 'desc', type: 'textarea', intro: '在模板内使用 $description 调用'},
+                    {name: '关键词', key: 'keywords', type: 'textarea', intro: '在模板内使用 $keywords 调用'},
+                    {
+                        name: '模板',
+                        key: 'template',
+                        type: 'select',
+                        extra: res.data.custompagetemplate.kvselect,
+                        intro: '模板文件请放到 <span style="color: #FF5722;">/template/*/custom/</span> 目录下，请pc和手机模板都制作好！'
+                    },
+                    {name: '自定义参数', key: 'params', templet: '#params'},
+                    {name: '状态', key: 'status', type: 'switch', extra: '显示|隐藏'},
+                ],
+            };
+            layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+        }
+    });
+</script>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+	<title>修改密码 - 用户中心 - {$kx.config.sitename}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/css/global.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/flexible.min.js"></script>
+    <style>
+        select {
+            border: none;
+            -webkit-appearance: none;
+            -webkit-tap-highlight-color: #fff;
+            outline: 0;
+            padding: 0 .1rem;
+        }
+    </style>
+</head>
+<body>
+    <form method="post">
+        <div class="w100 vh100">
+            <div class="w100  bg-white flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+                <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/return.png" class="pt-return">
+                <div class="size18 bold color37">修改密码</div>
+                <button type="submit" style="background:none;">保存</button>
+            </div>
+            <div class="bg-white mt10">
+                <div class="flex-wrp flex-align-center flex-between plr15 ptb15 border-b">
+                    <span class="size14 color7">原始密码</span>
+                    <input class="size14 color4 text-right" type="password" name="old_pwd" placeholder="第三方登录用户请留空">
+                </div>
+                <div class="flex-wrp flex-align-center flex-between plr15 ptb15 border-b">
+                    <span class="size14 color7">新密码</span>
+                    <input class="size14 color4 text-right" type="password" name="new_pwd">
+                </div>
+                <div class="flex-wrp flex-align-center flex-between plr15 ptb15 border-b">
+                    <span class="size14 color7">重复密码</span>
+                    <input class="size14 color4 text-right" type="password" id="repeat_pwd">
+                </div>
+            </div>
+        </div>
+    </form><!-- 底部版权 -->
+    {include file="/system/footer"}
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/layer/mobile/layer.js"></script>
+	<script>
+		$('.pt-return').click(function(){
+			window.history.back();
+		})
+        $('form').submit(function(){
+            if (!$(this).find('input[name=old_pwd]').val()){
+                layer.open({
+                    content: '原始密码不能为空，请检查后重试！'
+                    ,skin: 'msg'
+                    ,time: 2
+                });
+                return false;
+            }
+            if (!$(this).find('input[name=new_pwd]').val()){
+                layer.open({
+                    content: '新密码不能为空，请检查后重试！'
+                    ,skin: 'msg'
+                    ,time: 2
+                });
+                return false;
+            }
+            if ($(this).find('input[name=new_pwd]').val() != $(this).find('#repeat_pwd').val()){
+                $(this).find('input[name=new_pwd]').val('');
+                $(this).find('#repeat_pwd').val('');
+                layer.open({
+                    content: '两次输入密码不一致，请检查后重试！'
+                    ,skin: 'msg'
+                    ,time: 2
+                });
+                return false;
+            }
+            return true;
+        });
+	</script>
+</body>
+</html>

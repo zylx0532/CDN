@@ -1,0 +1,193 @@
+<title>友情链接列表</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>系统设置</cite></a>
+        <a><cite>信息管理</cite></a>
+        <a><cite>友情链接</cite></a>
+        <a><cite>链接列表</cite></a>
+    </div>
+</div>
+
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="layadmin-formlist">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">ID</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="id" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">站点</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="url" placeholder="请输入" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;">
+                <button class="layui-btn layuiadmin-btn" data-type="add">添加</button>
+                <button class="layui-btn layui-btn-normal layuiadmin-btn" data-type="batchreorder">排序</button>
+                <button class="layui-btn layui-btn-danger layuiadmin-btn" data-type="batchdel">删除</button>
+            </div>
+            <script type="text/html" id="statusTpl">
+                <input type="checkbox" lay-skin="switch" lay-text="正常|禁用" lay-filter="setStatus" value="{{d.id}}" {{ d.status== 1 ? 'checked' : '' }}>
+            </script>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            </script>
+        </div>
+    </div>
+</div>
+<script>
+    var api_batch = '/manage/system/friendlink/batch.json'
+        , api_list = '/manage/system/friendlink/list.json'
+        , api_del = '/manage/system/friendlink/del.json'
+        , api_change = '/manage/system/friendlink/change.json'
+        , url_add = '/setting/friendlink/add'
+        , url_edit = '/setting/friendlink/edit';
+    layui.use(['admin', 'table'], function  () {
+        var $ = layui.$
+            , admin = layui.admin
+            , table = layui.table
+            , form = layui.form;
+
+        table.render({
+            elem: '#LAY-curd-table'
+            , url: api_list
+            ,where:{access_token:layui.data('layuiAdmin').access_token}
+            , cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'id', width: 60, title: 'ID', align: 'center'}
+                , {field: 'name', title: '网站名称'}
+                , {field: 'url', title: '网站地址', minWidth: 180}
+                , {field: 'position', title: '排序序号', edit: 'text', align: 'center', width: 90}
+                , {field: 'status', title: '状态', templet: '#statusTpl', align: 'center', width: 100}
+                , {field: 'expire_time', title: '过期时间'}
+                , {field: 'create_time', title: '添加时间'}
+                , {field: 'last_update_time', title: '最后更新时间'}
+                , {title: '操作', width: 150, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+            , height: 'full-320'
+        });
+
+        //监听工具条
+        table.on('tool(LAY-curd-table)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('真的删除这条记录么', function (index) {
+                    admin.req({
+                        url: api_del
+                        , data: {id: data.id}
+                        , method: 'POST'
+                        , success: function (res) {
+                            layer.msg('删除成功');
+                        }
+                    });
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if (obj.event === 'edit') {
+                location.hash = url_edit + '/id=' + data.id;
+            }
+        });
+
+        //监听搜索
+        form.on('submit(LAY-front-search)', function (data) {
+            var field = data.field;
+
+            //执行重载
+            table.reload('LAY-curd-table', {
+                where: field
+            });
+        });
+
+        //事件
+        var active = {
+            batchdel: function () {
+                var checkStatus = table.checkStatus('LAY-curd-table')
+                    , checkData = checkStatus.data; //得到选中的数据
+
+                if (checkData.length === 0) {
+                    return layer.msg('请选择数据');
+                }
+                layer.confirm('确定删除吗？', function (index) {
+                    var items = [];
+                    layui.each(checkData, function (k, v) {
+                        items.push(v.id)
+                    });
+                    admin.req({
+                        url: api_batch
+                        , data: {type: 'del', items: items}
+                        , method: 'POST'
+                        , success: function (res) {
+                            table.reload('LAY-curd-table');
+                            layer.msg('已删除');
+                        }
+                    })
+                });
+            }
+            , batchreorder: function () {
+                var checkStatus = table.checkStatus('LAY-curd-table')
+                    , checkData = checkStatus.data; //得到选中的数据
+
+                if (checkData.length === 0) {
+                    return layer.msg('请选择数据');
+                }
+                var items = [], values = [];
+                layui.each(checkData, function (k, v) {
+                    items.push(v.id);
+                    values.push(v.position)
+                });
+                admin.req({
+                    url: api_batch
+                    , data: {type: 'change', items: items, field: 'position', values: values}
+                    , method: 'POST'
+                    , success: function (res) {
+                        table.reload('LAY-curd-table');
+                        layer.msg('已更新排序');
+                    }
+                })
+            }
+            , add: function () {
+                location.hash = url_add
+            }
+        };
+
+        form.on('switch(setStatus)', function (obj) {
+            admin.req({
+                url: api_change
+                , data: {field: 'status', value: obj.elem.checked ? 1 : 0, id: this.value}
+                , method: 'POST'
+                , success: function (res) {
+                    layer.tips('修改成功', obj.othis);
+                }
+            })
+        });
+
+        $('.layui-btn.layuiadmin-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+    });
+</script>

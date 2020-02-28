@@ -1,0 +1,55 @@
+<title>添加栏目</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>运营管理</cite></a>
+        <a><cite>推荐管理</cite></a>
+        <a><cite>添加栏目</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">添加栏目</div>
+                <div class="layui-card-body" pad15>
+                    <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+                        </div>
+                        <div class="layui-submit">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" type="button" lay-submit lay-filter="submit">确认</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var recommend_id = layui.router().search.recommend_id,
+        config = {
+            api: {
+                submit: '/manage/content/recommendPeriod/add.json'
+            },
+            url: {
+                index: '/content/recommend/period/index/recommend_id=' + recommend_id
+            },
+            beforeSubmit: function (obj) {
+                obj.field.show_time = (new Date(obj.field.show_time)).getTime() / 1000;
+            },
+            fields: [
+                {name: 'recommend_id', key: 'recommend_id', type: 'hide', value: recommend_id},
+                {name: '栏目名称', key: 'title', type: 'text',},
+                {name: '开始时间', key: 'show_time', type: 'datetime'},
+                {name: '状态', key: 'status', type: 'switch', extra: '正常|隐藏'},
+                {name: '栏目描述', key: 'intro', type: 'textarea',},
+            ],
+        };
+    layui.use('curd/addOrEdit', layui.factory('curd/addOrEdit'));
+</script>

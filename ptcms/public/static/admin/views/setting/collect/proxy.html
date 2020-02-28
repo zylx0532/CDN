@@ -1,0 +1,130 @@
+<title>代理设置</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>采集管理</cite></a>
+        <a><cite>采集设置</cite></a>
+        <a><cite>代理设置</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">代理设置</div>
+                <div class="layui-card-body" pad15>
+                    <div class="layui-form" wid100 lay-filter="LAY-info-form">
+                        <div class="layui-fields">
+
+                        </div>
+                        <div class="layui-card" style="box-shadow:none">
+                            <div class="layui-form-item">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="submit">确认修改</button>
+                                    <button class="layui-btn layui-btn-normal" lay-submit lay-filter="proxy-test">代理测试
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['form'], function () {
+        var api = '/manage/setting/proxy.json',
+            api_test = '/manage/setting/proxyTest.json';
+        var $ = layui.$
+            , layer = layui.layer
+            , laytpl = layui.laytpl
+            , admin = layui.admin;
+        var $body = $('body');
+        admin.req({
+            url: api,
+            success: function (res) {
+                layui.each(res.data.fields, function (k, v) {
+                    laytpl(tplField.innerHTML).render(v, function (html) {
+                        $body.find('.layui-form .layui-fields').append(html);
+                    });
+                });
+                layui.form.render();
+                layui.form.val('LAY-info-form', res.data.values);
+                if (res.data.values['proxy#useapi'] == 1) {
+                    layui.$('select[name="proxy#type"]').parents('.layui-form-item').hide();
+                    layui.$('input[name="proxy#host"]').parents('.layui-form-item').hide();
+                    layui.$('input[name="proxy#port"]').parents('.layui-form-item').hide();
+                    layui.$('input[name="proxy#password"]').parents('.layui-form-item').hide();
+                    layui.$('input[name="proxy#usename"]').parents('.layui-form-item').hide();
+                    layui.$('select[name="proxy#platform"]').parents('.layui-form-item').show();
+                    layui.$('input[name="proxy#api"]').parents('.layui-form-item').show();
+                } else {
+                    layui.$('select[name="proxy#platform"]').parents('.layui-form-item').hide();
+                    layui.$('input[name="proxy#api"]').parents('.layui-form-item').hide();
+                    layui.$('select[name="proxy#type"]').parents('.layui-form-item').show();
+                    layui.$('input[name="proxy#host"]').parents('.layui-form-item').show();
+                    layui.$('input[name="proxy#port"]').parents('.layui-form-item').show();
+                    layui.$('input[name="proxy#password"]').parents('.layui-form-item').show();
+                    layui.$('input[name="proxy#usename"]').parents('.layui-form-item').show();
+                }
+            }
+        });
+        //书籍管理，评论管理，用户管理
+        layui.form.on('submit(submit)', function (obj) {
+            if (!layui.$(this).hasClass('layui-btn-disabled')) {
+                admin.req({
+                    url: api,
+                    data: obj.field,
+                    method: 'POST',
+                    success: function (res) {
+                        layer.open({
+                            icon: 1,
+                            title: '操作成功',
+                            content: '修改成功',
+                        });
+                    }
+                });
+            }
+            return false;
+        });
+        layui.form.on('submit(proxy-test)', function (obj) {
+            admin.req({
+                url: api_test,
+                data: obj.field,
+                method: 'POST',
+                success: function (res) {
+                    layer.open({
+                        icon: 1,
+                        title: '操作成功',
+                        content: res.msg,
+                    });
+                }
+            });
+            return false;
+        });
+        layui.form.on('radio', function (obj) {
+            if (obj.elem.name === 'proxy#useapi') {
+                if (obj.value === '1') {
+                    layui.$('select[name="proxy#type"]').parents('.layui-form-item').hide();
+                    layui.$('input[name="proxy#host"]').parents('.layui-form-item').hide();
+                    layui.$('input[name="proxy#port"]').parents('.layui-form-item').hide();
+                    layui.$('input[name="proxy#password"]').parents('.layui-form-item').hide();
+                    layui.$('input[name="proxy#usename"]').parents('.layui-form-item').hide();
+                    layui.$('select[name="proxy#platform"]').parents('.layui-form-item').show();
+                    layui.$('input[name="proxy#api"]').parents('.layui-form-item').show();
+                } else {
+                    layui.$('select[name="proxy#platform"]').parents('.layui-form-item').hide();
+                    layui.$('input[name="proxy#api"]').parents('.layui-form-item').hide();
+                    layui.$('select[name="proxy#type"]').parents('.layui-form-item').show();
+                    layui.$('input[name="proxy#host"]').parents('.layui-form-item').show();
+                    layui.$('input[name="proxy#port"]').parents('.layui-form-item').show();
+                    layui.$('input[name="proxy#password"]').parents('.layui-form-item').show();
+                    layui.$('input[name="proxy#usename"]').parents('.layui-form-item').show();
+                }
+            }
+        });
+    });
+</script>

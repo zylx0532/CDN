@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>章节管理 - 原创专区 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/css/style.css"/>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico"/>
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta http-equiv="Cache-Control" content="no-transform"/>
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__"/>
+    <style>
+        .labels {
+            height: 51px;
+        }
+
+        .labels li {
+            padding: 15px 40px;
+            background-color: #e5e5e5;
+            color: #929297;
+            display: inline-block;
+            float: left;
+        }
+
+        .labels li:hover,
+        .labels li.active {
+            background-color: #fff;
+            color: #323237;
+        }
+
+        .container {
+            padding: 20px;
+        }
+
+        .container .head {
+            width: 100%;
+            height: 50px;
+        }
+
+        .container .head button {
+            padding: 5px 20px;
+            background-color: #fff;
+            border: 1px solid #C9C9C9;
+            margin: 0 5px;
+            border-radius: 2px;
+            cursor: pointer;
+        }
+
+        .container .head button:hover {
+            border-color: #f55;
+            color: #f55;
+        }
+
+        .container .content .warning {
+            background-color: #F7F8F8;
+            border-top: 2px solid #f0f1f1;
+        }
+
+        .container .content textarea {
+            color: #323237;
+        }
+
+        .container .content textarea[name=postscript] {
+            border-top: 1px solid #f3f3f3 !important;
+        }
+
+        /*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+        .container .content textarea::-webkit-scrollbar {
+            width: 8px;
+            height: 16px;
+            background-color: #f5f4f5;
+        }
+
+        /*定义滑块 内阴影+圆角*/
+        .container .content textarea::-webkit-scrollbar-thumb {
+            background-color: #929297;
+        }
+    </style>
+</head>
+<body>
+{include file="/author/system/header"}
+<div class="body">
+    {include file="/author/system/left"}
+    <div class="right">
+        <div class="labels">
+            <ul>
+                <a href="{link=author.chapter.index novelid=$kx.get.novelid type='draft'}"><li class="{=$type=='draft'?'active':''}">草稿箱</li></a>
+                <a href="{link=author.chapter.index novelid=$kx.get.novelid type='published'}"><li class="{=$type=='published'?'active':''}">已发布</li></a>
+                <a href="{link=author.chapter.index novelid=$kx.get.novelid type='recycle'}"><li class="{=$type=='recycle'?'active':''}">回收站</li></a>
+                <a href="{link=author.novel.index novelid=$kx.get.novelid}"><li>作品设置</li></a>
+            </ul>
+            <a href="{link=author.chapter.add novelid=$kx.get.novelid}" class="fr color1 bg-red plr20 ptb10">
+                <img class="pr10 vertical-middle" style="height: 16px;width:16px;"
+                     src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/images/icon-edit.png" alt="新建章节">新建章节
+            </a>
+        </div>
+        <div class="container bg-white">
+            <form method="post">
+                <div class="head">
+                    <a href="javascript:history.back();" class="fl ptb5 plr20 border-radius2 mlr5"
+                       style="background-color:#f5f4f5;border 1px solid #f5f4f5">
+                        <img class="mr10 vertical-middle"
+                             src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinpc1/author/images/icon-return.png"
+                             style="width: 8px;height: 16px;" alt="返回">返回
+                    </a>
+                    <div class="fl ml30 pt5">
+                        <label for="chapter_type" class="ptb5 color0 vertical-middle">类型</label>
+                        {if in_array($novel.type,[\App\Model\Novel\Novel::TYPE_TOLL,\App\Model\Novel\Novel::TYPE_VIP_FREE])}
+                        <input type="hidden" name="chapter_type" value="{=\App\Model\Novel\Chapter::TYPE_TOLL}">
+                        <span class="ptb5 color0 vertical-middle">收费章节</span>
+                        {else}
+                        <input type="hidden" name="chapter_type" value="{=\App\Model\Novel\Chapter::TYPE_FREE}">
+                        <span class="ptb5 color0 vertical-middle">公众章节</span>
+                        {/if}
+                    </div>
+                    <span style="line-height: 30px;margin-left: 10px;" id="auto_save_tips"></span>
+                    <button type="submit" class="fr color2 border-red" name="status" value="publish">发布</button>
+                    <button type="submit" class="fr" name="status" value="draft">保存草稿</button>
+                    {if $kx.get.type != 'published'}
+                    <button type="button" class="fr">删除</button>
+                    {/if}
+                </div>
+                <div class="content">
+                    <p class="plr15 ptb5 warning">警告：根据国家相关法律规定要求，禁止上传任何色情、低俗、涉政等违法违规内容。一旦出现我们将根据法规进行审核处理。</p>
+                    <div class="mtb15">
+                        <label class="color0 size24 bold">章节名称：</label>
+                        <input class="border-none size24 bold color0" style="width: 700px;" type="text" name="name"
+                               placeholder="请输入" value="{$chapter.name}">
+                        <span class="fr mt20">字数 <span class="input-number-tip">{=\Kuxin\Helper\Json::decode($chapter.note)['words']}</span></span>
+                    </div>
+                    <textarea name="content" class="w100 plr10 ptb10 border-none" style="width:930px;height:405px;"
+                              placeholder="章节内容">{$chapter.content}</textarea>
+                    <textarea name="postscript" class="w100 plr10 ptb10 border-none" style="width:930px;height:50px"
+                              placeholder="作者想说的话">{$chapter.postscript}</textarea>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{include file="/author/system/footer"}
+<script>
+    var isSave = true;
+    $("textarea").on('keydown', function (e) {
+        if (e.keyCode === 9) {
+            e.preventDefault();
+            var indent = '    ';
+            var start = this.selectionStart;
+            var end = this.selectionEnd;
+            var selected = window.getSelection().toString();
+            selected = indent + selected.replace(/\n/g, '\n' + indent);
+            this.value = this.value.substring(0, start) + selected + this.value.substring(end);
+            this.setSelectionRange(start + indent.length, start + selected.length);
+        }
+    });
+    $("textarea[name=content]").on('keyup', function () {
+        var str = $(this).val();
+        var len = str.length;
+        var reLen = 0;
+        for (var i = 0; i < len; i++) {
+            if (str.charCodeAt(i) < 33) {
+                continue;
+            }
+            if (str.charCodeAt(i) >= 0 || str.charCodeAt(i) <= 128) {
+                reLen += 1;
+            } else {
+                reLen += 2;
+            }
+        }
+        $(".input-number-tip").html(reLen);
+    });
+    $("form").submit(function () {
+        $('button[type=submit]').click(function(){return false});
+    });
+
+    var save_key = 'author_{$kx.get.novelid}_{$type}_{=$chapter.id?:0}';
+    function load() {
+        var data = window.localStorage.getItem(save_key);
+        if (data && (data = JSON.parse(data))){
+            if(confirm('上次的编辑在 '+data.saveTime+' 有未正确的保存,是否恢复?')){
+                $('input[name=chapter_type]').val(data.type);
+                $('input[name=name]').val(data.name);
+                $('textarea[name=content]').val(data.content);
+                $('textarea[name=postscript]').val(data.postscript);
+            }else{
+                remove();
+            }
+        }
+    }
+    $('input[name=name],textarea[name=content],textarea[name=postscript]').keyup(function () {
+        isSave = false;
+    });
+    load();
+    function save() {
+        if(!isSave && ($('textarea[name=content]').val() || $('textarea[name=postscript]').val())){
+            var saveTime = (new Date()).toLocaleString();
+            window.localStorage.setItem(save_key, JSON.stringify({
+                type: $('input[name=chapter_type]').val(),
+                name: $('input[name=name]').val(),
+                content: $('textarea[name=content]').val(),
+                postscript: $('textarea[name=postscript]').val(),
+                saveTime: saveTime
+            }));
+            $('#auto_save_tips').text('自动保存于:'+saveTime);
+            isSave = true;
+        }
+    }
+    function remove() {
+        window.localStorage.removeItem(save_key)
+    }
+
+    setInterval(function () {save();},10000);
+
+    $('form').submit(function () {
+        remove(save_key);
+        return true;
+    });
+</script>
+</body>
+</html>

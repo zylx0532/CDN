@@ -1,0 +1,138 @@
+<title>模板市场</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>系统设置</cite></a>
+        <a><cite>信息管理</cite></a>
+        <a><cite>模板管理</cite></a>
+        <a><cite>模板市场</cite></a>
+    </div>
+</div>
+<style>
+    tbody .layui-table-cell {
+        height: 160px;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="layui-search" class="layui-form layui-form layui-card-header layuiadmin-card-header-auto"
+             style="display: none">
+            <div class="layui-form-item">
+                <div id="layui-search-fields" class="layui-search-fields" style="display: inline-block">
+                </div>
+                <div id="layui-search-button" class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn" lay-submit lay-filter="LAY-front-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <div style="padding-bottom: 10px;" id="layui-top-button">
+            </div>
+            <table id="LAY-curd-table" lay-filter="LAY-curd-table"></table>
+            <script type="text/html" id="table-curd-list">
+            </script>
+        </div>
+    </div>
+</div>
+<script type="text/html" id="theme-info">
+    <b>{{d.name}}</b><br/>
+    作者：{{d.author}}<br/>
+    邮箱：{{d.email}}<br/>
+    网址：{{d.url}}<br/>
+    简介：{{d.description}}<br/>
+</script>
+<script type="text/html" id="theme-amp">
+    {{# if(d.amp){}}
+    <span class="layui-badge layui-bg-green">可用</span>
+    {{#}}}
+</script>
+<script type="text/html" id="theme-mip">
+    {{# if(d.mip){}}
+    <span class="layui-badge layui-bg-green">可用</span>
+    {{#}}}
+</script>
+<script type="text/html" id="theme-pc">
+    {{# if(d.pc){}}
+    <span class="layui-badge layui-bg-green">可用</span>
+    {{#}}}
+</script>
+<script type="text/html" id="theme-wap">
+    {{# if(d.wap){}}
+    <span class="layui-badge layui-bg-green">可用</span>
+    {{#}}}
+</script>
+<script>
+    var loading = null, config = {
+        api: {
+            list: '/manage/template/market.json',
+            down: '/manage/template/down.json',
+        },
+        actionButton: {
+            install: {
+                text: '下载',
+                icon: 'layui-icon layui-icon-install',
+                action(obj) {
+                    layui.layer.confirm('您确定要下载这套模板？', {
+                        btn: ['确定', '取消']
+                    }, function (index) {
+                        layui.admin.req({
+                            url: config.api.down,
+                            data: {id: obj.data.id},
+                            method: 'POST',
+                            success: function (res) {
+                                if (res.code) {
+                                    layer.alert(res.msg, {icon: 2,}, function (index) {
+                                        if (res.data.redirect) {
+                                            window.location.href = res.data.redirect;
+                                        } else {
+                                            layer.close(index);
+                                        }
+                                    });
+                                } else {
+                                    layer.close(index);
+                                    window.location.href = res.data.file;
+                                }
+                            }
+                        });
+                    });
+                }
+            },
+            manuals: {
+                text: '使用说明',
+                icon: 'layui-icon layui-icon-install',
+                action(obj) {
+                    layui.layer.open({
+                        type: 2,
+                        title: '使用说明',
+                        shadeClose: false,
+                        shade: false,
+                        maxmin: true,
+                        area: ['1080px', '720px'],
+                        content: obj.data.manuals
+                    });
+                }
+            },
+        },
+        table: {
+            page: false,
+            height: 0,
+            cols: [[
+                {field: 'demo', title: '预览', templet: '#table-img', width: 120},
+                {field: 'key', title: '模板信息', templet: '#theme-info'},
+                {field: 'version', title: '版本', width: 120},
+                {field: 'typename', title: '类型', width: 120},
+                {field: 'price', title: '价格', width: 120},
+                {field: 'pc', title: 'PC模板', templet: '#theme-pc', align: 'center', width: 100},
+                {field: 'wap', title: '手机模板', templet: '#theme-wap', align: 'center', width: 100},
+                {field: 'amp', title: 'AMP模板', templet: '#theme-amp', align: 'center', width: 100},
+                {field: 'mip', title: 'MIP模板', templet: '#theme-mip', align: 'center', width: 100},
+                {title: '操作', width: 160, align: 'center', fixed: 'right', toolbar: '#table-curd-list'}
+            ]]
+        }
+    };
+    layui.use('curd/list', layui.factory('curd/list'));
+</script>

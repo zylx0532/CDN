@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <title>{$tkd.title|parseTpl}</title>
+    <meta name="keywords" content="{$tkd.keywords|parseTpl}">
+    <meta name="description" content="{$tkd.description|parseTpl}">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/style.css"/>
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/jquery-3.3.1.js"></script>
+    <link rel="shortcut icon" type="image/ico" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/favicon.ico" />
+    <meta name="author" content="www.ptcms.com">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="width=device-width" />
+    <meta name="applicable-device" content="pc">
+    <meta http-equiv="mobile-agent" content="format=html5; url={$kx.config.mobileurl}__SELF__">
+    <meta http-equiv="Cache-Control" content="no-siteapp" />
+    <meta http-equiv="Cache-Control" content="no-transform" />
+    <link rel="canonical" href="{$kx.config.pcurl}__SELF__" />
+</head>
+<body>
+	<!-- 导航栏 -->
+    {include file="/system/header"}
+	<!-- 内容 -->
+	<div class="pt-content mt10">
+		<!-- 一楼 -->
+		<div class="pt-floor1 clearfix">
+			<!-- 分类 -->
+			<div class="pt-category">
+                {block method="category.list" name=categoryList pid=1 withall=0}
+                {loop=categoryList}
+                <div class="pt-category-cont">
+                    <div class="pt-category-cont-title">
+                        <span class="fl pt-category-cont-title-icon"></span>
+                        <a title="{$loop.name}" href="{link=novel.category.list categoryid=$loop.id key=$loop.key}" class="size18 color3 mr40" style="line-height: 20px;">{$loop.name}</a>
+                        <span class="size12 color7">当前分类共<span class="color2">{$loop.num}</span>本</span>
+                        <a href="{link=novel.category.list categoryid=$loop.id key=$loop.key}">
+                            <span class="color4 mr40 fr">更多内容<span class="color2">+</span></span>
+                        </a>
+                    </div>
+                    {block method="novel.list" name=novelList order=weekvisit num=3 category=$loop.id}
+                    {loop=novelList}
+                    <div class="pt-category-top">
+                        <a title="{$loop.novel.name}" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}">
+                            <img src="{$loop.novel.cover}" alt="{$loop.novel.name}">
+                        </a>
+                        <div class="pt-category-top-r">
+                            <div class="size16 color7 title">
+                                <a title="{$loop.novel.name}" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}">
+                                    <span class="size16 color7 fl" title="{$loop.novel.name}">{$loop.novel.name}</span>
+                                </a>
+                                <a title="{$loop.author.name}" href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">
+                                    <span class="size16 color4 fr" title="{$loop.author.name}">{$loop.author.name}</span>
+                                </a>
+                            </div>
+                            <div class="compulsory-row-three size12 color4 pt-category-r-intro" title="{$loop.novel.intro}">{$loop.novel.intro|showIntroLine}</div>
+                            <div class="size14 color7">
+                                <span class="color2 size16">{$loop.data.allvisit} </span>人在读
+                            </div>
+                        </div>
+                    </div>
+                    {/loop}
+                </div>
+                {/loop}
+			</div>
+			<div class="w240 fr">
+                <!-- 周榜、月榜 -->
+
+                <div class="pt-sexselect">
+                    {block method="rank.info" name=rankinfo key=weekvisit}
+                    <div class="pt-sexselect-title border-b"><span class="fl pt-sexselect-title-icon"></span>{$rankinfo.name}</div>
+                    <ul class="pt-sexselect-list">
+                        {block method="novel.list" name=list order=$rankinfo.key num=20}
+                        {section loop=$list item=$loop}
+                        <li>
+                            <span class="{=$i.index<3?'bg-red':'bg-ccc'} pt-sexselect-square">{=$i.index + 1}</span>
+                            <a class="color5" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                            <a title="{$loop.author.name}" class="color3 fr" href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">{$loop.author.name}</a>
+                        </li>
+                        {/section}
+                    </ul>
+                </div>
+                <div class="pt-sexselect mt10">
+                    {block method="rank.info" name=rankinfo key=monthvisit}
+                    <div class="pt-sexselect-title border-b"><span class="fl pt-sexselect-title-icon"></span>{$rankinfo.name}</div>
+                    <ul class="pt-sexselect-list">
+                        {block method="novel.list" name=list order=$rankinfo.key num=20}
+                        {section loop=$list item=$loop}
+                        <li>
+                            <span class="{=$i.index<3?'bg-red':'bg-ccc'} pt-sexselect-square">{=$i.index + 1}</span>
+                            <a class="color5" href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}" title="{$loop.novel.name}">{$loop.novel.name}</a>
+                            <a title="{$loop.author.name}" class="color3 fr" href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">{$loop.author.name}</a>
+                        </li>
+                        {/section}
+                    </ul>
+                </div>
+                <!-- 新书推荐 -->
+                <div class="fr pt-new-recomment">
+                    <div class="pt-new-recomment-title">新书推荐</div>
+                    <ul class="pt-new-recomment-list">
+                        {block method="recommend" name=list recommendid=1 num=10}
+                        {loop=$list}
+                        <li>
+                            <a title="{$loop.data.category.name}" class="color3" href="{link=novel.category.list categoryid=$loop.data.category.id key=$loop.data.category.key}">[{$loop.data.category.name}]</a>
+                            <a href="{link=novel.novel.index novelid=$loop.data.novel.id pinyin=$loop.data.novel.pinyin}" class="color4 pt-text" title="{$loop.data.novel.name}">{$loop.data.novel.name}</a>
+                        </li>
+                        {/loop}
+                    </ul>
+                </div>
+            </div>
+		</div>
+	</div>
+	<!-- 底部版权-->
+    {include file="/system/footer"}
+</body>
+</html>

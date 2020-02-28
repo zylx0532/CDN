@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>阅读历史 - 用户中心 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/css/global.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/flexible.min.js"></script>
+</head>
+<body class="bg-f27">
+<div class="relative w100  bg-white flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/return.png" class="pt-return">
+    <div class="size18 bold color37">阅读历史</div>
+    <div>
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/ellipsis.png" class="mr5 pt-ellipsis">
+    </div>
+    <!-- tip -->
+    <div class="pt5 pb5 pt-tip">
+        <a href="{link=index.index}" class="block color1 text-center pt-tip-item">前往首页</a>
+        <a href="javascript:void(0);" class="block color1 text-center pt-tip-item pt-history-clear">清空记录</a>
+    </div>
+</div>
+<div style="min-height:85vh">
+    <!-- 星标置顶 -->
+    {block method=mark.history userid=$userinfo.id name=list}
+    <div class="w100 bg-white lh100 mt10 pt-read">
+        <div class="flex-wrp">
+            <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/recently_read.png" class="pt-stick-icon">
+            <div class="color4 size14">阅读历史</div>
+        </div>
+        <div class="pt-stick-cont">
+            {loop}
+            <div class="flex-wrp pt-stick-item" data-novel-id="{$loop.novel.id}" data-chapter-id="{$loop.nextid}" data-is-mark="{=$loop.ismark?1:0}">
+                <img src="{$loop.novel.cover}" class="mr15" data-url="{link=novel.chapter.read novelid=$loop.novel.id  pinyin=$loop.novel.pinyin chapterid=$loop.nextid}">
+                <div class="flex-item flex-wrp flex-cell flex-between pt5">
+                    <div class="flex-wrp flex-between">
+                        <a href="{link=novel.novel.index novelid=$loop.novel.id pinyin=$loop.novel.pinyin}">
+                            <div class="size14 color7">{$loop.novel.name}
+                                {if $loop.markinfo.newnum>0}<span class="color4 size12">[<span class="color2">{$loop.newnum}</span> 章未读]</span>{/if}
+                            </div>
+                        </a>
+                        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/images/ellipsis_gray.png" class="pt-ellipsis-white">
+                    </div>
+                    <a href="{link=author.space.index authorid=$loop.author.id pinyin=$loop.author.pinyin name=$loop.author.name}">
+                        <div class="size12 color4">[ {$loop.author.name} ]</div>
+                    </a>
+                    <a href="{link=novel.chapter.read novelid=$loop.novel.id  pinyin=$loop.novel.pinyin chapterid=$loop.last.id}">
+                        <div class="size12 compulsory-row-one lh130 color4">{$loop.novel.is_over|default='连载','完结'} - {$loop.last.name}</div>
+                    </a>
+                    <div class="flex-wrp">
+                        <a class="color5 size12 compulsory-row-one" href="{link=novel.chapter.read pinyin=$loop.novel.pinyin novelid=$loop.novel.id chapterid=$loop.markinfo.nextid}">
+                            读到 - {$loop.markinfo.name}
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {/loop}
+        </div>
+    </div>
+</div>
+<!-- 底部版权 -->
+{include file="/system/footer"}
+<!-- 底部按钮 -->
+{include file="/system/footerbutton"}
+
+<!-- 遮罩 -->
+<div class="pt-mask-mark">
+    <div class="pt-mask-mark-shade"></div>
+    <div class="flex-wrp bg-white pt-mask-mark-bottom">
+        <div class="flex-wrp flex-center size14 color2 w50 pt-mark"></div>
+        <div class="flex-wrp flex-center size14 color4 w50 pt-history-remove">移出记录</div>
+    </div>
+</div>
+
+<!-- js -->
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/layer/mobile/layer.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/ruixinm1/js/history.js"></script>
+<!-- js -->
+<script>
+    var __ADD_MARK = '{link=user.mark.add}',
+        __DEL_MARK = '{link=user.mark.del}',
+        __REMOVE_HISTORY = '{link=user.history.del}',
+        __CLEAR_HISTORY = '{link=user.history.clear}';
+</script>
+</body>
+</html>

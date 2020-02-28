@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+    <title>我回复的评论 - 用户中心 - {$kx.config.sitename}</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/css/global.css"/>
+    <script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/js/flexible.min.js"></script>
+</head>
+<body>
+<!-- 头部 -->
+<div class="w100  bg-white flex-wrp flex-align-center flex-between lh100 plr15 ptb15">
+    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/return.png" class="pt-return">
+    <div class="size18 bold color37">我的回复</div>
+    <div>
+        <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/ellipsis.png" class="mr5 pt-ellipsis">
+    </div>
+    <!-- tip -->
+    <div class="pt5 pb5 pt-tip">
+        <a href="{link=user.comment.publish}" class="block color1 text-center pt-tip-item">我的评论</a>
+        <a href="{link=index.index}" class="block color1 text-center pt-tip-item">前往首页</a>
+        <a href="{link=novel.search.index}" class="block color1 text-center pt-tip-item">搜索小说</a>
+        <a href="{link=user.index.index}" class="block color1 text-center pt-tip-item" rel="nofollow">个人中心</a>
+    </div>
+</div>
+
+<!-- 全部评论 -->
+<div class="w100 mb10 bg-white lh100 mt10 pt-comment"  style="margin-bottom: .56rem;">
+    <div class="flex-wrp flex-between ">
+        <div class="size14 color7 bold pt-comment-title">全部评论</div>
+        <div class="size12 color4 mr15">共 {$userinfo.data.comment_reply_num} 条</div>
+    </div>
+    {block method="pagination" name="paginate" page=$page limit=$pagesize count=$userinfo.data.comment_reply_num maxpage=50 section=3}
+    {block method="user.replyList" name=replyList userid=$userinfo.id}
+    {loop=replyList}
+    <div class="flex-wrp plr15 pt-comment-cont" data-comment-id="{$loop.id}">
+        <img src="{$loop.comment.user.avatar}" class="mr20 pt-comment-icon">
+        <div class="flex-item flex-wrp flex-cell flex-around">
+            <div class="flex-wrp lh100 flex-between">
+                <div class="size14 color4">{$loop.comment.user.name}</div>
+                <div class="size12 color4">{$loop.comment.datetime|date="Y-m-d H:i:s"}</div>
+            </div>
+            <a href="{link=novel.comment.post novelid=$loop.novel.novel.id pinyin=$loop.novel.novel.pinyin commentid=$loop.id}">
+                <div class="compulsory-row lh150 ptb10 size14">{$loop.comment.content}</div>
+                <div class="compulsory-row lh150 ptb10 size14 color32 bg-f9 pl15">回复：{$loop.content}</div>
+            </a>
+            <div class="text-right lh100 comment-btn {$loop.comment.rating|boolval|default='','disable'}">
+                <div class="inline-block comment-btn-up {=$loop.comment.rating=='good'?'active':''}">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/praise{=$loop.comment.rating=='good'?'_hover':''}.png" alt="">
+                    <span class="size12 color4 number">{$loop.comment.good_num}</span>
+                </div>
+                <div class="inline-block comment-btn-down {=$loop.comment.rating=='good'?'active':''}">
+                    <img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxmobileno1/images/tread{=$loop.comment.rating=='bad'?'_hover':''}.png" alt="">
+                    <span class="size12 color4 number">{$loop.comment.bad_num}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {/loop}
+    {if $paginate.total > 1}
+    <div class="flex-wrp flex-between bg-white ptb15 plr15 mt10" style="position: fixed;bottom: 0.44rem;width: 100%;">
+        {if $paginate.first != $paginate.current}
+        <div class="flex-wrp flex-around flex-center pt-page4">
+            <a href="{link=novel.comment.list novelid=$novel.id pinyin=$novel.pinyin page=$paginate.first}">
+                <span class="size14 color2">首页</span>
+            </a>
+        </div>
+        {/if}
+        {if $paginate.prev}
+        <div class="flex-wrp flex-around flex-center pt-page4">
+            <a href="{link=novel.comment.list novelid=$novel.id pinyin=$novel.pinyin page=$paginate.prev}">
+                <span class="size14 color2">上一页</span>
+            </a>
+        </div>
+        {/if}
+        {if $paginate.next}
+        <div class="flex-wrp flex-around flex-center pt-page4">
+            <a href="{link=novel.comment.list novelid=$novel.id pinyin=$novel.pinyin page=$paginate.next}">
+                <span class="size14 color2">下一页</span>
+            </a>
+        </div>
+        {/if}
+        {if $paginate.last != $paginate.current}
+        <div class="flex-wrp flex-around flex-center pt-page4">
+            <a href="{link=novel.comment.list novelid=$novel.id pinyin=$novel.pinyin page=$paginate.last}">
+                <span class="size14 color2">尾页</span>
+            </a>
+        </div>
+        {/if}
+    </div>
+    {/if}
+</div>
+
+<!-- 底部版权 -->
+{include file="/system/footer"}
+<!-- 底部按钮 -->
+{include file="/system/footerbutton"}
+</body>
+</html>

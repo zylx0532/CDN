@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>我的邀请 - 用户中心 - {$kx.config.sitename}</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/global.css"/>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/css/style.css"/>
+</head>
+<body>
+	<!-- 头部 -->
+    {include file="/system/header"}
+	<!-- 内容 -->
+	<div class="pt-content">
+		<!-- 面包屑 -->
+		<div class="pt-crumb">
+			<img src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/images/crumb_icon.png" class="pt-crumb-icon">
+			<span class="color5">
+                <a href="{$kx.config.siteurl}">{$kx.config.sitename}</a> > <a href="{link=user.index.index}" class="color5">用户中心</a> > <a href="{link=user.invite.index}">我的邀请</a>
+            </span>
+		</div>
+
+		<!-- 一楼 -->
+		<div class="pt-floor1">
+            {include file="/system/userleft"}
+            <div class="bg-white plr20 ptb20 mb10 fr" style="width: 950px;border-top: 4px solid #f55">
+                <div class="size18 color32 bold">累计邀请(人)</div>
+                <div class="color2 bold" style="font-size: 35px;">{$userinfo.data.invite_reg_num}</div>
+            </div>
+            <div class="relative pt-rank">
+                <div class="relative pt-rank">
+                    <div class="pt-rank-head">
+                        <span class="size18 color2 mr10">邀请记录</span>
+                        <span class="size16 fr btn-invite cursor">邀请链接</span>
+                    </div>
+                    <div class="pt-user-table" style="padding-top:20px">
+                    {block method="pagination" name="paginate" page=$page limit=$pagesize count=$count maxpage=50 section=3}
+                    {block method="user.inviteList" name=invitelist userid=$userinfo.id page=$page}
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>用户/IP</th>
+                            <th>类型</th>
+                            <th>{$kx.config.user.exp_caption}奖励</th>
+                            <th>{$kx.config.user.point_caption}奖励</th>
+                            <th>签到时间</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {if empty($invitelist)}
+                            <tr>
+                                <td colspan="6">您似乎来到了没有数据存在的荒原~~~</td>
+                            </tr>
+                        {else}
+                            {section loop=$invitelist item=$loop}
+                            <tr>
+                                <td>{$i.order}</td>
+                                <td class="color2">{$loop.ext}</td>
+                                <td>>{$loop.type|default="注册","访问"}</td>
+                                <td>{$loop.exp}</td>
+                                <td>{$loop.point}</td>
+                                <td>{$loop.datetime|date="Y-m-d H:i:s"}</td>
+                            </tr>
+                            {/section}
+                        {/if}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- 分页 -->
+                <div class="pt-pages">
+                    {if !empty($invitelist) && $paginate.total>1}
+                    <div class="pt30 color5">
+                        {if $paginate.prev}
+                        <a href="{link=user.invite.index page=$paginate.prev}"><span><</span></a>
+                        {else}
+                        <span class="disable"><</span>
+                        {/if}
+                        {loop=paginate.items}
+                        <a href="{link=user.invite.index page=$loop.num}">
+                            <span class="{$loop.status|default='','pt-pages-select'}">{$loop.num}</span>
+                        </a>
+                        {/loop}
+                        {if $paginate.next}
+                        <a href="{link=user.invite.index page=$paginate.next}"><span>></span></a>
+                        {else}
+                        <span class="disable">></span>
+                        {/if}
+                    </div>
+                    {/if}
+                </div>
+            </div>
+		</div>
+	</div>
+
+	<!-- 底部版权-->
+    {include file="/system/footer"}
+    <script>
+        $('.btn-invite').click(function () {
+            layer.alert(
+                '您的专用地址：<span class="copy"><input type="text" value="{$kx.config.siteurl}/?fr={$userinfo.id}" style="width: 350px;" readonly></span><br>' +
+                '您还可以拼装链接分享任何页面,只要按照以下规则：<br>' +
+                '1、如果页面链接中包含"?"问号,那么在最后拼接上 &fr={$userinfo.id}<br>' +
+                '2、如果页面链接中不包含"?"问号,那么在最后拼接上 ?fr={$userinfo.id}',
+                {
+                    title: '邀请链接说明',
+                    area: '500px',
+                    btn:['复制','关闭'],
+                    btn1: function (index,layno) {
+                        layno.find('input')[0].select();
+                        document.execCommand("Copy");
+                        layer.msg('复制成功');
+                    }
+                }
+            );
+        });
+    </script>
+	<!-- js-->
+	<script src="https://cdn.jsdelivr.net/gh/zylx0532/CDN/ptcms/public/template/kxwebno1/js/rankdetail.js"></script>
+</body>
+</html>

@@ -1,0 +1,120 @@
+<title>TKD设置</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a lay-href="">主页</a>
+        <a><cite>SEO设置</cite></a>
+        <a><cite>TKD设置</cite></a>
+    </div>
+</div>
+<style>
+    .layui-form-label{
+        width: 140px !important;
+    }
+    .layui-input-block{
+        margin-left: 170px !important;;
+    }
+</style>
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12" id="tkdView">
+            <form class="layui-form" wid100 lay-filter="LAY-info-form">
+                <div class="body"></div>
+                <div class="layui-card">
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <label class="layui-form-label">
+                                <button class="layui-btn mb" lay-submit lay-filter="submit">确认修改</button>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script id="tkdTpl" type="text/html">
+    {{#  layui.each(d, function(index, items){ }}
+    <div class="layui-card">
+        <div class="layui-tab layui-tab-brief">
+            <ul class="layui-tab-title">
+                {{#  layui.each(items, function(i, item){ }}
+                <li {{# if(!i){ }}class="layui-this"{{# }}}>{{item.name}}</li>
+                {{#  }); }}
+            </ul>
+            <div class="layui-tab-content">
+                {{#  layui.each(items, function(i, item){ }}
+                <div class="layui-tab-item {{# if(!i){ }}layui-show{{# }}}">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">{{item.name}}标题设置</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="{{item.key}}[title]" value="" class="layui-input">
+                            {{# if(item.intro){ }}
+                            <div class="layui-form-mid layui-word-aux">{{item.intro}}</div>
+                            {{# } }}
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">{{item.name}}关键词设置</label>
+                        <div class="layui-input-block">
+                            <textarea name="{{item.key}}[keywords]" class="layui-textarea"></textarea>
+                            {{# if(item.intro){ }}
+                            <div class="layui-form-mid layui-word-aux">{{item.intro}}</div>
+                            {{# } }}
+                        </div>
+                    </div>
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">{{item.name}}描述信息</label>
+                        <div class="layui-input-block">
+                            <textarea name="{{item.key}}[description]" class="layui-textarea"></textarea>
+                            {{# if(item.intro){ }}
+                            <div class="layui-form-mid layui-word-aux">{{item.intro}}</div>
+                            {{# } }}
+                        </div>
+                    </div>
+                </div>
+                {{#  }); }}
+            </div>
+        </div>
+    </div>
+    {{#  }); }}
+</script>
+<script>
+    layui.define(['form', 'upload'], function (exports) {
+        var $ = layui.$
+            , layer = layui.layer
+            , laytpl = layui.laytpl
+            , admin = layui.admin
+            , form = layui.form;
+
+        var $body = $('body');
+
+        form.render();
+
+        admin.req({
+            url: '/manage/setting/tkd.json',
+            success: function (res) {
+                laytpl(tkdTpl.innerHTML).render(res.data.fields, function (html) {
+                    $body.find('#tkdView .body').html(html);
+                });
+                form.val('LAY-info-form', res.data.values);
+            }
+        });
+
+        form.on('submit(submit)', function (obj) {
+            admin.req({
+                url: '/manage/setting/tkd.json',
+                data: obj.field,
+                method: 'POST',
+                success: function (res) {
+                    layer.open({
+                        icon: 1,
+                        title: '操作成功',
+                        content: '修改成功',
+                    });
+                }
+            });
+            return false;
+        });
+    });
+</script>
