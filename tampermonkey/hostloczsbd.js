@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         hostloc zsbd
-// @namespace    https://greasyfork.org/scripts/396933-hostloc-zsbd
-// @version      0.4.1
+// @namespace    https://www.zhiqiang.name
+// @version      0.4.2
 // @description  HostLoc 字数补丁，防折叠!
 // @author       webmaster@zhiqiang.name
 // @match        https://www.hostloc.com/thread-*
