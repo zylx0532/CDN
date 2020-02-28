@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         hostloc zsbd
 // @namespace    https://greasyfork.org/scripts/396933-hostloc-zsbd
-// @version      0.3
+// @version      0.4.1
 // @description  HostLoc 字数补丁，防折叠!
 // @author       webmaster@zhiqiang.name
 // @match        https://www.hostloc.com/thread-*
@@ -44,7 +44,7 @@
     function addIdioms() {
         var text=document.getElementById("fastpostmessage");
         if (text.value.length<16) {
-            text.value += "\n/**\n * "+idioms[Math.floor(Math.random()*idioms.length)] + "\n *\n *@see https://greasyfork.org/zh-CN/scripts/396933-hostloc-zsbd\n */";
+            text.value += "\n\n/**\n * "+idioms[Math.floor(Math.random()*idioms.length)] + "\n *\n *Link https://greasyfork.org/zh-CN/scripts/396933-hostloc-zsbd\n */";
         }
     }
     document.getElementById("fastpostmessage").onkeydown=function(event) {
