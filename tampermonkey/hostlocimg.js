@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         hostloc_image_up
 // @namespace    https://www.zhiqiang.name
-// @version      0.6.6
+// @version      0.6.7
 // @license      MIT
 // @description  用于改善HostLoc等DZ论坛上传图片需要放大镜的问题
 // @author       webmaster@zhiqiang.name
@@ -335,9 +335,9 @@ nw.c([
 ] , function(){
 
     nw.addScriptLink({
-        'src' : 'https://cdn.jsdelivr.net/gh/zylx0532/CDN/Chevereto/sdk/pup.js',
+        'src' : 'https://imgchr.com/sdk/pup.js',
         'id' : 'chevereto-pup-src',
-        'data-url':'https://www.zylx.net/upload',
+        'data-url':'https://imgchr.com/upload',
         'data-auto-insert':'bbcode-embed'
     });
 
