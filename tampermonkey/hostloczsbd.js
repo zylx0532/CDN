@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         hostloc zsbd
 // @namespace    https://www.zhiqiang.name
-// @version      0.4.6
-// @description  HostLoc 字数补丁，防折叠!
+// @version      0.4.8
+// @description  HostLoc 自动签名档 字数补丁，防折叠!
 // @author       webmaster@zhiqiang.name
 // @match        https://www.hostloc.com/thread-*
 // @match        https://www.hostloc.com/forum.php?mod=viewthread*
@@ -31,11 +31,11 @@
         "谎言不一定是谎言，被发现的谎言，才算是谎言。——《秋之回忆》",
         "这个世上有很多事是解释不通的\n * 比如突然的失落\n * 莫名其妙的孤独\n * 没有由来的落寞\n * 以及突然离开的你",
         "他突然开始有点喜欢这个看似严苛无趣、却偶尔能给人惊喜的世界了\n * 因为面前这个他特别喜欢的人\n * 这大概是他有生以来最大程度的爱屋及乌。——《黑天》",
-        "我觉得还行，各位觉得呢?"];
+        "人死后会成为什么?夜空中的一座孤岛。——《一封孤岛的信》"];
 
     function addIdioms() {
         var text=document.getElementById("fastpostmessage");
-        if (text.value.length<20) {
+        if (text.value.length<100) {
             text.value += "\n\n\n\n/**\n * "+idioms[Math.floor(Math.random()*idioms.length)] + "\n *\n *Link https://greasyfork.org/zh-CN/scripts/396933-hostloc-zsbd\n */                                                                                                                                              |";
         }
     }
