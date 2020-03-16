@@ -1,15 +1,16 @@
 // ==UserScript==
 // @name         hostloc_image_up
 // @namespace    https://www.zhiqiang.name
-// @version      0.6.7
+// @version      0.7.0
 // @license      MIT
-// @description  用于改善HostLoc等DZ论坛上传图片需要放大镜的问题
+// @description  用于改善HostLoc隔壁网等DZ论坛上传图片需要放大镜的问题
 // @author       webmaster@zhiqiang.name
 // @grant        none
 // @include      http://www.hostloc.com/*
 // @include      https://hostloc.com/*
 // @include      https://www.hostloc.com/*
 // @include      https://bbs.hkrscoc.com/*
+// @include      http://www.gebi1.com/*
 // @connect      *
 // @run-at       document-start
 // ==/UserScript==
@@ -332,6 +333,9 @@ nw.c([
     /bbs\.hkrscoc\.com\/thread/,
     /bbs\.hkrscoc\.com\/forum\.php\?mod=post/,
     /bbs\.hkrscoc\.com\/forum\.php\?mod=viewthread/,
+    /gebi1\.com\/thread/,
+    /gebi1\.com\/forum\.php\?mod=post/,
+    /gebi1\.com\/forum\.php\?mod=viewthread/,
 ] , function(){
 
     nw.addScriptLink({
