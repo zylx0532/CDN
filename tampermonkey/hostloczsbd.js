@@ -1,13 +1,14 @@
 // ==UserScript==
 // @name         hostloc zsbd
 // @namespace    https://www.zhiqiang.name
-// @version      0.4.9
-// @description  HostLoc 自动签名档 字数补丁，防折叠!PS:默认签名档，可自行修改变量L为20切换为仅防折叠
+// @version      0.5.0
+// @description  HostLoc 隔壁等DZ论坛自动签名档 字数补丁，防折叠!PS:默认签名档，可自行修改变量L为20切换为仅防折叠
 // @author       webmaster@zhiqiang.name
 // @match        https://www.hostloc.com/thread-*
 // @match        https://www.hostloc.com/forum.php?mod=viewthread*
 // @match        https://hostloc.com/forum.php?mod=viewthread*
 // @match        https://hostloc.com/thread-*
+// @match        http://www.gebi1.com/forum.php?mod=viewthread*
 // @grant        none
 // ==/UserScript==
 
@@ -37,7 +38,7 @@
     function addIdioms() {
         var text=document.getElementById("fastpostmessage");
         if (text.value.length<l) {
-            text.value += "\n\n\n\n/**\n * "+idioms[Math.floor(Math.random()*idioms.length)] + "\n *\n *Link https://greasyfork.org/zh-CN/scripts/396933-hostloc-zsbd\n */                                                                                                                                              |";
+            text.value += "\n\n\n\n/**\n * "+idioms[Math.floor(Math.random()*idioms.length)] + "\n *\n *Link https://greasyfork.org/zh-CN/scripts/396933-hostloc-zsbd\n */";
         }
     }
     document.getElementById("fastpostmessage").onkeydown=function(event) {
