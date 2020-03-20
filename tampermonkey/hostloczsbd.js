@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         hostloc zsbd
 // @namespace    https://www.zhiqiang.name
-// @version      0.5.0
+// @version      0.5.2
 // @description  HostLoc 隔壁等DZ论坛自动签名档 字数补丁，防折叠!PS:默认签名档，可自行修改变量L为20切换为仅防折叠
 // @author       webmaster@zhiqiang.name
 // @match        https://www.hostloc.com/thread-*
@@ -9,6 +9,7 @@
 // @match        https://hostloc.com/forum.php?mod=viewthread*
 // @match        https://hostloc.com/thread-*
 // @match        http://www.gebi1.com/forum.php?mod=viewthread*
+// @match        http://www.gebi1.com/thread-*
 // @grant        none
 // ==/UserScript==
 
@@ -29,16 +30,18 @@
         "不是别人，是我，承认了你的价值",
         "我一直都在你身边 ，一直都在",
         "故事开始便不承认普通",
+        "我坚信，人应该有力量，揪着自己的头发把自己从泥地里拔起来。",
         "地狱太冷，我来殉你。  —— 二哈和他的白猫师尊",
         "谎言不一定是谎言，被发现的谎言，才算是谎言。——《秋之回忆》",
         "这个世上有很多事是解释不通的\n * 比如突然的失落\n * 莫名其妙的孤独\n * 没有由来的落寞\n * 以及突然离开的你",
         "他突然开始有点喜欢这个看似严苛无趣、却偶尔能给人惊喜的世界了\n * 因为面前这个他特别喜欢的人\n * 这大概是他有生以来最大程度的爱屋及乌。——《黑天》",
+        "有些坚持，经不起一点点希望\n * 哪怕是一点光亮，也会让人陷入痛苦。——《撒野》",
         "人死后会成为什么?夜空中的一座孤岛。——《一封孤岛的信》"];
 
     function addIdioms() {
         var text=document.getElementById("fastpostmessage");
         if (text.value.length<l) {
-            text.value += "\n\n\n\n/**\n * "+idioms[Math.floor(Math.random()*idioms.length)] + "\n *\n *Link https://greasyfork.org/zh-CN/scripts/396933-hostloc-zsbd\n */";
+            text.value += "\n\n\n\n/**\n * "+idioms[Math.floor(Math.random()*idioms.length)] + "\n *\n * Link https://greasyfork.org/zh-CN/scripts/396933-hostloc-zsbd\n */";
         }
     }
     document.getElementById("fastpostmessage").onkeydown=function(event) {
