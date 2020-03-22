@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         hostloc zsbd
 // @namespace    https://www.zhiqiang.name
-// @version      0.5.2
+// @version      0.6.0
 // @description  HostLoc 隔壁等DZ论坛自动签名档 字数补丁，防折叠!PS:默认签名档，可自行修改变量L为20切换为仅防折叠
 // @author       webmaster@zhiqiang.name
 // @match        https://www.hostloc.com/thread-*
@@ -10,6 +10,8 @@
 // @match        https://hostloc.com/thread-*
 // @match        http://www.gebi1.com/forum.php?mod=viewthread*
 // @match        http://www.gebi1.com/thread-*
+// @match        http://www.rosabc.com/forum.php?mod=viewthread*
+// @match        http://www.rosabc.com/thread-*
 // @grant        none
 // ==/UserScript==
 
