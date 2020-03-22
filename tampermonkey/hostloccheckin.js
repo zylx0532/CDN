@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Discuz checkin
 // @namespace    https://www.zhiqiang.name
-// @version      0.1.2
-// @description  在HOSTLOC论坛顶部增加一个按钮、点击以后自动访问本站15位网友的空间实现刷分。。
+// @version      0.2.2
+// @description  在HOSTLOC等论坛顶部增加一个按钮、点击以后自动访问本站15位网友的空间实现刷分。。
 // @author       Blood.Cold
 // @license      GPL 3.0
 // @match        https://www.hostloc.com/**
@@ -10,6 +10,7 @@
 // @match        http://www.hostloc.com/**
 // @match        https://bbs.hkrscoc.com/**
 // @match        http://bbs.hkrscoc.com/**
+// @match        http://www.rosabc.com/**
 // @grant        none
 // ==/UserScript==
 
@@ -17,7 +18,7 @@
 var i=0;
 var button;
 function visit(){
-    if(i>=15){
+    if(i>=20){
         return;
     }
     var xmlhttp=new XMLHttpRequest();
