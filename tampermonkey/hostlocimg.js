@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         hostloc_image_up
 // @namespace    https://www.zhiqiang.name
-// @version      0.7.0
+// @version      0.8.0
 // @license      MIT
-// @description  用于改善HostLoc隔壁网等DZ论坛上传图片需要放大镜的问题
+// @description  用于改善HostLoc、隔壁网、ROSABC等DZ论坛上传图片需要放大镜的问题
 // @author       webmaster@zhiqiang.name
 // @grant        none
 // @include      http://www.hostloc.com/*
@@ -11,6 +11,7 @@
 // @include      https://www.hostloc.com/*
 // @include      https://bbs.hkrscoc.com/*
 // @include      http://www.gebi1.com/*
+// @include      http://www.rosabc.com/*
 // @connect      *
 // @run-at       document-start
 // ==/UserScript==
@@ -336,6 +337,9 @@ nw.c([
     /gebi1\.com\/thread/,
     /gebi1\.com\/forum\.php\?mod=post/,
     /gebi1\.com\/forum\.php\?mod=viewthread/,
+    /www\.rosabc\.com\/thread/,
+    /www\.rosabc\.com\/forum\.php\?mod=post/,
+    /www\.rosabc\.com\/forum\.php\?mod=viewthread/,
 ] , function(){
 
     nw.addScriptLink({
