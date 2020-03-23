@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name            Discuz checkin
+// @name            Discuz 论坛自动访问用户空间
 // @license         GPL 3.0
 // @namespace       https://www.zhiqiang.name
 // @icon            https://www.zhiqiang.name/favicon.ico
@@ -13,7 +13,6 @@
 // @include         http://www.gebi1.com/*
 // @include         http://www.rosabc.com/*
 // @include         http://bbs.nas66.com/*
-// @include         none
 // @run-at          document-end
 // ==/UserScript==
 

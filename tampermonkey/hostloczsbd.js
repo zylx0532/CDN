@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name            hostloc zsbd
+// @name            Discuz 论坛自动签名
 // @license         GPL 3.0
 // @namespace       https://www.zhiqiang.name
 // @icon            https://www.zhiqiang.name/favicon.ico
@@ -9,6 +9,8 @@
 // @include         https://www.hostloc.com/thread-*
 // @include         https://www.hostloc.com/forum.php?mod=viewthread*
 // @include         https://hostloc.com/forum.php?mod=viewthread*
+// @include         https://bbs.hkrscoc.com/thread-*
+// @include         https://bbs.hkrscoc.com/forum.php?mod=viewthread*
 // @include         https://hostloc.com/thread-*
 // @include         http://www.gebi1.com/forum.php?mod=viewthread*
 // @include         http://www.gebi1.com/thread-*

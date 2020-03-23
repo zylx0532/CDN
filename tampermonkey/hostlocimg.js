@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name            hostloc image up
+// @name            Discuz 论坛图床插件
 // @license         GPL 3.0
 // @namespace       https://www.zhiqiang.name
 // @icon            https://www.zhiqiang.name/favicon.ico
