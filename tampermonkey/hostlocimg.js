@@ -1,19 +1,21 @@
 // ==UserScript==
-// @name         hostloc_image_up
-// @namespace    https://www.zhiqiang.name
-// @version      0.8.0
-// @license      MIT
-// @description  用于改善HostLoc、隔壁网、ROSABC等DZ论坛上传图片需要放大镜的问题
-// @author       webmaster@zhiqiang.name
-// @grant        none
-// @include      http://www.hostloc.com/*
-// @include      https://hostloc.com/*
-// @include      https://www.hostloc.com/*
-// @include      https://bbs.hkrscoc.com/*
-// @include      http://www.gebi1.com/*
-// @include      http://www.rosabc.com/*
-// @connect      *
-// @run-at       document-start
+// @name            hostloc image up
+// @license         GPL 3.0
+// @namespace       https://www.zhiqiang.name
+// @icon            https://www.zhiqiang.name/favicon.ico
+// @author          Blood.Cold
+// @version         0.9.0
+// @description     用于改善HostLoc、隔壁网、ROSABC等DZ论坛上传图片需要放大镜的问题
+// @grant           none
+// @include         http://www.hostloc.com/*
+// @include         https://hostloc.com/*
+// @include         https://www.hostloc.com/*
+// @include         https://bbs.hkrscoc.com/*
+// @include         http://www.gebi1.com/*
+// @include         http://www.rosabc.com/*
+// @include         http://bbs.nas66.com/*
+// @connect         *
+// @run-at          document-start
 // ==/UserScript==
 
 
@@ -340,6 +342,9 @@ nw.c([
     /www\.rosabc\.com\/thread/,
     /www\.rosabc\.com\/forum\.php\?mod=post/,
     /www\.rosabc\.com\/forum\.php\?mod=viewthread/,
+    /bbs\.nas66\.com\/thread/,
+    /bbs\.nas66\.com\/forum\.php\?mod=post/,
+    /bbs\.nas66\.com\/forum\.php\?mod=viewthread/,
 ] , function(){
 
     nw.addScriptLink({

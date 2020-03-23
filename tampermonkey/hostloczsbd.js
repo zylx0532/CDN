@@ -1,18 +1,23 @@
 // ==UserScript==
-// @name         hostloc zsbd
-// @namespace    https://www.zhiqiang.name
-// @version      0.6.1
-// @description  HostLoc 隔壁等DZ论坛自动签名档 字数补丁，防折叠!PS:默认签名档，可自行修改变量L为20切换为仅防折叠
-// @author       webmaster@zhiqiang.name
-// @match        https://www.hostloc.com/thread-*
-// @match        https://www.hostloc.com/forum.php?mod=viewthread*
-// @match        https://hostloc.com/forum.php?mod=viewthread*
-// @match        https://hostloc.com/thread-*
-// @match        http://www.gebi1.com/forum.php?mod=viewthread*
-// @match        http://www.gebi1.com/thread-*
-// @match        http://www.rosabc.com/forum.php?mod=viewthread*
-// @match        http://www.rosabc.com/thread-*
-// @grant        none
+// @name            hostloc zsbd
+// @license         GPL 3.0
+// @namespace       https://www.zhiqiang.name
+// @icon            https://www.zhiqiang.name/favicon.ico
+// @author          Blood.Cold
+// @version         0.7.0
+// @description     HostLoc 隔壁等DZ论坛自动签名档 字数补丁，防折叠!PS:默认签名档，可自行修改变量L为20切换为仅防折叠
+// @include         https://www.hostloc.com/thread-*
+// @include         https://www.hostloc.com/forum.php?mod=viewthread*
+// @include         https://hostloc.com/forum.php?mod=viewthread*
+// @include         https://hostloc.com/thread-*
+// @include         http://www.gebi1.com/forum.php?mod=viewthread*
+// @include         http://www.gebi1.com/thread-*
+// @include         http://www.rosabc.com/forum.php?mod=viewthread*
+// @include         http://www.rosabc.com/thread-*
+// @include         http://bbs.nas66.com/forum.php?mod=viewthread*
+// @include         http://bbs.nas66.com/thread-*
+// @grant           none
+// @run-at          document-end
 // ==/UserScript==
 
 (function() {
@@ -23,6 +28,7 @@
         "故事开始便不承认普通",
         "我一直都在你身边 ，一直都在",
         "明明只是活着，哀伤却无处不在",
+        "垂死病中惊坐起，笑问客从何处来",
         "不是别人，是我，承认了你的价值",
         "大风起兮云飞扬，意大利炮轰他娘",
         "抛去所谓的敬畏之心，你会重新认知这个世界。",
