@@ -1,10 +1,10 @@
 // ==UserScript==
-// @name            Discuz 论坛自动签名
+// @name            Discuz 论坛自动随机签名脚本
 // @license         GPL 3.0
 // @namespace       https://www.zhiqiang.name
 // @icon            https://www.zhiqiang.name/favicon.ico
 // @author          Blood.Cold
-// @version         0.7.0
+// @version         0.8.0
 // @description     HostLoc 隔壁等DZ论坛自动签名档 字数补丁，防折叠!PS:默认签名档，可自行修改变量L为20切换为仅防折叠
 // @include         https://www.hostloc.com/thread-*
 // @include         https://www.hostloc.com/forum.php?mod=viewthread*
@@ -18,6 +18,8 @@
 // @include         http://www.rosabc.com/thread-*
 // @include         http://bbs.nas66.com/forum.php?mod=viewthread*
 // @include         http://bbs.nas66.com/thread-*
+// @include         http://www.u-share.cn/forum.php?mod=viewthread*
+// @include         http://www.u-share.cn/thread-*
 // @grant           none
 // @run-at          document-end
 // ==/UserScript==
@@ -46,6 +48,7 @@
         "如果我是那雨滴的话，那么\n * 我能够像把不曾交汇的天空与大地连接起来那样\n * 把某人的心串联起来吗",
         "活着的意义从哪儿来？\n * 找啊，活下去的理由\n * 不断颠覆，不断否定\n * 没有一个一劳永逸的理由的",
         "这个世上有很多事是解释不通的\n * 比如突然的失落\n * 莫名其妙的孤独\n * 没有由来的落寞\n * 以及突然离开的你",
+        "作为一个词语\n * “ 活着”\n * 在我们中国的语言里充满了力量\n * 它的力量不是来自于喊叫\n * 也不是来自于进攻\n * 而是忍受\n * 去忍受生命赋予我们的责任\n * 去忍受现实给予我们的幸福和苦难、无聊和平庸",
         "即使如此，我也有我想保护的世界！——《高达seed》",
         "人死后会成为什么?夜空中的一座孤岛。——《一封孤岛的信》",
         "谎言不一定是谎言，被发现的谎言，才算是谎言。——《秋之回忆》",
