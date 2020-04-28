@@ -4,7 +4,7 @@
 // @namespace       https://www.zhiqiang.name
 // @icon            https://www.zhiqiang.name/favicon.ico
 // @author          Blood.Cold
-// @version         0.9.0
+// @version         1.0.0
 // @description     用于改善HostLoc、隔壁网、ROSABC等DZ论坛上传图片需要放大镜的问题
 // @grant           none
 // @include         http://www.hostloc.com/*
@@ -14,6 +14,7 @@
 // @include         http://www.gebi1.com/*
 // @include         http://www.rosabc.com/*
 // @include         http://bbs.nas66.com/*
+// @include         http://www.u-share.cn/*
 // @connect         *
 // @run-at          document-start
 // ==/UserScript==
@@ -345,6 +346,9 @@ nw.c([
     /bbs\.nas66\.com\/thread/,
     /bbs\.nas66\.com\/forum\.php\?mod=post/,
     /bbs\.nas66\.com\/forum\.php\?mod=viewthread/,
+    /www\.u-share\.cn\/thread/,
+    /www\.u-share\.cn\/forum\.php\?mod=post/,
+    /www\.u-share\.cn\/forum\.php\?mod=viewthread/,
 ] , function(){
 
     nw.addScriptLink({
