@@ -4,7 +4,7 @@
 // @namespace       https://www.zhiqiang.name
 // @icon            https://www.zhiqiang.name/favicon.ico
 // @author          Blood.Cold
-// @version         0.3.0
+// @version         0.3.1
 // @description     在HOSTLOC等论坛顶部增加一个按钮、点击以后自动访问本站15位网友的空间实现刷分。。
 // @include         http://www.hostloc.com/*
 // @include         https://hostloc.com/*
