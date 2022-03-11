@@ -4,7 +4,7 @@
 // @namespace       https://www.zhiqiang.name
 // @icon            https://www.zhiqiang.name/favicon.ico
 // @author          Blood.Cold
-// @version         1.0.0
+// @version         1.0.1
 // @description     用于改善HostLoc、隔壁网、ROSABC等DZ论坛上传图片需要放大镜的问题
 // @grant           none
 // @include         http://www.hostloc.com/*
