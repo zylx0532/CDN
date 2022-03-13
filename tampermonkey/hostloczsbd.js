@@ -4,8 +4,8 @@
 // @namespace       https://www.zhiqiang.name
 // @icon            https://www.zhiqiang.name/favicon.ico
 // @author          Blood.Cold
-// @version         0.8.2
-// @description     HostLoc 隔壁等DZ论坛自动签名档 字数补丁，防折叠!PS:默认签名档，可自行修改变量L为20切换为仅防折叠
+// @version         1.0.0
+// @description     HostLoc 隔壁 52 等DZ论坛自动签名档 字数补丁，防折叠!PS:默认签名档，可自行修改变量L为20切换为仅防折叠
 // @include         https://www.hostloc.com/thread-*
 // @include         https://www.hostloc.com/forum.php?mod=viewthread*
 // @include         https://hostloc.com/forum.php?mod=viewthread*
@@ -20,6 +20,8 @@
 // @include         http://bbs.nas66.com/thread-*
 // @include         http://www.u-share.cn/forum.php?mod=viewthread*
 // @include         http://www.u-share.cn/thread-*
+// @include         https://www.52pojie.cn/thread-*
+// @include         https://www.52pojie.cn/forum.php?mod=viewthread*
 // @grant           none
 // @run-at          document-end
 // ==/UserScript==
