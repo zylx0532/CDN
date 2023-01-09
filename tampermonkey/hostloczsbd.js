@@ -4,24 +4,14 @@
 // @namespace       https://www.zhiqiang.name
 // @icon            https://www.zhiqiang.name/favicon.ico
 // @author          Blood.Cold
-// @version         1.0.0
+// @version         1.1.5
 // @description     HostLoc 隔壁 52 等DZ论坛自动签名档 字数补丁，防折叠!PS:默认签名档，可自行修改变量L为20切换为仅防折叠
-// @include         https://www.hostloc.com/thread-*
-// @include         https://www.hostloc.com/forum.php?mod=viewthread*
-// @include         https://hostloc.com/forum.php?mod=viewthread*
-// @include         https://bbs.hkrscoc.com/thread-*
-// @include         https://bbs.hkrscoc.com/forum.php?mod=viewthread*
-// @include         https://hostloc.com/thread-*
-// @include         http://www.gebi1.com/forum.php?mod=viewthread*
-// @include         http://www.gebi1.com/thread-*
-// @include         http://www.rosabc.com/forum.php?mod=viewthread*
-// @include         http://www.rosabc.com/thread-*
-// @include         http://bbs.nas66.com/forum.php?mod=viewthread*
-// @include         http://bbs.nas66.com/thread-*
-// @include         http://www.u-share.cn/forum.php?mod=viewthread*
-// @include         http://www.u-share.cn/thread-*
-// @include         https://www.52pojie.cn/thread-*
-// @include         https://www.52pojie.cn/forum.php?mod=viewthread*
+// @include         http://*/thread-*
+// @include         https://*/thread-*
+// @include         http://*/forum.php?mod=viewthread*
+// @include         https://*/forum.php?mod=viewthread*
+// @include         http://*/forum.php?mod=post*
+// @include         https://*/forum.php?mod=post*
 // @grant           none
 // @run-at          document-end
 // ==/UserScript==
@@ -30,6 +20,12 @@
     'use strict';
     var l = 200;//原始内容低于该长度就自动签名
     var idioms = [
+		"Linux常用命令：cat /proc/mounts 显示已加载的文件系统",
+		"Linux常用命令：rsync -rogpav --delete /home /tmp 同步两边的目录",
+		"Linux常用命令：du -sk * | sort -rn 以容量大小为依据依次显示文件和目录的大小",
+        "Linux常用命令：sed '/ *#/d; /^$/d' example.txt 从example.txt文件中删除所有注释和空白行",
+        "Linux常用命令：cat file1 file2 ... | command <> file1_in.txt_or_file1_out.txt general syntax for text manipulation using PIPE, STDIN and STDOUT"];
+    var idioms1 = [
         "不忘初心，努力前行",
         "故事开始便不承认普通",
         "我一直都在你身边 ，一直都在",
@@ -63,11 +59,10 @@
         "命运啊，说是注定，不如说是你忘了是在何时做了选择。——《塔希里亚故事集》",
         "有些坚持，经不起一点点希望\n * 哪怕是一点光亮，也会让人陷入痛苦。——《撒野》",
         "他突然开始有点喜欢这个看似严苛无趣、却偶尔能给人惊喜的世界了\n * 因为面前这个他特别喜欢的人\n * 这大概是他有生以来最大程度的爱屋及乌。——《黑天》"];
-
     function addIdioms() {
         var text=document.getElementById("fastpostmessage");
         if (text.value.length<l) {
-            text.value += "\n\n\n\n/**\n * "+idioms[Math.floor(Math.random()*idioms.length)] + "\n *\n * Link https://greasyfork.org/zh-CN/scripts/396933-hostloc-zsbd\n */";
+            text.value += "\n\n\n/**\n * "+idioms[Math.floor(Math.random()*idioms.length)]+"\n * "+idioms1[Math.floor(Math.random()*idioms.length)] + "\n * Link https://greasyfork.org/zh-CN/scripts/396933-hostloc-zsbd\n */";
         }
     }
     document.getElementById("fastpostmessage").onkeydown=function(event) {
