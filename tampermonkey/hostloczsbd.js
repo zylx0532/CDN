@@ -4,7 +4,7 @@
 // @namespace       https://www.zhiqiang.name
 // @icon            https://www.zhiqiang.name/favicon.ico
 // @author          Blood.Cold
-// @version         1.1.5
+// @version         1.1.6
 // @description     HostLoc 隔壁 52 等DZ论坛自动签名档 字数补丁，防折叠!PS:默认签名档，可自行修改变量L为20切换为仅防折叠
 // @include         http://*/thread-*
 // @include         https://*/thread-*
@@ -21,6 +21,7 @@
     var l = 200;//原始内容低于该长度就自动签名
     var idioms = [
 		"Linux常用命令：cat /proc/mounts 显示已加载的文件系统",
+		"Linux常用命令：mkdir -p /tmp/dir1/dir2 创建一个目录树",
 		"Linux常用命令：rsync -rogpav --delete /home /tmp 同步两边的目录",
 		"Linux常用命令：du -sk * | sort -rn 以容量大小为依据依次显示文件和目录的大小",
         "Linux常用命令：sed '/ *#/d; /^$/d' example.txt 从example.txt文件中删除所有注释和空白行",
