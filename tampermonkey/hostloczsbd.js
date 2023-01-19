@@ -27,6 +27,7 @@
         "Linux常用命令：sed '/ *#/d; /^$/d' example.txt 从example.txt文件中删除所有注释和空白行",
         "Linux常用命令：cat file1 file2 ... | command <> file1_in.txt_or_file1_out.txt general syntax for text manipulation using PIPE, STDIN and STDOUT"];
     var idioms1 = [
+		"大哥大嫂过年好",
         "不忘初心，努力前行",
         "故事开始便不承认普通",
         "我一直都在你身边 ，一直都在",
