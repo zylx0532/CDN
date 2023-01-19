@@ -20,6 +20,7 @@
     'use strict';
     var l = 200;//原始内容低于该长度就自动签名
     var idioms = [
+		"Linux常用命令：pwd 显示用户当前所在的目录",
 		"Linux常用命令：cat /proc/mounts 显示已加载的文件系统",
 		"Linux常用命令：mkdir -p /tmp/dir1/dir2 创建一个目录树",
 		"Linux常用命令：rsync -rogpav --delete /home /tmp 同步两边的目录",
