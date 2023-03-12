@@ -4,7 +4,7 @@
 // @namespace       https://www.zhiqiang.name
 // @icon            https://www.zhiqiang.name/favicon.ico
 // @author          Blood.Cold
-// @version         1.0.1
+// @version         2.0.0
 // @description     用于改善HostLoc、隔壁网、ROSABC等DZ论坛上传图片需要放大镜的问题
 // @grant           none
 // @include         http://www.hostloc.com/*
@@ -352,9 +352,9 @@ nw.c([
 ] , function(){
 
     nw.addScriptLink({
-        'src' : 'https://imgchr.com/sdk/pup.js',
+        'src' : 'https://www.z-9.net/sdk/pup.js',
         'id' : 'chevereto-pup-src',
-        'data-url':'https://imgchr.com/upload',
+        'data-url':'https://www.z-9.net/upload',
         'data-auto-insert':'bbcode-embed'
     });
 
