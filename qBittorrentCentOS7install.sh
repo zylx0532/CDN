@@ -98,7 +98,7 @@ else
 fi
 
 # Install qBittorrent Required
-yum -y install gcc gcc-c++ qt-devel boost-devel openssl-devel qt5-qtbase-devel qt5-linguist
+yum -y install gcc gcc-c++ qt-devel boost-devel openssl-devel qt5-qtbase-devel qt5-linguist qt5-qtsvg-devel
 if [ $? -eq 0 ];then
     echo -e "${green} qBittorrent编译所需依赖安装成功 ${font}"
 else 
@@ -137,15 +137,15 @@ fi
 
 # Install qBittorrent
 cd ~
-wget --no-check-certificate https://github.com/qbittorrent/qBittorrent/archive/refs/tags/release-4.5.2.tar.gz
+wget --no-check-certificate https://github.com/qbittorrent/qBittorrent/archive/refs/tags/release-4.1.1.tar.gz
 if [ $? -eq 0 ];then
     echo -e "${green} qBittorrent软件包下载成功 ${font}"
 else 
     echo -e "${red} qBittorrent软件包下载失败 ${font}"
     exit 1
 fi
-tar -xzvf release-4.5.2.tar.gz
-cd qBittorrent-release-4.5.2
+tar -xzvf release-4.1.1.tar.gz
+cd qBittorrent-release-4.1.1
 ./configure --prefix=/usr --disable-gui CPPFLAGS=-I/usr/include/qt5 CXXFLAGS=-std=c++11
 make -j${CPUcore}
 make install
