@@ -7,6 +7,9 @@ chmod +x peer2fly.sh
 
 ./peer2fly.sh --email 你的邮箱 --number 你需要开设的节点数量
 
+## qBittorrent For Centos7
+wget -O qBittorrentCentOS7install.sh https://raw.githubusercontent.com/zylx0532/CDN/master/qBittorrentCentOS7install.sh --no-check-certificate && bash qBittorrentCentOS7install.sh
+
 ## mtr_trace.sh
 ### 检测VPS回程国内三网路由，用法：
 ```bash
