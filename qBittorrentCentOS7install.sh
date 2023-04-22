@@ -108,15 +108,15 @@ fi
 
 # Install libtorrent
 cd ~
-wget --no-check-certificate https://github.com/arvidn/libtorrent/releases/download/v2.0.8/libtorrent-rasterbar-2.0.8.tar.gz
+wget --no-check-certificate https://github.com/arvidn/libtorrent/releases/download/v1.2.18/libtorrent-rasterbar-1.2.18.tar.gz
 if [ $? -eq 0 ];then
     echo -e "${green} libtorrent软件包下载成功 ${font}"
 else 
     echo -e "${red} libtorrent软件包下载失败 ${font}"
     exit 1
 fi
-tar -zxf libtorrent-rasterbar-2.0.8.tar.gz
-cd libtorrent-rasterbar-2.0.8
+tar -zxf libtorrent-rasterbar1.2.18.tar.gz
+cd libtorrent-rasterbar-1.2.18
 ./configure --prefix=/usr CXXFLAGS=-std=c++11
 make -j${CPUcore}
 make install
